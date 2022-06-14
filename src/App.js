@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Loadable from "react-loadable";
+import Login from "./containers/Login/login";
+import DefaultLayout from "./containers/Layout/layout";
+import ActivateAccount from "./containers/Register/activateAccount";
 
-function App() {
+const loading = () => (
+  <div className="">
+    <div className="" />
+  </div>
+);
+
+const SignIn = Loadable({
+  loader: () => import("./containers/Register/signIn"),
+  loading,
+});
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/activate-account" element={<ActivateAccount />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/websystem/*" element={<DefaultLayout />} />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
