@@ -1,10 +1,9 @@
 import React from "react";
 import { Route, Routes, NavLink, Link } from "react-router-dom";
-import Home from "../../views/Home";
-import Verification from "../../views/Verification";
+import Home from "../../views/Home/Home";
+import Verification from "../../views/Verification/Verification";
 
 const DefaultLayout = (props) => {
-  console.log("ok");
   return (
     <div>
       <div

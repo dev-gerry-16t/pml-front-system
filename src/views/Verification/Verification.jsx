@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate,useLinkClickHandler } from "react-router-dom";
+import { useNavigate, useLinkClickHandler } from "react-router-dom";
 
 const Verification = (props) => {
   const navigate = useNavigate();
