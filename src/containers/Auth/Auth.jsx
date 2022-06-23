@@ -1,27 +1,37 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import isEmpty from "lodash/isEmpty";
-import isNil from "lodash/isNil";
+import isNil from "lodash/lodash";
 import { callGlobalActionApi } from "../../utils/actions/actions";
-import {
-  setDataUserProfile,
-  setDataUserMenu,
-} from "../../utils/dispatchs/userProfileDispatch";
 import LoaderApp from "../../components/loaderApp";
-import { useNavigate, useLinkClickHandler } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import FrontFunctions from "../../utils/actions/frontFunctions";
+import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 
 const Auth = (props) => {
-  const {
-    history,
-    callGetAllUserProfile,
-    dataProfile,
-    setDataUserProfile,
-    setDataUserMenu,
-    callGetAllMenuProfile,
-    callGlobalActionApi,
-    purgeStore,
-  } = props;
+  const { dataProfile, callGlobalActionApi, purgeStore } = props;
   const navigate = useNavigate();
+  const frontFunctions = new FrontFunctions();
+
+  const handlerSetLoginHistory = async (data, id) => {
+    const { idSystemUser, tokenApp, infoNavigator } = data;
+    try {
+      await callGlobalActionApi(
+        {
+          idSystemUser,
+          token: tokenApp,
+          refreshToken: null,
+          info: JSON.stringify(infoNavigator),
+          language: "es-ES",
+        },
+        id,
+        API_CONSTANTS.LOG_IN.SET_LOGIN_HISTORY,
+        "PUT",
+        false
+      );
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const handlerCallGetAllUserProfile = async () => {
     try {
@@ -70,20 +80,34 @@ const Auth = (props) => {
     } catch (error) {}
   };
 
-  const handlerAsyncCallApiis = async () => {
-    await handlerCallGetAllUserProfile();
+  const handlerAsyncCallApis = async () => {
+    const infoNavigator = frontFunctions.handlerDetectDevice();
+    console.log("dataProfile", dataProfile);
+    if (isNil(dataProfile) === false) {
+      await handlerSetLoginHistory(
+        {
+          idSystemUser: dataProfile.idSystemUser,
+          tokenApp: dataProfile.token,
+          infoNavigator,
+        },
+        dataProfile.idLoginHistory
+      );
+      await handlerCallGetAllUserProfile();
+    } else {
+      navigate("/login");
+    }
   };
 
   const handlerFinishSession = async () => {
     await purgeStore();
     await sessionStorage.clear();
     await localStorage.clear();
-    history.push("/login");
+    navigate("/login");
   };
 
   useEffect(() => {
     if (window.location.pathname === "/auth") {
-      handlerAsyncCallApiis();
+      handlerAsyncCallApis();
     } else if (window.location.pathname === "/logout") {
       handlerFinishSession();
     }
@@ -94,7 +118,9 @@ const Auth = (props) => {
 
 const mapStateToProps = (state) => {
   const { dataProfile } = state;
-  return { dataProfile };
+  return {
+    dataProfile: dataProfile.dataProfile,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => ({

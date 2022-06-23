@@ -14,6 +14,7 @@ const DefaultLayout = (props) => {
       >
         <Link to="home">Home</Link>
         <Link to="verificacion">Verificación</Link>
+        <Link to="/logout">Cerrar Sesión</Link>
       </div>
       <div>
         <Routes>

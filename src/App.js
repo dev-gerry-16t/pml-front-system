@@ -26,6 +26,7 @@ const App = () => {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/activate-account" element={<ActivateAccount />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/logout" element={<Auth />} />
         <Route path="/websystem/*" element={<DefaultLayout />} />
       </Routes>
     </BrowserRouter>

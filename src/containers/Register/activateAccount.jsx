@@ -43,16 +43,21 @@ const ActivateAccount = (props) => {
   };
 
   const handlerOnClickStart = async () => {
-    if (isEmpty(dataVerify) === false && dataVerify.canLogin === true) {
-      await setDataUserProfile({
-        idLoginHistory: dataVerify.idLoginHistory,
-        idSystemUser: dataVerify.idSystemUser,
-        token: dataVerify.tokenApp,
-      });
-      navigate("/auth");
-    } else {
-      navigate("/login");
-    }
+    try {
+      if (
+        isNil(dataVerify.idLoginHistory) === false &&
+        dataVerify.canLogin === true
+      ) {
+        await setDataUserProfile({
+          idLoginHistory: dataVerify.idLoginHistory,
+          idSystemUser: dataVerify.idSystemUser,
+          token: dataVerify.tokenApp,
+        });
+        navigate("/auth");
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {}
   };
 
   useEffect(() => {

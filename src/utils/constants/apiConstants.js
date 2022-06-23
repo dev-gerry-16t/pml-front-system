@@ -15,6 +15,7 @@ const API_CONSTANTS = {
   },
   LOG_IN: {
     SET_LOGIN_HISTORY: `${API.LOG_IN}/setLoginHistory/`,
+    VERIFY_LOGIN: `${API.LOG_IN}/verifyLogin`,
   },
 };
 
