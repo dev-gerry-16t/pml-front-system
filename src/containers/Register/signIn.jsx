@@ -7,19 +7,29 @@ import { callGlobalActionApi } from "../../utils/actions/actions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import "./css/styleRegister.scss";
 import LoaderApp from "../../components/loaderApp";
+import ComponentPresentation from "../../components/componentPresentation";
+import CustomForm from "../../components/customForm";
+import CustomInput from "../../components/customInput";
+import CustomButton from "../../components/customButton";
+import { useOnChangeInput } from "../../hooks";
+import ComponentSendEmail from "../../components/componentSendEmail";
 
 const SignIn = (props) => {
   const { callGlobalActionApi } = props;
-  const [searchParams] = useSearchParams();
-  const { key, userId } = Object.fromEntries([...searchParams]);
-  const [dataForm, setDataForm] = useState({
+  let component = <LoaderApp />;
+
+  const initialState = {
     email: "",
     firstname: "",
     lastname: "",
     mobilephone: "",
     password: "",
     confirmPassword: "",
-  });
+  };
+  const [searchParams] = useSearchParams();
+  const { key, userId } = Object.fromEntries([...searchParams]);
+  const [dataForm, handlerOnChange, setDataForm] =
+    useOnChangeInput(initialState);
   const [validateLink, setValidateLink] = useState(false);
   const [loadedScreen, setLoadedScreen] = useState(true);
   const [sendActivateAccount, setSendActivateAccount] = useState(false);
@@ -91,7 +101,13 @@ const SignIn = (props) => {
   const handlerSignInUser = async (password) => {
     try {
       const response = await callGlobalActionApi(
-        { userId, password, parameter: "BE-HSConfig", language: "es-ES" },
+        {
+          mobilephone: dataForm.mobilephone,
+          userId,
+          password,
+          parameter: "BE-HSConfig",
+          language: "es-ES",
+        },
         null,
         API_CONSTANTS.SIGN_IN.SIGN_IN_USER,
         "POST",
@@ -102,98 +118,98 @@ const SignIn = (props) => {
     }
   };
 
+  const handlerOnSubmit = async () => {
+    try {
+      setLoadedScreen(true);
+      await handlerSignInUser(dataForm.password);
+      setLoadedScreen(false);
+      setSendActivateAccount(true);
+    } catch (error) {
+      setLoadedScreen(false);
+    }
+  };
+
   useEffect(() => {
     handlerGetContactInformationById();
   }, []);
 
-  return loadedScreen === false ? (
-    <div className="register-container">
-      {sendActivateAccount === false ? (
-        <>
-          {validateLink === false ? (
-            <h1>Link invalido</h1>
-          ) : (
-            <div
+  if (loadedScreen === true) {
+    component = <LoaderApp />;
+  } else if (
+    loadedScreen === false &&
+    validateLink === true &&
+    sendActivateAccount === false
+  ) {
+    component = (
+      <ComponentPresentation
+        greet="¡Bienvenido!"
+        subGreet={`${dataForm.firstname} ${dataForm.lastname}`}
+      >
+        <CustomForm onSubmit={handlerOnSubmit}>
+          <div className="vertical-form">
+            <span className="indication">
+              Ingresa tus datos para dar de alta tu perfil
+            </span>
+            <CustomInput
+              value={dataForm.mobilephone}
+              onChange={handlerOnChange}
+              name="mobilephone"
+              placeholder="WhatsApp"
+              type="phone"
+              subType="whatsapp"
+              isRequired
+            />
+            <CustomInput
+              value={dataForm.password}
+              onChange={handlerOnChange}
+              name="password"
+              placeholder="Contraseña"
+              type="password"
+              isRequired
+            />
+            <CustomInput
+              value={dataForm.confirmPassword}
+              onChange={handlerOnChange}
+              name="confirmPassword"
+              placeholder="Confirmar contraseña"
+              type="password"
+              isRequired
+            />
+            <CustomButton
+              type="submit"
+              formatType="secondary"
+              text="Registrarme"
               style={{
-                display: "flex",
-                flexDirection: "column",
-                rowGap: "5px",
-                width: "500px",
+                padding: "0.6em 0px",
+                width: "100%",
               }}
-            >
-              <input
-                value={dataForm.firstname}
-                placeholder="Nombre"
-                name="name"
-                type="text"
-                onChange={(e) => {
-                  setDataForm({ ...dataForm, firstname: e.target.value });
-                }}
-              />
-              <input
-                value={dataForm.lastname}
-                placeholder="Apellido"
-                name="lastname"
-                type="text"
-                onChange={(e) => {
-                  setDataForm({ ...dataForm, lastname: e.target.value });
-                }}
-              />
-              <input
-                value={dataForm.email}
-                placeholder="Correo"
-                name="email"
-                type="email"
-                onChange={(e) => {
-                  setDataForm({ ...dataForm, email: e.target.value });
-                }}
-              />
-              <input
-                value={dataForm.mobilephone}
-                placeholder="Teléfono"
-                name="phoneNumber"
-                type="tel"
-                onChange={(e) => {
-                  setDataForm({ ...dataForm, mobilephone: e.target.value });
-                }}
-              />
-              <input
-                value={dataForm.password}
-                placeholder="Contraseña"
-                name="password"
-                type="password"
-                onChange={(e) => {
-                  setDataForm({ ...dataForm, password: e.target.value });
-                }}
-              />
-              <input
-                value={dataForm.confirmPassword}
-                placeholder="Confirmar contraseña"
-                type="password"
-                onChange={(e) => {
-                  setDataForm({ ...dataForm, confirmPassword: e.target.value });
-                }}
-              />
-              <button
-                onClick={async () => {
-                  try {
-                    await handlerSignInUser(dataForm.password);
-                    setSendActivateAccount(true);
-                  } catch (error) {}
-                }}
-              >
-                Registrarme
-              </button>
-            </div>
-          )}
-        </>
-      ) : (
-        <div>Send mail open your inbox mail</div>
-      )}
-    </div>
-  ) : (
-    <LoaderApp />
-  );
+            />
+          </div>
+
+          {/* <div className="option-user">
+                ¿Ya tienes cuenta? <span>Inicia sesión</span>
+              </div> */}
+        </CustomForm>
+      </ComponentPresentation>
+    );
+  } else if (
+    loadedScreen === false &&
+    validateLink === false &&
+    sendActivateAccount === false
+  ) {
+    component = (
+      <ComponentPresentation greet="¡Bienvenido!" subGreet="Link no valido" />
+    );
+  } else if (
+    loadedScreen === false &&
+    validateLink === true &&
+    sendActivateAccount === true
+  ) {
+    component = (
+      <ComponentSendEmail email={dataForm.email} onClick={handlerOnSubmit} />
+    );
+  }
+  return component;
 };
 
 const mapStateToProps = (state) => {

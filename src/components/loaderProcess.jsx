@@ -17,7 +17,15 @@ const spin = keyframes`
 
 const seconds = "800ms";
 
-const FullScreen = styled.div``;
+const FullScreen = styled.div`
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const SVG = styled.svg`
   path {

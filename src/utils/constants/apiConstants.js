@@ -5,6 +5,8 @@ const HEADER = {
 const API = {
   SIGN_IN: "/api/v1/signin",
   LOG_IN: "/api/v1/login",
+  SYSTEM_CONFIGURATION: "/api/v1/systemConfiguration",
+  SYSTEM_USER: "/api/v1/systemUser",
 };
 
 const API_CONSTANTS = {
@@ -16,6 +18,16 @@ const API_CONSTANTS = {
   LOG_IN: {
     SET_LOGIN_HISTORY: `${API.LOG_IN}/setLoginHistory/`,
     VERIFY_LOGIN: `${API.LOG_IN}/verifyLogin`,
+    GET_USER_PROFILE: `${API.LOG_IN}/getUserProfile`,
+  },
+  SYSTEM_CONFIGURATION: {
+    GET_ALL_LABELS: `${API.SYSTEM_CONFIGURATION}/getAllLabels`,
+  },
+  SYSTEM_USER: {
+    GET_PIPELINE: `${API.SYSTEM_USER}/getPipeline`,
+    IS_SERVICE_READY: `${API.SYSTEM_USER}/isServiceReady`,
+    SET_PIPELINE_STEP: `${API.SYSTEM_USER}/setPipelineStep/`,
+    SET_VEHICLE: `${API.SYSTEM_USER}/setVehicle/`,
   },
 };
 

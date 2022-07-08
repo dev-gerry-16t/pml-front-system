@@ -8,6 +8,7 @@ import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import "./css/styleRegister.scss";
 import LoaderApp from "../../components/loaderApp";
 import { setDataUserProfile } from "../../utils/dispatchs/userProfileDispatch";
+import ComponentSuccess from "../../components/componentSuccess";
 
 const ActivateAccount = (props) => {
   const { callGlobalActionApi, setDataUserProfile } = props;
@@ -17,10 +18,13 @@ const ActivateAccount = (props) => {
   const [validateLink, setValidateLink] = useState(false);
   const [dataVerify, setDataVerify] = useState({});
 
+  let component = <LoaderApp />;
+
   const navigate = useNavigate();
 
   const handlerVerifyEnroll = async () => {
     try {
+      setLoadedScreen(true);
       const response = await callGlobalActionApi(
         { tokenEnroll: token, language: "es-ES" },
         null,
@@ -44,6 +48,7 @@ const ActivateAccount = (props) => {
 
   const handlerOnClickStart = async () => {
     try {
+      setLoadedScreen(true);
       if (
         isNil(dataVerify.idLoginHistory) === false &&
         dataVerify.canLogin === true
@@ -53,33 +58,50 @@ const ActivateAccount = (props) => {
           idSystemUser: dataVerify.idSystemUser,
           token: dataVerify.tokenApp,
         });
+        setLoadedScreen(false);
+
         navigate("/auth");
       } else {
+        setLoadedScreen(false);
+
         navigate("/login");
       }
-    } catch (error) {}
+    } catch (error) {
+      setLoadedScreen(false);
+    }
   };
 
   useEffect(() => {
     handlerVerifyEnroll();
   }, []);
 
-  return loadedScreen === false ? (
-    <div className="activate-container">
-      {validateLink === true ? (
-        <div>
-          <h1>Cuenta activada</h1>
-          <button onClick={handlerOnClickStart}>Comenzar</button>
-        </div>
-      ) : (
-        <div>
-          <h1>Ocurrió un error al validar tu cuenta</h1>
-        </div>
-      )}
-    </div>
-  ) : (
-    <LoaderApp />
-  );
+  if (loadedScreen === true) {
+    component = <LoaderApp />;
+  } else if (loadedScreen === false && validateLink === true) {
+    component = (
+      <ComponentSuccess
+        greet="¡Felicidades!"
+        subGreet=""
+        status="Tu cuenta se ha validado correctamente"
+        labelButton="Continuar"
+        onClick={handlerOnClickStart}
+      />
+    );
+  } else if (loadedScreen === false && validateLink === false) {
+    component = (
+      <ComponentSuccess
+        greet="¡Uups!"
+        subGreet=""
+        status="Ocurrió un error al validar tu cuenta"
+        labelButton="Continuar"
+        onClick={() => {
+          navigate("/login");
+        }}
+      />
+    );
+  }
+
+  return component;
 };
 
 const mapStateToProps = (state) => {

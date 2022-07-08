@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import isNil from "lodash/lodash";
+import isNil from "lodash/isNil";
 import { callGlobalActionApi } from "../../utils/actions/actions";
 import LoaderApp from "../../components/loaderApp";
 import { useNavigate } from "react-router-dom";
@@ -76,13 +76,13 @@ const Auth = (props) => {
       //       ? responseResult.path
       //       : "/websystem"
       //   );
-      navigate("/websystem/home");
+      navigate("/websystem");
     } catch (error) {}
   };
 
   const handlerAsyncCallApis = async () => {
     const infoNavigator = frontFunctions.handlerDetectDevice();
-    console.log("dataProfile", dataProfile);
+
     if (isNil(dataProfile) === false) {
       await handlerSetLoginHistory(
         {
