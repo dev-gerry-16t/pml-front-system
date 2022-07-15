@@ -6,6 +6,7 @@ import ComponentGeneralSection from "../../components/componentGeneralSection";
 import CustomStepLine from "../../components/customStepLine";
 import LoaderApp from "../../components/loaderApp";
 import InstructionsVerification from "./subScreens/InstructionsVerification";
+import DocumentId from "./subScreens/DocumentId";
 
 const Verification = (props) => {
   const dataContextLayout = useContext(ContextLayout);
@@ -16,30 +17,48 @@ const Verification = (props) => {
     idPawn,
     idItem,
   } = dataContextLayout;
-  
+
   let component = <LoaderApp />;
 
-  if (isNil(config) === false) {
+  if (isNil(config) === false && window.mobileCheck() === false) {
     component = (
       <div className="general-container">
         <ComponentGeneralSection title={step}>
-          <span>
-            Para iniciar con tu proceso iniciaremos con una verificación de
-            identidad, esto nos ayuda a la eliminación de fraudes por
-            suplantación de identidad
-          </span>
+          <div
+            style={{
+              marginTop: "1em",
+              fontSize: "1.2em",
+              color: "var(--color-font-black)",
+            }}
+          >
+            <span>
+              Para iniciar con tu proceso iniciaremos con una verificación de
+              identidad, esto nos ayuda a la eliminación de fraudes por
+              suplantación de identidad
+            </span>
+          </div>
           <CustomStepLine data={config.stepLine}>
             <Routes>
               <Route
                 path="instructions"
                 element={<InstructionsVerification />}
               />
-              {/* <Route path="documentId" element={<CarInformation />} />
-              <Route path="documentAddress" element={<Verification />} />
-              <Route path="selfie" element={<Verification />} /> */}
+              <Route path="documentId" element={<DocumentId />} />
             </Routes>
           </CustomStepLine>
         </ComponentGeneralSection>
+      </div>
+    );
+  }
+  if (isNil(config) === false && window.mobileCheck() === true) {
+    component = (
+      <div className="general-container">
+        <CustomStepLine data={config.stepLine}>
+          <Routes>
+            <Route path="instructions" element={<InstructionsVerification />} />
+            <Route path="documentId" element={<DocumentId />} />
+          </Routes>
+        </CustomStepLine>
       </div>
     );
   }

@@ -1,7 +1,5 @@
 import React from "react";
-import isEmpty from "lodash/isEmpty";
 import styled from "styled-components";
-import { IconArrowSquareRight } from "../assets/icons";
 import CustomButton from "./customButton";
 
 const Container = styled.div`
@@ -17,11 +15,12 @@ const Container = styled.div`
 `;
 
 const CustomIndicationList = ({
-  data,
   stepNumber,
   subTitle,
   labelReady,
+  children,
   onClick = () => {},
+  isVisibleButton = false,
 }) => {
   return (
     <div>
@@ -29,30 +28,21 @@ const CustomIndicationList = ({
       <div>
         <span className="step-description-subTitle">{subTitle}</span>
       </div>
-      <Container className="section-shadow flex-row">
-        {isEmpty(data) === false &&
-          data.map((row, ix) => {
-            return (
-              <div key={`list-${ix}`} className="info-list-instruction">
-                <IconArrowSquareRight fill="none" />
-                <strong>{row.name} -</strong>
-                <span>{row.description}</span>
-              </div>
-            );
-          })}
-      </Container>
-      <div className="alignButton">
-        <CustomButton
-          formatType="secondary"
-          style={{
-            padding: "0.5em",
-            width: "100%",
-          }}
-          onClick={onClick}
-        >
-          {labelReady}
-        </CustomButton>
-      </div>
+      <Container className="section-shadow flex-row">{children}</Container>
+      {isVisibleButton === true && (
+        <div className="alignButton">
+          <CustomButton
+            formatType="secondary"
+            style={{
+              padding: "0.5em",
+              width: "100%",
+            }}
+            onClick={onClick}
+          >
+            {labelReady}
+          </CustomButton>
+        </div>
+      )}
     </div>
   );
 };

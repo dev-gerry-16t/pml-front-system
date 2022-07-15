@@ -35,6 +35,11 @@ const DefaultLayout = Loadable({
   loading,
 });
 
+const TestScreen = Loadable({
+  loader: () => import("./containers/test/test"),
+  loading,
+});
+
 const App = ({ callGlobalActionApi, dataProfile }) => {
   // const handlerGetAllLabels = async () => {
   //   try {
@@ -65,6 +70,8 @@ const App = ({ callGlobalActionApi, dataProfile }) => {
         <Route path="/activate-account" element={<ActivateAccount />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/logout" element={<Auth />} />
+        <Route path="/testScreen" element={<TestScreen />} />
+        
         <Route path="/websystem/*" element={<DefaultLayout />} />
       </Routes>
     </BrowserRouter>

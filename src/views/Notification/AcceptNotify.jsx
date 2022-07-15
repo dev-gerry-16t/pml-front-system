@@ -98,14 +98,15 @@ const AcceptNotify = (props) => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeInitTest = setTimeout(() => {
       timeInterval = setInterval(() => {
         handlerIsServiceReady();
       }, 10000);
-    }, 20000);
+    }, 15000);
 
     return () => {
       clearInterval(timeInterval);
+      clearTimeout(timeInitTest);
     };
   }, []);
 

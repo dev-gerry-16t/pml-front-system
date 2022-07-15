@@ -60,6 +60,29 @@ class FrontFunctions {
     };
     return info;
   };
+  handlerUploadToMetaMap = async (file, metaData, identity, token) => {
+    try {
+      const form = new FormData();
+      form.append("inputs", JSON.stringify(metaData));
+      form.append("document", file);
+      const options = {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      options.body = form;
+      const fetchDocument = await fetch(
+        `https://api.getmati.com/v2/identities/${identity}/send-input`,
+        options
+      );
+      const response = await fetchDocument.json();
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
 }
 
 export default FrontFunctions;

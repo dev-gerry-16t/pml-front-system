@@ -1,7 +1,19 @@
-import React, { Children } from "react";
+import React from "react";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
-const GeneralSection = styled.div`
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.5,
+      duration: 1,
+    },
+  },
+};
+
+const GeneralSection = styled(motion.div)`
   width: 100%;
   padding: 2em;
   background: var(--color-backGround-section);
@@ -25,7 +37,7 @@ const GeneralSection = styled.div`
 
 const ComponentGeneralSection = ({ title = "", children }) => {
   return (
-    <GeneralSection>
+    <GeneralSection variants={container} initial="hidden" animate="show">
       <div className="title-section">
         <h2>{title}</h2>
       </div>
