@@ -116,7 +116,7 @@ const ComponentShotCamera = (props) => {
           <h2>{labelImage}</h2>
         </LabelShot>
         <div className="mask-video">
-          <div id="screen-shot" className="face"></div>
+          <div id="screen-shot" className={type}></div>
         </div>
         <video id="video-shot" autoPlay={true}></video>
         <ButtonCam>
@@ -130,7 +130,7 @@ const ComponentShotCamera = (props) => {
               canvas.width = video.videoWidth;
               canvas.height = video.videoHeight;
               canvas.getContext("2d").drawImage(video, 0, 0);
-              const srcImage = canvas.toDataURL("image/jpeg");
+              const srcImage = canvas.toDataURL("image/jpeg", 1);
               onClickShot(srcImage);
             }}
           >

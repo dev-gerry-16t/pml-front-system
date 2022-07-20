@@ -6,8 +6,13 @@ import styled from "styled-components";
 import Icons from "../assets/icons/icons";
 
 const Border = styled.div`
-  border: 2px solid var(--color-brand-primary);
-  border-radius: 10px;
+  border: ${(props) =>
+    props.border === "primary"
+      ? "2px solid var(--color-brand-primary)"
+      : "none"};
+  border-bottom: ${(props) =>
+    props.border === "secondary" ? "1px solid var( --color-font-dark)" : ""};
+  border-radius: ${(props) => (props.border === "primary" ? "10px" : "0px")};
   padding: 0.4em;
   display: grid;
   grid-template-columns: 10% 90%;
@@ -30,6 +35,7 @@ const Select = styled.div`
     font-size: 1.2em;
     width: 100%;
     height: 100%;
+    background: transparent;
   }
   ::placeholder {
     color: var(--color-font-light);
@@ -50,9 +56,10 @@ const CustomSelect = ({
   isRequired = false,
   data = [],
   type = "",
+  border = "primary",
 }) => {
   return (
-    <Border>
+    <Border border={border}>
       <Icon>{Icons[subType || type]}</Icon>
       <Select>
         <select
@@ -67,13 +74,17 @@ const CustomSelect = ({
           placeholder={placeholder}
           required={isRequired}
         >
-          <option disabled selected value="">
+          <option disabled value="">
             {placeholder}
           </option>
           {isNil(data) === false &&
             isEmpty(data) === false &&
-            data.map((row) => {
-              return <option value={row.id}>{row.text}</option>;
+            data.map((row, ix) => {
+              return (
+                <option key={`${row.id}-${ix}`} value={row.id}>
+                  {row.text}
+                </option>
+              );
             })}
         </select>
       </Select>
@@ -89,6 +100,7 @@ CustomSelect.propTypes = {
   isRequired: PropTypes.bool,
   data: PropTypes.array,
   type: PropTypes.string,
+  border: PropTypes.string,
 };
 
 export default CustomSelect;

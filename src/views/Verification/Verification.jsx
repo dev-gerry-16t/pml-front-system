@@ -7,6 +7,8 @@ import CustomStepLine from "../../components/customStepLine";
 import LoaderApp from "../../components/loaderApp";
 import InstructionsVerification from "./subScreens/InstructionsVerification";
 import DocumentId from "./subScreens/DocumentId";
+import DocumentAddress from "./subScreens/DocumentAddress";
+import DocumentSelfie from "./subScreens/Selfie";
 
 const Verification = (props) => {
   const dataContextLayout = useContext(ContextLayout);
@@ -44,6 +46,8 @@ const Verification = (props) => {
                 element={<InstructionsVerification />}
               />
               <Route path="documentId" element={<DocumentId />} />
+              <Route path="documentAddress" element={<DocumentAddress />} />
+              <Route path="selfie" element={<DocumentSelfie />} />
             </Routes>
           </CustomStepLine>
         </ComponentGeneralSection>
@@ -57,6 +61,8 @@ const Verification = (props) => {
           <Routes>
             <Route path="instructions" element={<InstructionsVerification />} />
             <Route path="documentId" element={<DocumentId />} />
+            <Route path="documentAddress" element={<DocumentAddress />} />
+            <Route path="selfie" element={<DocumentSelfie />} />
           </Routes>
         </CustomStepLine>
       </div>

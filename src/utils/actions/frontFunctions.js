@@ -60,11 +60,20 @@ class FrontFunctions {
     };
     return info;
   };
-  handlerUploadToMetaMap = async (file, metaData, identity, token) => {
+  handlerUploadToMetaMap = async (
+    file,
+    metaData,
+    identity,
+    token,
+    documentType,
+    nameFile
+  ) => {
     try {
       const form = new FormData();
       form.append("inputs", JSON.stringify(metaData));
-      form.append("document", file);
+      file.forEach((element, ix) => {
+        form.append(documentType, element, `${nameFile}-${ix + 1}.jpeg`);
+      });
       const options = {
         method: "POST",
         headers: {

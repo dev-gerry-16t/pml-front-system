@@ -7,6 +7,8 @@ const API = {
   LOG_IN: "/api/v1/login",
   SYSTEM_CONFIGURATION: "/api/v1/systemConfiguration",
   SYSTEM_USER: "/api/v1/systemUser",
+  CATALOGS: "/api/v1/catalogs",
+  META_MAP: "/api/v1/verification",
 };
 
 const API_CONSTANTS = {
@@ -28,6 +30,12 @@ const API_CONSTANTS = {
     IS_SERVICE_READY: `${API.SYSTEM_USER}/isServiceReady`,
     SET_PIPELINE_STEP: `${API.SYSTEM_USER}/setPipelineStep/`,
     SET_VEHICLE: `${API.SYSTEM_USER}/setVehicle/`,
+  },
+  CATALOGS: {
+    GET_ALL_COUNTRIES: `${API.CATALOGS}/getAllCountries`,
+  },
+  META_MAP: {
+    CREATE_VERIFICATION: `${API.META_MAP}/createVerification`,
   },
 };
 

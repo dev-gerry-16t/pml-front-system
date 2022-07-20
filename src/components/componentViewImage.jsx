@@ -52,6 +52,7 @@ const ResultImage = styled.div`
       width: 100%;
       height: 50vh;
       object-fit: cover;
+      border-radius: 1em;
     }
   }
 `;
@@ -77,15 +78,17 @@ const ComponentViewImage = (props) => {
             <span>{indication}</span>
           </div>
           <div className="image-outline">
-            <img src={src} alt="screenImage" />
+            <img id="image-container-process" src={src} alt="screenImage" />
           </div>
           <div className="align-button-row">
             <CustomButton
               style={{
                 padding: "0.5em 0px",
               }}
-              onClick={() => {
-                onClickContinue();
+              onClick={async () => {
+                const urlObject = await fetch(src);
+                const blobFile = await urlObject.blob();
+                onClickContinue(blobFile);
               }}
             >
               Continuar

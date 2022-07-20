@@ -3,7 +3,7 @@ const DOMAIN_WEB_TEST = "apptest.homify.ai";
 const DOMAIN_WEB_LOCAL = "localhost";
 
 const INSTANCE_LOCAL = {
-  DNS_API: "192.168.100.127",
+  DNS_API: "localhost",
   API_PROTOCOL: "http://",
   PORT: "3001",
 };
