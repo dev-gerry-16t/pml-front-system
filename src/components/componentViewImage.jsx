@@ -100,7 +100,7 @@ const ComponentViewImage = (props) => {
               formatType="tertiary"
               onClick={onClickOther}
             >
-              Tomar otra
+              Tomar/Subir otra
             </CustomButton>
           </div>
         </ResultImage>

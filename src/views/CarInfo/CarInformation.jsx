@@ -19,10 +19,6 @@ import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import LoaderProcess from "../../components/loaderProcess";
 import CustomSelect from "../../components/customSelect";
 
-const ContainerInfo = styled.div`
-  padding: 1em 3em;
-`;
-
 const EditButton = styled.div`
   position: absolute;
   bottom: -2em;
@@ -167,14 +163,6 @@ const ComponentEditInformation = ({
                 type="number"
                 isRequired
               />
-              <CustomInput
-                value={dataForm.carriagePlateState}
-                onChange={handlerOnChange}
-                name="carriagePlateState"
-                placeholder="Estado de las placas"
-                type="text"
-                isRequired
-              />
               <CustomSelect
                 value={dataForm.isUniqueOwner}
                 onChange={(e) => {
@@ -243,7 +231,6 @@ const ComponentCarInformation = ({ data, onClick, isVisible }) => {
             <span>Versión</span>
             <span>Color</span>
             <span>Kilometraje</span>
-            <span>Estado de las placas</span>
             <span>Único dueño</span>
           </div>
           <div
@@ -270,9 +257,6 @@ const ComponentCarInformation = ({ data, onClick, isVisible }) => {
             )}
 
             <strong>{isNil(km) === false ? km : "s/a"}</strong>
-            <strong>
-              {isNil(carriagePlateState) === false ? carriagePlateState : "s/a"}
-            </strong>
             <strong>
               {isNil(isUniqueOwner) === false
                 ? isUniqueOwner === false
@@ -344,94 +328,92 @@ const CarInformation = (props) => {
     component = (
       <div className="general-container">
         <ComponentGeneralSection title={step}>
-          <ContainerInfo>
-            <ComponentBorderTopSection>
-              <div className="flex-row">
-                <div
-                  className="grid-column-2"
-                  style={{
-                    paddingBottom: "3em",
-                    borderBottom: "1px solid var(--color-border-black)",
-                  }}
-                >
-                  <div className="section-center">
-                    <CarDefaultColor width={"21em"} color={colorCar} />
-                  </div>
-                  <div
-                    style={{
-                      position: "relative",
-                    }}
-                    className="section-center"
-                  >
-                    {loadedScreen === true && <LoaderProcess />}
-                    <ComponentEditInformation
-                      data={config}
-                      isVisible={isVisible}
-                      onClick={() => {
-                        setIsVisible(!isVisible);
-                      }}
-                      onChangeColor={(value) => {
-                        setColorCar(value);
-                      }}
-                      onSaveInformation={async (data) => {
-                        try {
-                          setLoadedScreen(true);
-                          await handlerSetPipeLineStep(data);
-                          await getPipeLine();
-                          setLoadedScreen(false);
-                          setIsVisible(!isVisible);
-                        } catch (error) {
-                          setLoadedScreen(false);
-                        }
-                      }}
-                    />
-                    <ComponentCarInformation
-                      data={config}
-                      onClick={() => {
-                        setIsVisible(!isVisible);
-                      }}
-                      isVisible={isVisible}
-                    />
-                  </div>
-                </div>
-                <div className="section-center">
-                  <CreditAsigned>
-                    <div
-                      dangerouslySetInnerHTML={{ __html: config.firstAmount }}
-                    />
-                    <span className="type-credit">Prestamo PRE-aprobado</span>
-                  </CreditAsigned>
-                </div>
-              </div>
-            </ComponentBorderTopSection>
-            <div
-              className="align-button"
-              style={{
-                marginTop: "4em",
-              }}
-            >
-              <CustomButton
+          <ComponentBorderTopSection>
+            <div className="flex-row">
+              <div
+                className="grid-column-2"
                 style={{
-                  width: "40%",
-                  padding: "5px 0px",
-                }}
-                formatType="secondary"
-                onClick={async () => {
-                  try {
-                    await setPipeLine(
-                      {
-                        idStep,
-                      },
-                      idPawn
-                    );
-                    await getPipeLine();
-                  } catch (error) {}
+                  paddingBottom: "3em",
+                  borderBottom: "1px solid var(--color-border-black)",
                 }}
               >
-                Iniciar Proceso
-              </CustomButton>
+                <div className="section-center">
+                  <CarDefaultColor width={"21em"} color={colorCar} />
+                </div>
+                <div
+                  style={{
+                    position: "relative",
+                  }}
+                  className="section-center"
+                >
+                  {loadedScreen === true && <LoaderProcess />}
+                  <ComponentEditInformation
+                    data={config}
+                    isVisible={isVisible}
+                    onClick={() => {
+                      setIsVisible(!isVisible);
+                    }}
+                    onChangeColor={(value) => {
+                      setColorCar(value);
+                    }}
+                    onSaveInformation={async (data) => {
+                      try {
+                        setLoadedScreen(true);
+                        await handlerSetPipeLineStep(data);
+                        await getPipeLine();
+                        setLoadedScreen(false);
+                        setIsVisible(!isVisible);
+                      } catch (error) {
+                        setLoadedScreen(false);
+                      }
+                    }}
+                  />
+                  <ComponentCarInformation
+                    data={config}
+                    onClick={() => {
+                      setIsVisible(!isVisible);
+                    }}
+                    isVisible={isVisible}
+                  />
+                </div>
+              </div>
+              <div className="section-center">
+                <CreditAsigned>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: config.firstAmount }}
+                  />
+                  <span className="type-credit">Prestamo PRE-aprobado</span>
+                </CreditAsigned>
+              </div>
             </div>
-          </ContainerInfo>
+          </ComponentBorderTopSection>
+          <div
+            className="align-button"
+            style={{
+              marginTop: "4em",
+            }}
+          >
+            <CustomButton
+              style={{
+                width: "40%",
+                padding: "5px 0px",
+              }}
+              formatType="secondary"
+              onClick={async () => {
+                try {
+                  await setPipeLine(
+                    {
+                      idStep,
+                    },
+                    idPawn
+                  );
+                  await getPipeLine();
+                } catch (error) {}
+              }}
+            >
+              Iniciar Proceso
+            </CustomButton>
+          </div>
         </ComponentGeneralSection>
       </div>
     );

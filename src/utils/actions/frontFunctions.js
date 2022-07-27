@@ -1,8 +1,19 @@
 import isNil from "lodash/isNil";
 import isEmpty from "lodash/isEmpty";
+import isString from "lodash/isString";
 import platform from "platform";
 
 class FrontFunctions {
+  getExtensionFile = (str) => {
+    let extension = "";
+    if (isEmpty(str) === false && isString(str) === true) {
+      const splitType = str.split("/");
+      if (splitType.length === 2) {
+        extension = `${splitType[splitType.length - 1]}`;
+      }
+    }
+    return extension;
+  };
   parseFormatCurrency = (money, fraction, maxFraction) => {
     let resultNumber = "";
     if (isNil(money) === false) {

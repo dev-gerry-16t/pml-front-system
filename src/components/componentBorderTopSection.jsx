@@ -3,15 +3,15 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 
 const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.5,
-        duration: 0.5,
-      },
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.5,
+      duration: 0.5,
     },
-  };
+  },
+};
 
 const GeneralSection = styled(motion.div)`
   width: 100%;
@@ -23,12 +23,13 @@ const GeneralSection = styled(motion.div)`
   border-top: 10px solid var(--color-brand-primary);
 `;
 
-const ComponentBorderTopSection = ({ children }) => {
+const ComponentBorderTopSection = ({ children, className = "" }) => {
   return (
     <GeneralSection
       variants={container}
       initial="hidden"
       animate="show"
+      className={className}
     >
       {children}
     </GeneralSection>

@@ -12,6 +12,8 @@ import FrontFunctions from "../../utils/actions/frontFunctions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import ContextLayout from "../../context/contextLayout";
 import Verification from "../../views/Verification/Verification";
+import FinishVerification from "../../views/FinishVerification/FinishVerification";
+import CheckList from "../../views/CheckList/CheckList";
 
 const max_width = "820px";
 
@@ -163,7 +165,9 @@ const DefaultLayout = (props) => {
           setPipeLine: async (data, id) => {
             try {
               await handlerSetPipeLineStep(data, id);
-            } catch (error) {}
+            } catch (error) {
+              throw error;
+            }
           },
         }}
       >
@@ -178,6 +182,8 @@ const DefaultLayout = (props) => {
           <Route path="accept-notify" element={<AcceptNotify />} />
           <Route path="car-information" element={<CarInformation />} />
           <Route path="user-verification/*" element={<Verification />} />
+          <Route path="finish-verification" element={<FinishVerification />} />
+          <Route path="check-list/*" element={<CheckList />} />
         </Routes>
       </ContextLayout.Provider>
     </Container>

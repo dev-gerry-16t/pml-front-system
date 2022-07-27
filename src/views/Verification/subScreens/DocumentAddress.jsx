@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { connect } from "react-redux";
 import { AnimatePresence } from "framer-motion";
-import ComponentProcessDocument from "../../../components/componentProcessDocument";
+import ComponentProcessDocument from "../../../components/componentProcessDocumentVerification";
 import ComponentQrScan from "../../../components/componentQrScan";
 import CustomIndicationList from "../../../components/customIndicationList";
 import LoaderApp from "../../../components/loaderApp";

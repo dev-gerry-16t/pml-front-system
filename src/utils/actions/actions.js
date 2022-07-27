@@ -71,8 +71,9 @@ const callGlobalActionApi =
     }
   };
 
-const callAddDocument =
-  (file, data, callback) => async (dispatch, getState) => {
+const callSetCustomerInDocument =
+  (file, data, callback, method = "POST") =>
+  async (dispatch, getState) => {
     const state = getState();
     const { dataProfile } = state;
     HEADER.Authorization = "Bearer " + dataProfile.dataProfile.token;
@@ -89,11 +90,26 @@ const callAddDocument =
           callback(percentCompleted);
         },
       };
-      const response = await RequesterAxios.post(
-        API_CONSTANTS.ADD_DOCUMENT,
-        formData,
-        config
-      );
+      let response = null;
+      if (method === "POST") {
+        response = await RequesterAxios.post(
+          API_CONSTANTS.SYSTEM_USER.SET_CUSTOMER_IN_DOCUMENT,
+          formData,
+          config
+        );
+      } else if (method === "PUT") {
+        response = await RequesterAxios.put(
+          API_CONSTANTS.SYSTEM_USER.SET_CUSTOMER_IN_DOCUMENT,
+          formData,
+          config
+        );
+      } else {
+        response = await RequesterAxios.post(
+          API_CONSTANTS.SYSTEM_USER.SET_CUSTOMER_IN_DOCUMENT,
+          formData,
+          config
+        );
+      }
       const responseResultStatus =
         isNil(response) === false && isNil(response.status) === false
           ? response.status
@@ -135,4 +151,4 @@ const getTimeZone = () => {
   );
 };
 
-export { callAddDocument, callGlobalActionApi };
+export { callSetCustomerInDocument, callGlobalActionApi };

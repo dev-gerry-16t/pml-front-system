@@ -13,6 +13,10 @@ const container = {
   },
 };
 
+const ContainerInfo = styled.div`
+  padding: 1em 3em;
+`;
+
 const GeneralSection = styled(motion.div)`
   width: 100%;
   padding: 2em;
@@ -41,7 +45,7 @@ const ComponentGeneralSection = ({ title = "", children }) => {
       <div className="title-section">
         <h2>{title}</h2>
       </div>
-      {children}
+      <ContainerInfo>{children}</ContainerInfo>
     </GeneralSection>
   );
 };

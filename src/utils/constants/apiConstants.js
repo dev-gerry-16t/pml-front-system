@@ -30,6 +30,8 @@ const API_CONSTANTS = {
     IS_SERVICE_READY: `${API.SYSTEM_USER}/isServiceReady`,
     SET_PIPELINE_STEP: `${API.SYSTEM_USER}/setPipelineStep/`,
     SET_VEHICLE: `${API.SYSTEM_USER}/setVehicle/`,
+    GET_PAWN_DOCUMENTS: `${API.SYSTEM_USER}/getPawnDocuments`,
+    SET_CUSTOMER_IN_DOCUMENT: `${API.SYSTEM_USER}/setCustomerInDocument`,
   },
   CATALOGS: {
     GET_ALL_COUNTRIES: `${API.CATALOGS}/getAllCountries`,

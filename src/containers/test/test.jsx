@@ -1,5 +1,5 @@
 import React from "react";
-import ComponentProcessDocument from "../../components/componentProcessDocument";
+import ComponentProcessDocument from "../../components/componentProcessDocumentVerification";
 
 const TestScreen=()=>{
     return(

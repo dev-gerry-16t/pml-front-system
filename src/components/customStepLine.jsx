@@ -10,6 +10,8 @@ import {
   IconDocId,
   IconSelfie,
   IconInstructions,
+  IconInvoiceCar,
+  IconCarId,
 } from "../assets/icons";
 
 const max_width = "820px";
@@ -19,6 +21,8 @@ const IconsStep = {
   IconDocId,
   IconSelfie,
   IconInstructions,
+  IconInvoiceCar,
+  IconCarId,
 };
 
 const PrincipalContainer = styled.div`
@@ -212,8 +216,10 @@ const CustomStepLine = ({ children, data }) => {
                 }}
               >
                 <div className="title-description">
-                  <span className="title">{row.name}</span>
-                  <span className="description">{row.description}</span>
+                  <span className="title">{row.name || row.documentType}</span>
+                  <span className="description">
+                    {row.description || row.directions}
+                  </span>
                 </div>
                 <div className="icon-step">
                   <Step
@@ -222,17 +228,18 @@ const CustomStepLine = ({ children, data }) => {
                     }
                     border={"3px solid var(--color-font-primary)"}
                   >
-                    {React.createElement(IconsStep[row.icon], {
-                      size: "2.5em",
-                      fill:
-                        row.isCompleted === true || row.isCurrent === true
-                          ? "var(--color-backGround-section)"
-                          : "none",
-                      color:
-                        row.isCompleted === true || row.isCurrent === true
-                          ? "var(--color-backGround-section)"
-                          : "var(--color-font-primary)",
-                    })}
+                    {isNil(IconsStep[row.icon]) === false &&
+                      React.createElement(IconsStep[row.icon], {
+                        size: "2.5em",
+                        fill:
+                          row.isCompleted === true || row.isCurrent === true
+                            ? "var(--color-backGround-section)"
+                            : "none",
+                        color:
+                          row.isCompleted === true || row.isCurrent === true
+                            ? "var(--color-backGround-section)"
+                            : "var(--color-font-primary)",
+                      })}
                   </Step>
                   <div className="line-mobile">
                     <Line
