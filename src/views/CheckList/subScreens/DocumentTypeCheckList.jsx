@@ -7,6 +7,7 @@ import isEmpty from "lodash/isEmpty";
 import ComponentProcessDocument from "../../../components/componentProcessDocuments";
 import ComponentShotCamera from "../../../components/componentShotCamera";
 import ComponentViewImage from "../../../components/componentViewImage";
+import ComponentViewDocument from "../../../components/componentViewDocument";
 import LoaderApp from "../../../components/loaderApp";
 import ContextLayout from "../../../context/contextLayout";
 import ContextStepLine from "../../../context/contextStepLine";
@@ -31,6 +32,7 @@ const DocumentTypeCheckList = (props) => {
   } = dataContextLayout;
   const [isVisibleCamera, setIsVisibleCamera] = useState(false);
   const [isVisibleImage, setIsVisibleImage] = useState(false);
+  const [isVisibleFile, setIsVisibleFile] = useState(false);
   const [dataSrcShot, setDataSrcShot] = useState("");
   const [loadProcess, setLoadProcess] = useState(false);
   const [metaDataFile, setMetaDataFile] = useState({});
@@ -88,6 +90,7 @@ const DocumentTypeCheckList = (props) => {
 
   const handlerSetCustomerInDocument = async (file) => {
     try {
+      setLoadProcess(true);
       await callSetCustomerInDocument(
         file,
         {
@@ -105,9 +108,15 @@ const DocumentTypeCheckList = (props) => {
         () => {},
         "PUT"
       );
-      handlerGetPawnDocuments();
       setIsVisibleImage(false);
-    } catch (error) {}
+      setIsVisibleFile(false);
+      setLoadProcess(false);
+      setTimeout(() => {
+        handlerGetPawnDocuments();
+      }, 1000);
+    } catch (error) {
+      setLoadProcess(false);
+    }
   };
 
   let component = <LoaderApp />;
@@ -126,10 +135,11 @@ const DocumentTypeCheckList = (props) => {
             <ComponentShotCamera
               labelImage="Los datos deben ser visibles"
               type="default-rectangle"
-              onClickShot={(src) => {
+              onClickShot={(src, data) => {
                 setDataSrcShot(src);
                 setIsVisibleImage(true);
                 setIsVisibleCamera(false);
+                setMetaDataFile(data);
               }}
             />
           )}
@@ -152,6 +162,20 @@ const DocumentTypeCheckList = (props) => {
             />
           )}
         </AnimatePresence>
+        <AnimatePresence>
+          {isVisibleFile === true && (
+            <ComponentViewDocument
+              src={dataSrcShot}
+              indication="Verifica que tu foto sea visible"
+              onClickContinue={handlerSetCustomerInDocument}
+              metaDataFile={metaDataFile}
+              onClickOther={() => {
+                setIsVisibleFile(false);
+                setDataSrcShot(null);
+              }}
+            />
+          )}
+        </AnimatePresence>
         <ComponentProcessDocument
           onClickOpenCamera={() => {
             setIsVisibleCamera(true);
@@ -167,7 +191,7 @@ const DocumentTypeCheckList = (props) => {
           accept={content.extensions}
           onClickUploadFile={(src, data) => {
             setDataSrcShot(src);
-            setIsVisibleImage(true);
+            setIsVisibleFile(true);
             setMetaDataFile(data);
           }}
         ></ComponentProcessDocument>

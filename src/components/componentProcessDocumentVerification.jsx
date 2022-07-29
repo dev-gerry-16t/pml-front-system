@@ -86,7 +86,7 @@ const ComponentProcessDocument = (props) => {
       alert("El tamaño del archivo supera el máximo permitido");
     }
   };
-  console.log("ENVIROMENT", ENVIROMENT);
+
   return (
     <div className="section-shadow padding-2-1">
       <CustomIndicationList

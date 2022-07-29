@@ -12,6 +12,8 @@ import {
   IconInstructions,
   IconInvoiceCar,
   IconCarId,
+  IconDocument,
+  IconCarTenure,
 } from "../assets/icons";
 
 const max_width = "820px";
@@ -23,6 +25,8 @@ const IconsStep = {
   IconInstructions,
   IconInvoiceCar,
   IconCarId,
+  IconDocument,
+  IconCarTenure,
 };
 
 const PrincipalContainer = styled.div`

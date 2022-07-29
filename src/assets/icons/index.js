@@ -8,6 +8,8 @@ import IconCar from "./iconCar";
 import IconInvoiceCar from "./iconInvoiceCar";
 import IconCarId from "./iconCarId";
 import IconUploadFile from "./iconUploadFile";
+import IconDocument from "./iconDocument";
+import IconCarTenure from "./iconCarTenure";
 
 export {
   IconDocAddress,
@@ -20,4 +22,6 @@ export {
   IconInvoiceCar,
   IconCarId,
   IconUploadFile,
+  IconDocument,
+  IconCarTenure,
 };

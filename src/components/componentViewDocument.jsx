@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import FileViewer from "react-file-viewer";
 import styled from "styled-components";
 import CustomButton from "./customButton";
 
@@ -57,8 +58,20 @@ const ResultImage = styled.div`
   }
 `;
 
-const ComponentViewImage = (props) => {
-  const { src, indication, onClickOther, onClickContinue } = props;
+const ComponentViewDocument = (props) => {
+  const { src, indication, onClickOther, onClickContinue, metaDataFile } =
+    props;
+  const [isVisibleDocument, setIsVisibleDocument] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsVisibleDocument(true);
+    }, 1000);
+
+    return () => {
+      setIsVisibleDocument(false);
+    };
+  }, []);
+
   return (
     <ModalImage
       variants={container}
@@ -78,7 +91,13 @@ const ComponentViewImage = (props) => {
             <span>{indication}</span>
           </div>
           <div className="image-outline">
-            <img id="image-container-process" src={src} alt="screenImage" />
+            {isVisibleDocument === true && (
+              <FileViewer
+                fileType={metaDataFile.extension}
+                filePath={src}
+                onError={() => {}}
+              />
+            )}
           </div>
           <div className="align-button-row">
             <CustomButton
@@ -100,7 +119,7 @@ const ComponentViewImage = (props) => {
               formatType="tertiary"
               onClick={onClickOther}
             >
-              Tomar otra
+              Cancelar
             </CustomButton>
           </div>
         </ResultImage>
@@ -109,4 +128,4 @@ const ComponentViewImage = (props) => {
   );
 };
 
-export default ComponentViewImage;
+export default ComponentViewDocument;

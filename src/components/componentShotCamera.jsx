@@ -131,7 +131,12 @@ const ComponentShotCamera = (props) => {
               canvas.height = video.videoHeight;
               canvas.getContext("2d").drawImage(video, 0, 0);
               const srcImage = canvas.toDataURL("image/jpeg", 1);
-              onClickShot(srcImage);
+              const metadata = {
+                name: window.crypto.randomUUID(),
+                type: "image/jpeg",
+                extension: "jpeg",
+              };
+              onClickShot(srcImage, metadata);
             }}
           >
             <IconCamera size="3em" />

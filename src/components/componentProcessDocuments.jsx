@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import isEmpty from "lodash/isEmpty";
 import isNil from "lodash/isNil";
 import styled from "styled-components";
-import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+import FileViewer from "react-file-viewer";
 import { IconUploadFile } from "../assets/icons";
 import CustomButton from "./customButton";
 import CustomIndicationList from "./customIndicationList";
@@ -186,21 +186,13 @@ const ComponentProcessDocument = (props) => {
                 </motion.button>
               </ButtonHeader>
               {isVisibleDocument === true && (
-                <DocViewer
-                  className="contain-doc-view"
-                  pluginRenderers={DocViewerRenderers}
-                  config={{
-                    header: {
-                      disableFileName: true,
-                      disableHeader: true,
-                    },
-                  }}
-                  documents={[
-                    {
-                      uri: `${ENVIROMENT}/api/v1/file/getFile/${bucketDocument}/${selectDataFile.idDocument}?type=${selectDataFile.mimeType}`,
-                    },
-                  ]}
-                />
+                <div className="contain-doc-view">
+                  <FileViewer
+                    fileType={selectDataFile.extension}
+                    filePath={`${ENVIROMENT}/api/v1/file/getFile/${bucketDocument}/${selectDataFile.idDocument}?type=${selectDataFile.mimeType}`}
+                    onError={() => {}}
+                  />
+                </div>
               )}
             </div>
           </ModalView>
