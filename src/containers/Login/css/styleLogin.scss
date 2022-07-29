@@ -1,0 +1,14 @@
+.display-right {
+  display: flex;
+  justify-content: end;
+  margin-top: 0.5em;
+  margin-bottom: 5em;
+  span {
+    font-family: "Lato";
+    font-weight: 700;
+    font-size: 1.2em;
+    color: var(--color-brand-primary);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

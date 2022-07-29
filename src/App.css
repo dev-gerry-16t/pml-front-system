@@ -1,31 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+@font-face {
+  font-family: "Kometa";
+  src: url("./assets/fonts/kometa.otf");
+}
 .App {
-  text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
   }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
-  color: #61dafb;
+}
+
+:root {
+  --color-backGround-light: #f4f5fa;
+  --color-brand-primary: #103097;
+  --color-brand-secondary: #00d2ae;
+  --color-font-primary: #233299;
+  --color-font-secondary: #f6f7fc;
+  --color-font-light: rgba(9, 12, 65, 0.45);
+  --color-font-normal: #202332;
+  --color-font-dark: #000;
+  --color-border-black: #090c41;
+  --color-backGround-section: #f9f9f9;
 }
 
 @keyframes App-logo-spin {
@@ -35,4 +40,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+body {
+  box-sizing: border-box;
 }
