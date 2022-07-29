@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import isEmpty from "lodash/isEmpty";
 import isNil from "lodash/isNil";
 import { connect } from "react-redux";
@@ -22,6 +22,8 @@ const Login = (props) => {
   const [dataForm, handlerOnChange] = useOnChangeInput(initialState);
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { token = "" } = Object.fromEntries([...searchParams]);
 
   const handlerVerifyLogin = async () => {
     try {
@@ -46,6 +48,36 @@ const Login = (props) => {
       navigate("/auth");
     } catch (error) {}
   };
+
+  const handlerLoginWithToken = async (key) => {
+    try {
+      const response = await callGlobalActionApi(
+        { ...dataForm, language: "es-ES" },
+        key,
+        API_CONSTANTS.LOG_IN.VERIFY_LOGIN_WITH_TOKEN,
+        "GET",
+        false
+      );
+      const responseResult =
+        isNil(response.response) === false &&
+        isEmpty(response.response) === false
+          ? response.response
+          : {};
+      await setDataUserProfile({
+        ...dataProfile,
+        idSystemUser: responseResult.idSystemUser,
+        idLoginHistory: responseResult.idLoginHistory,
+        token: key,
+      });
+      navigate("/auth");
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (isEmpty(token) === false) {
+      handlerLoginWithToken(token);
+    }
+  }, [token]);
 
   return (
     <ComponentPresentation greet="¡Bienvenido!" subGreet="Iniciar Sesión">

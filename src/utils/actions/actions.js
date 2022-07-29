@@ -33,6 +33,8 @@ const callGlobalActionApi =
           config,
           token
         );
+      } else if (method === "GET") {
+        response = await RequesterAxios.get(CONSTANT + id, config);
       } else {
         response = await RequesterAxios.post(
           CONSTANT,

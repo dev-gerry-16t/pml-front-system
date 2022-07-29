@@ -21,6 +21,7 @@ const API_CONSTANTS = {
     SET_LOGIN_HISTORY: `${API.LOG_IN}/setLoginHistory/`,
     VERIFY_LOGIN: `${API.LOG_IN}/verifyLogin`,
     GET_USER_PROFILE: `${API.LOG_IN}/getUserProfile`,
+    VERIFY_LOGIN_WITH_TOKEN: `${API.LOG_IN}/verifyLoginWithToken/`,
   },
   SYSTEM_CONFIGURATION: {
     GET_ALL_LABELS: `${API.SYSTEM_CONFIGURATION}/getAllLabels`,
