@@ -88,36 +88,6 @@ const DocumentId = (props) => {
     }
   };
 
-  const handlerGetConfigurationMetaMap = async () => {
-    try {
-      const response = await callGlobalActionApi(
-        {
-          idSystemUser,
-          idLoginHistory,
-          idCustomer: null,
-          flowId: config.flowId,
-          metadata: config.metadata,
-        },
-        null,
-        API_CONSTANTS.META_MAP.CREATE_VERIFICATION,
-        "POST",
-        true
-      );
-      const responseResult =
-        isEmpty(response) === false &&
-        isNil(response.response) === false &&
-        isEmpty(response.response) === false
-          ? response.response
-          : {};
-      setDataUserProfile({
-        ...dataProfile,
-        tokenMetaMap: responseResult.token,
-        idVerification: responseResult.verificationId,
-        identity: responseResult.identity,
-      });
-    } catch (error) {}
-  };
-
   const handlerContinueProcess = async (file) => {
     const dataMetaMap = arrayDataFiles;
     const dataFileMetaMap = arrayFiles;
@@ -222,13 +192,7 @@ const DocumentId = (props) => {
   };
 
   useEffect(() => {
-    if (
-      window.mobileCheck() === true &&
-      isNil(dataProfile.idVerification) === true
-    ) {
-      handlerGetAllCountries();
-      handlerGetConfigurationMetaMap();
-    }
+    handlerGetAllCountries();
   }, []);
 
   if (window.mobileCheck() === false && loadProcess === false) {

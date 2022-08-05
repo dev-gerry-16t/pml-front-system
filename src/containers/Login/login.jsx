@@ -12,6 +12,8 @@ import CustomForm from "../../components/customForm";
 import CustomInput from "../../components/customInput";
 import CustomButton from "../../components/customButton";
 import ComponentPresentation from "../../components/componentPresentation";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
+import FrontFunctions from "../../utils/actions/frontFunctions";
 
 const Login = (props) => {
   const { callGlobalActionApi, setDataUserProfile, dataProfile } = props;
@@ -20,6 +22,7 @@ const Login = (props) => {
     password: "",
   };
   const [dataForm, handlerOnChange] = useOnChangeInput(initialState);
+  const frontFunctions = new FrontFunctions();
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -46,7 +49,13 @@ const Login = (props) => {
         token: responseResult.tokenApp,
       });
       navigate("/auth");
-    } catch (error) {}
+    } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
+     
+    }
   };
 
   const handlerLoginWithToken = async (key) => {

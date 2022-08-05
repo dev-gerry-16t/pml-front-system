@@ -7,6 +7,7 @@ import { API_CONSTANTS } from "./utils/constants/apiConstants";
 import "./App.css";
 import "./global-styles.scss";
 import LoaderApp from "./components/loaderApp";
+import ComponentToasterMessage from "./components/componentToasterMessage";
 
 const loading = () => <LoaderApp />;
 
@@ -63,6 +64,7 @@ const App = ({ callGlobalActionApi, dataProfile }) => {
 
   return (
     <BrowserRouter>
+      <ComponentToasterMessage />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
@@ -71,7 +73,7 @@ const App = ({ callGlobalActionApi, dataProfile }) => {
         <Route path="/auth" element={<Auth />} />
         <Route path="/logout" element={<Auth />} />
         <Route path="/testScreen" element={<TestScreen />} />
-        
+
         <Route path="/websystem/*" element={<DefaultLayout />} />
       </Routes>
     </BrowserRouter>
