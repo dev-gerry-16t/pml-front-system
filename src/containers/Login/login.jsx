@@ -53,8 +53,7 @@ const Login = (props) => {
       frontFunctions.showMessageStatusApi(
         error,
         GLOBAL_CONSTANTS.STATUS_API.WARNING
-      );
-     
+      );     
     }
   };
 
