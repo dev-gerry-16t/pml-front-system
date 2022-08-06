@@ -32,7 +32,6 @@ const Verification = (props) => {
   const frontFunctions = new FrontFunctions();
 
   let component = <LoaderApp />;
-  console.log("config", config);
   const handlerGetConfigurationMetaMap = async () => {
     try {
       const response = await callGlobalActionApi(

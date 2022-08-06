@@ -9,6 +9,8 @@ import "./css/styleRegister.scss";
 import LoaderApp from "../../components/loaderApp";
 import { setDataUserProfile } from "../../utils/dispatchs/userProfileDispatch";
 import ComponentSuccess from "../../components/componentSuccess";
+import FrontFunctions from "../../utils/actions/frontFunctions";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 
 const ActivateAccount = (props) => {
   const { callGlobalActionApi, setDataUserProfile } = props;
@@ -17,6 +19,7 @@ const ActivateAccount = (props) => {
   const [loadedScreen, setLoadedScreen] = useState(true);
   const [validateLink, setValidateLink] = useState(false);
   const [dataVerify, setDataVerify] = useState({});
+  const frontFunctions = new FrontFunctions();
 
   let component = <LoaderApp />;
 
@@ -43,6 +46,10 @@ const ActivateAccount = (props) => {
     } catch (error) {
       setValidateLink(false);
       setLoadedScreen(false);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
     }
   };
 

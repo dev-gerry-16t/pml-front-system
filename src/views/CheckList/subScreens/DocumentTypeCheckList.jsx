@@ -16,6 +16,8 @@ import {
   callSetCustomerInDocument,
 } from "../../../utils/actions/actions";
 import { API_CONSTANTS } from "../../../utils/constants/apiConstants";
+import FrontFunctions from "../../../utils/actions/frontFunctions";
+import GLOBAL_CONSTANTS from "../../../utils/constants/globalConstants";
 
 const DocumentTypeCheckList = (props) => {
   const { callGlobalActionApi, callSetCustomerInDocument, dataProfile } = props;
@@ -37,6 +39,8 @@ const DocumentTypeCheckList = (props) => {
   const [loadProcess, setLoadProcess] = useState(false);
   const [metaDataFile, setMetaDataFile] = useState({});
   const [dataPawnDocument, setDataPawnDocument] = useState({});
+
+  const frontFunctions = new FrontFunctions();
 
   const handlerGetPawnDocuments = async () => {
     try {
@@ -67,6 +71,10 @@ const DocumentTypeCheckList = (props) => {
           : {};
       setDataPawnDocument(responseDocuments);
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
     }
   };

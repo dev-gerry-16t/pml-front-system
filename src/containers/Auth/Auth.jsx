@@ -6,6 +6,7 @@ import LoaderApp from "../../components/loaderApp";
 import { useNavigate } from "react-router-dom";
 import FrontFunctions from "../../utils/actions/frontFunctions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 
 const Auth = (props) => {
   const { dataProfile, callGlobalActionApi, purgeStore } = props;
@@ -29,6 +30,10 @@ const Auth = (props) => {
         false
       );
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
     }
   };

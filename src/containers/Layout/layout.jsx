@@ -14,6 +14,7 @@ import ContextLayout from "../../context/contextLayout";
 import Verification from "../../views/Verification/Verification";
 import FinishVerification from "../../views/FinishVerification/FinishVerification";
 import CheckList from "../../views/CheckList/CheckList";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 
 const max_width = "820px";
 
@@ -104,6 +105,10 @@ const DefaultLayout = (props) => {
         navigate(findCurrentScreen.path);
       }
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
     }
   };
@@ -123,6 +128,10 @@ const DefaultLayout = (props) => {
         true
       );
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
     }
   };

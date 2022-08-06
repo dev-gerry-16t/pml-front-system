@@ -18,6 +18,7 @@ import FrontFunctions from "../../utils/actions/frontFunctions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import LoaderProcess from "../../components/loaderProcess";
 import CustomSelect from "../../components/customSelect";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 
 const EditButton = styled.div`
   position: absolute;
@@ -312,6 +313,10 @@ const CarInformation = (props) => {
         true
       );
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
     }
   };

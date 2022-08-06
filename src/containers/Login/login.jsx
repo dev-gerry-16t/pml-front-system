@@ -52,7 +52,7 @@ const Login = (props) => {
     } catch (error) {
       frontFunctions.showMessageStatusApi(
         error,
-        GLOBAL_CONSTANTS.STATUS_API.WARNING
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
       );     
     }
   };
@@ -78,7 +78,12 @@ const Login = (props) => {
         token: key,
       });
       navigate("/auth");
-    } catch (error) {}
+    } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
+    }
   };
 
   useEffect(() => {

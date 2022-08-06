@@ -13,6 +13,8 @@ import CustomInput from "../../components/customInput";
 import CustomButton from "../../components/customButton";
 import { useOnChangeInput } from "../../hooks";
 import ComponentSendEmail from "../../components/componentSendEmail";
+import FrontFunctions from "../../utils/actions/frontFunctions";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 
 const SignIn = (props) => {
   const { callGlobalActionApi } = props;
@@ -33,6 +35,7 @@ const SignIn = (props) => {
   const [validateLink, setValidateLink] = useState(false);
   const [loadedScreen, setLoadedScreen] = useState(true);
   const [sendActivateAccount, setSendActivateAccount] = useState(false);
+  const frontFunctions = new FrontFunctions();
 
   const handlerValidateKeyNumber = (data) => {
     let numberToCompare = "";
@@ -95,6 +98,10 @@ const SignIn = (props) => {
     } catch (error) {
       setLoadedScreen(false);
       setValidateLink(false);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
     }
   };
 
@@ -126,6 +133,10 @@ const SignIn = (props) => {
       setSendActivateAccount(true);
     } catch (error) {
       setLoadedScreen(false);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
     }
   };
 

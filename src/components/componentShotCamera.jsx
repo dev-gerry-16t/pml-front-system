@@ -82,6 +82,7 @@ const ComponentShotCamera = (props) => {
       stream = await navigator.mediaDevices.getUserMedia(constraints);
       video.srcObject = stream;
       video.autoplay = true;
+      video.playsInline = true;
     } catch (error) {
       window.alert(error);
     }

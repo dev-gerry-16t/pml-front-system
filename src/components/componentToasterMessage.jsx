@@ -57,8 +57,8 @@ const ButtonHeader = styled.div`
     border: none;
     cursor: pointer;
     background: conic-gradient(
-      rgba(255, 255, 255, 0.4) ${(props) => props.load * 3.6}deg,
-      rgba(255, 255, 255, 0.1) ${(props) => props.load * 3.6}deg
+      rgba(255, 255, 255, 0.4) ${(props) => props.load * 2 * 3.6}deg,
+      rgba(255, 255, 255, 0.1) ${(props) => props.load * 2 * 3.6}deg
     );
     position: relative;
     animation: ${loadCircle} 1s cubic-bezier(0.1, 0.7, 1, 0.1) ease-out;
@@ -117,7 +117,7 @@ const ComponentToasterMessage = () => {
   }, []);
 
   useEffect(() => {
-    if (timeDisplay >= 11) {
+    if (timeDisplay >= 6) {
       handlerCloseMessage();
       clearInterval(intervalTime);
     }

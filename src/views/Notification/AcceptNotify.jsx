@@ -11,6 +11,7 @@ import CustomButton from "../../components/customButton";
 import { callGlobalActionApi } from "../../utils/actions/actions";
 import FrontFunctions from "../../utils/actions/frontFunctions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 
 const container = {
   hidden: { opacity: 0 },
@@ -93,6 +94,10 @@ const AcceptNotify = (props) => {
         getPipeLine();
       }
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
     }
   };
