@@ -192,12 +192,12 @@ const DocumentId = (props) => {
         setIsVisibleImage(false);
         setIsVisibleCamera(false);
         setLoadProcess(false);
-        dataSrcShot("");
-        loadProcess(false);
-        arrayFiles([]);
-        arrayDataFiles([]);
-        stepPage(1);
-        textFieType("");
+        setDataSrcShot("");
+        setLoadProcess(false);
+        setArrayFiles([]);
+        setArrayDataFiles([]);
+        setStepPage(1);
+        setTextFileType("");
       }, 7000);
       frontFunctions.showMessageStatusApi(
         error,
