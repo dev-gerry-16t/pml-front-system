@@ -30,20 +30,24 @@ import platform from "platform";
 // No faces detected in the video.
 
 const messageApiMati = {
-  "documePhoto.badText": "La validación del campo del documento falló.",
-  "documentPhoto.blurryText": "La foto del documento está demasiado borrosa.",
-  "documentPhoto.croppedDocument": "La foto del documento está recortada.",
+  "documePhoto.badText":
+    "La validación del campo del documento falló, verifica que sea legible y vuelve a intentarlo.",
+  "documentPhoto.blurryText":
+    "La foto del documento está demasiado borrosa, verifica que sea legible y vuelve a intentarlo.",
+  "documentPhoto.croppedDocument":
+    "La foto del documento está recortada, vuelve a intentarlo.",
   "documentPhoto.smallImageSize":
-    "La resolución de la foto del documento es demasiado baja",
+    "La resolución de la foto del documento es demasiado baja, vuelve a intentarlo.",
   "documentPhoto.unexpectedData":
-    "Error inesperado en la lectura del documento.",
-  "documentPhoto.noText": "La foto del documento no tiene texto.",
+    "Error inesperado en la lectura del documento, vuelve a intentarlo.",
+  "documentPhoto.noText":
+    "La foto del documento no tiene texto, vuelve a intentarlo.",
   "documentPhoto.noFace":
-    "La foto del documento no tiene rostro (para los pasos de validación que requieren un rostro).",
+    "La foto del documento no tiene rostro (para los pasos de validación que requieren un rostro), vuelve a intentarlo.",
   "documentPhoto.grayscaleImage":
-    "La foto del documento está en escala de grises.",
+    "La foto del documento está en escala de grises, vuelve a intentarlo.",
   "documentPhoto.screenPhoto":
-    "La foto del documento es una captura de pantalla.",
+    "La foto del documento es una captura de pantalla, vuelve a intentarlo con un documento original.",
   "documentPhoto.noDocument": "El usuario debe subir una foto diferente.",
   "documentPhoto.missingFields":
     "La foto del documento no coincide con una plantilla de documento conocida.",
@@ -166,6 +170,14 @@ class FrontFunctions {
         options
       );
       const response = await fetchDocument.json();
+
+      if (isEmpty(response) === false) {
+        for (const element of response) {
+          if (element.error) {
+            throw messageApiMati[element.error.code];
+          }
+        }
+      }
       return response;
     } catch (error) {
       throw error;

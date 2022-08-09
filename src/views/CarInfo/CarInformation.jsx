@@ -295,6 +295,7 @@ const CarInformation = (props) => {
     isNil(config) === false ? config.color : "#989FD6"
   );
   const [loadedScreen, setLoadedScreen] = useState(false);
+  const [isVisibleLoad, setIsVisibleLoad] = useState(false);
 
   const frontFunctions = new FrontFunctions();
 
@@ -321,6 +322,22 @@ const CarInformation = (props) => {
     }
   };
 
+  const handlerContinueProcess = async () => {
+    try {
+      setIsVisibleLoad(true);
+      await setPipeLine(
+        {
+          idStep,
+        },
+        idPawn
+      );
+      await getPipeLine();
+      setIsVisibleLoad(false);
+    } catch (error) {
+      setIsVisibleLoad(false);
+    }
+  };
+
   useEffect(() => {
     if (isNil(config) === false) {
       setColorCar(isNil(config.color) === false ? config.color : "#989FD6");
@@ -329,7 +346,7 @@ const CarInformation = (props) => {
 
   let component = <LoaderApp />;
 
-  if (isNil(config) === false) {
+  if (isNil(config) === false && isVisibleLoad === false) {
     component = (
       <div className="general-container">
         <ComponentGeneralSection title={step}>
@@ -404,17 +421,7 @@ const CarInformation = (props) => {
                 padding: "5px 0px",
               }}
               formatType="secondary"
-              onClick={async () => {
-                try {
-                  await setPipeLine(
-                    {
-                      idStep,
-                    },
-                    idPawn
-                  );
-                  await getPipeLine();
-                } catch (error) {}
-              }}
+              onClick={handlerContinueProcess}
             >
               Iniciar Proceso
             </CustomButton>
@@ -422,6 +429,10 @@ const CarInformation = (props) => {
         </ComponentGeneralSection>
       </div>
     );
+  }
+
+  if (isVisibleLoad === true) {
+    component = <LoaderApp />;
   }
 
   return component;

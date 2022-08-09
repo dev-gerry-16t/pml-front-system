@@ -18,6 +18,7 @@ import { useOnChangeInput } from "../../../hooks";
 import LoaderProcess from "../../../components/loaderFullProcess";
 import ComponentShotCamera from "../../../components/componentShotCamera";
 import ComponentViewImage from "../../../components/componentViewImage";
+import GLOBAL_CONSTANTS from "../../../utils/constants/globalConstants";
 
 const DocumentId = (props) => {
   const initialState = {
@@ -106,7 +107,7 @@ const DocumentId = (props) => {
         dataMetaMap.push(dataToMetaMap);
         dataFileMetaMap.push(file);
         setLoadProcess(true);
-        const response = await frontFunctions.handlerUploadToMetaMap(
+        await frontFunctions.handlerUploadToMetaMap(
           dataFileMetaMap,
           dataMetaMap,
           dataProfile.identity,
@@ -164,7 +165,7 @@ const DocumentId = (props) => {
         dataMetaMap.push(dataToMetaMap);
         dataFileMetaMap.push(file);
         setLoadProcess(true);
-        const response = await frontFunctions.handlerUploadToMetaMap(
+        await frontFunctions.handlerUploadToMetaMap(
           dataFileMetaMap,
           dataMetaMap,
           dataProfile.identity,
@@ -187,7 +188,21 @@ const DocumentId = (props) => {
         setLoadProcess(false);
       }
     } catch (error) {
-      setLoadProcess(false);
+      setTimeout(() => {
+        setIsVisibleImage(false);
+        setIsVisibleCamera(false);
+        setLoadProcess(false);
+        dataSrcShot("");
+        loadProcess(false);
+        arrayFiles([]);
+        arrayDataFiles([]);
+        stepPage(1);
+        textFieType("");
+      }, 7000);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
     }
   };
 

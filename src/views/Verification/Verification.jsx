@@ -69,7 +69,6 @@ const Verification = (props) => {
   };
 
   useEffect(() => {
-    console.log("render");
     if (
       window.mobileCheck() === true &&
       isNil(dataProfile.idVerification) === true &&

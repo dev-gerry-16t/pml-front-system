@@ -132,14 +132,14 @@ const ComponentToasterMessage = () => {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -300, opacity: 0 }}
           onHoverEnd={(e) => {
-            e.stopPropagation();
-            handlerStartInterval();
+            // e.stopPropagation();
+            // handlerStartInterval();
           }}
           onHoverStart={(e) => {
-            e.stopPropagation();
-            if (isNil(intervalTime) === false) {
-              clearInterval(intervalTime);
-            }
+            // e.stopPropagation();
+            // if (isNil(intervalTime) === false) {
+            //   clearInterval(intervalTime);
+            // }
           }}
         >
           <div className="name-message">
