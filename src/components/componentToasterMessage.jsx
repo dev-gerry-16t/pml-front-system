@@ -95,7 +95,6 @@ const ComponentToasterMessage = () => {
     setErrorType("");
     setTimeDisplay(0);
   };
-  console.log("timeDisplay", timeDisplay);
   const handlerStartInterval = () => {
     let time = timeDisplay;
     intervalTime = setInterval(() => {
