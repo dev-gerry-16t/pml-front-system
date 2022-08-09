@@ -62,7 +62,7 @@ const LabelShot = styled.div`
   z-index: 1;
   h2 {
     margin: 0px;
-    color: var(--color-backGround-section);
+    color: var(--color-brand-secondary);
   }
 `;
 
@@ -70,22 +70,32 @@ const ComponentShotCamera = (props) => {
   const { labelImage, onClickShot, type } = props;
 
   const handlerOpenCamera = async () => {
-    const constraints = {
-      video: {
-        facingMode: type === "selfie" ? "user" : { exact: "environment" },
-        // width: { max: window.innerWidth },
-        // height: { min: window.innerHeight },
-      },
-    };
-
-    const video = document.querySelector("video");
     try {
-      stream = await navigator.mediaDevices.getUserMedia(constraints);
-      video.srcObject = stream;
-      video.autoplay = true;
-      video.playsInline = true;
+      if (
+        "mediaDevices" in navigator &&
+        "getUserMedia" in navigator.mediaDevices
+      ) {
+        const constraints = {
+          video: {
+            facingMode: type === "selfie" ? "user" : "environment",
+            width: { min: 600 },
+            height: { min: 600 },
+          },
+        };
+        const video = document.querySelector("video");
+        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+          video.srcObject = stream;
+          video.onloadedmetadata = () => {
+            video.play();
+          };
+        });
+      } else {
+        window.alert("Dispositivo no compatible");
+      }
     } catch (error) {
-      window.alert(error);
+      window.alert(
+        "No se encontró un dispositivo compatible con la configuración proporcionada"
+      );
     }
   };
 
@@ -134,12 +144,13 @@ const ComponentShotCamera = (props) => {
               canvas.width = video.videoWidth;
               canvas.height = video.videoHeight;
               canvas.getContext("2d").drawImage(video, 0, 0);
-              const srcImage = canvas.toDataURL("image/jpeg", 1);
+              const srcImage = canvas.toDataURL("image/jpeg");
               const metadata = {
                 name: window.crypto.randomUUID(),
                 type: "image/jpeg",
                 extension: "jpeg",
               };
+              video.pause()
               onClickShot(srcImage, metadata);
             }}
           >
