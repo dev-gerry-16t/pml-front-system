@@ -47,23 +47,21 @@ const Header = styled.header`
 `;
 
 const DefaultLayout = (props) => {
-  const {
-    dataProfile: { idSystemUser, idLoginHistory },
-    callGlobalActionApi,
-  } = props;
+  const { dataProfile, callGlobalActionApi } = props;
+  const navigate = useNavigate();
+
   const [idItem, setIdItem] = useState(null);
   const [idPawn, setIdPawn] = useState(null);
   const [dataConfigStep, setDataConfigStep] = useState([]);
 
-  const navigate = useNavigate();
   const frontFunctions = new FrontFunctions();
 
   const handlerGetPipeLine = async () => {
     try {
       const response = await callGlobalActionApi(
         {
-          idSystemUser,
-          idLoginHistory,
+          idSystemUser: dataProfile.idSystemUser,
+          idLoginHistory: dataProfile.idLoginHistory,
           idCustomer: null,
         },
         null,
@@ -118,8 +116,8 @@ const DefaultLayout = (props) => {
       await callGlobalActionApi(
         {
           ...data,
-          idSystemUser,
-          idLoginHistory,
+          idSystemUser: dataProfile.idSystemUser,
+          idLoginHistory: dataProfile.idLoginHistory,
           idCustomer: null,
         },
         id,
@@ -153,7 +151,11 @@ const DefaultLayout = (props) => {
   };
 
   useEffect(() => {
-    handlerGetPipeLine();
+    if (isNil(dataProfile)) {
+      navigate("/logout");
+    } else {
+      handlerGetPipeLine();
+    }
   }, []);
 
   return (
