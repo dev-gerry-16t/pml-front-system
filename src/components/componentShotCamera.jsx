@@ -1,4 +1,5 @@
 import React from "react";
+import isNil from "lodash/isNil";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconCamera } from "../assets/icons";
@@ -93,9 +94,11 @@ const ComponentShotCamera = (props) => {
       handlerOpenCamera();
     }, 500);
     return () => {
-      stream.getTracks().forEach(function (track) {
-        track.stop();
-      });
+      if (isNil(stream) === false && isNil(stream.getTracks) === false) {
+        stream.getTracks().forEach(function (track) {
+          track.stop();
+        });
+      }
     };
   }, []);
 
