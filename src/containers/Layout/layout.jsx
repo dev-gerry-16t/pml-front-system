@@ -189,13 +189,18 @@ const DefaultLayout = (props) => {
             alt="Imagen-ciudad"
           />
         </Header>
-        <Routes>
-          <Route path="accept-notify" element={<AcceptNotify />} />
-          <Route path="car-information" element={<CarInformation />} />
-          <Route path="user-verification/*" element={<Verification />} />
-          <Route path="finish-verification" element={<FinishVerification />} />
-          <Route path="check-list/*" element={<CheckList />} />
-        </Routes>
+        {isNil(dataProfile) === false && (
+          <Routes>
+            <Route path="accept-notify" element={<AcceptNotify />} />
+            <Route path="car-information" element={<CarInformation />} />
+            <Route path="user-verification/*" element={<Verification />} />
+            <Route
+              path="finish-verification"
+              element={<FinishVerification />}
+            />
+            <Route path="check-list/*" element={<CheckList />} />
+          </Routes>
+        )}
       </ContextLayout.Provider>
     </Container>
   );
