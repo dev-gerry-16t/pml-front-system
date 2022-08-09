@@ -12,6 +12,7 @@ import FrontFunctions from "../../../utils/actions/frontFunctions";
 import LoaderProcess from "../../../components/loaderFullProcess";
 import ComponentShotCamera from "../../../components/componentShotCamera";
 import ComponentViewImage from "../../../components/componentViewImage";
+import GLOBAL_CONSTANTS from "../../../utils/constants/globalConstants";
 
 const DocumentSelfie = (props) => {
   const { dataProfile } = props;
@@ -47,7 +48,7 @@ const DocumentSelfie = (props) => {
       dataMetaMap.push(dataToMetaMap);
       dataFileMetaMap.push(file);
       setLoadProcess(true);
-      const response = await frontFunctions.handlerUploadToMetaMap(
+      await frontFunctions.handlerUploadToMetaMap(
         dataFileMetaMap,
         dataMetaMap,
         dataProfile.identity,
@@ -65,7 +66,16 @@ const DocumentSelfie = (props) => {
       await getPipeLine();
       setLoadProcess(false);
     } catch (error) {
-      setLoadProcess(false);
+      setTimeout(() => {
+        setIsVisibleImage(false);
+        setIsVisibleCamera(false);
+        setLoadProcess(false);
+        setDataSrcShot("");
+      }, 7000);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
     }
   };
 

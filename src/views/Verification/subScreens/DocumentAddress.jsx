@@ -14,6 +14,7 @@ import LoaderProcess from "../../../components/loaderFullProcess";
 import ComponentShotCamera from "../../../components/componentShotCamera";
 import ComponentViewImage from "../../../components/componentViewImage";
 import ComponentInstruction from "../../../components/componentInstruction";
+import GLOBAL_CONSTANTS from "../../../utils/constants/globalConstants";
 
 const arrayIndication = [
   { name: "Recibo de luz", desciption: "" },
@@ -63,7 +64,7 @@ const DocumentAddress = (props) => {
       dataMetaMap.push(dataToMetaMap);
       dataFileMetaMap.push(file);
       setLoadProcess(true);
-      const response = await frontFunctions.handlerUploadToMetaMap(
+      await frontFunctions.handlerUploadToMetaMap(
         dataFileMetaMap,
         dataMetaMap,
         dataProfile.identity,
@@ -81,7 +82,17 @@ const DocumentAddress = (props) => {
       await getPipeLine();
       setLoadProcess(false);
     } catch (error) {
-      setLoadProcess(false);
+      setTimeout(() => {
+        setIsVisibleImage(false);
+        setIsVisibleCamera(false);
+        setLoadProcess(false);
+        setDataSrcShot("");
+        setLoadProcess(false);
+      }, 7000);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
     }
   };
 

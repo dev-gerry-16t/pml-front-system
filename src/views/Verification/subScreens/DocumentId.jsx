@@ -193,7 +193,6 @@ const DocumentId = (props) => {
         setIsVisibleCamera(false);
         setLoadProcess(false);
         setDataSrcShot("");
-        setLoadProcess(false);
         setArrayFiles([]);
         setArrayDataFiles([]);
         setStepPage(1);
