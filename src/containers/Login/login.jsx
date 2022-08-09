@@ -79,7 +79,6 @@ const Login = (props) => {
       });
       navigate("/auth");
     } catch (error) {
-      console.log('error',error);
       frontFunctions.showMessageStatusApi(
         error,
         GLOBAL_CONSTANTS.STATUS_API.WARNING
