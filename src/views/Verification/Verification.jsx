@@ -59,6 +59,7 @@ const Verification = (props) => {
         tokenMetaMap: responseResult.token,
         idVerification: responseResult.verificationId,
         identity: responseResult.identity,
+        alpha2: isNil(config.alpha2) === false ? config.alpha2 : null,
       });
     } catch (error) {
       frontFunctions.showMessageStatusApi(

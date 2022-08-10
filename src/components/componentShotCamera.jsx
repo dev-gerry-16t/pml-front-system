@@ -76,6 +76,7 @@ const ComponentShotCamera = (props) => {
         "getUserMedia" in navigator.mediaDevices
       ) {
         const constraints = {
+          audio: false,
           video: {
             facingMode: type === "selfie" ? "user" : "environment",
             width: { min: 600 },
@@ -104,11 +105,10 @@ const ComponentShotCamera = (props) => {
       handlerOpenCamera();
     }, 500);
     return () => {
-      if (isNil(stream) === false && isNil(stream.getTracks) === false) {
-        stream.getTracks().forEach(function (track) {
-          track.stop();
-        });
-      }
+      console.log("stream", stream);
+      stream.getTracks().forEach(function (track) {
+        track.stop();
+      });
     };
   }, []);
 
@@ -132,7 +132,7 @@ const ComponentShotCamera = (props) => {
         <div className="mask-video">
           <div id="screen-shot" className={type}></div>
         </div>
-        <video id="video-shot" autoPlay={true}></video>
+        <video id="video-shot" muted autoplay playsinline></video>
         <ButtonCam>
           <motion.button
             className="screen-shot"
@@ -150,7 +150,8 @@ const ComponentShotCamera = (props) => {
                 type: "image/jpeg",
                 extension: "jpeg",
               };
-              video.pause()
+              video.pause();
+              video.currentTime = 0;
               onClickShot(srcImage, metadata);
             }}
           >

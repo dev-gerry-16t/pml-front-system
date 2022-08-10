@@ -15,6 +15,9 @@ const container = {
 
 const ContainerInfo = styled.div`
   padding: 1em 3em;
+  @media screen and (max-width: 420px) {
+    padding: 1em 10px;
+  }
 `;
 
 const GeneralSection = styled(motion.div)`
@@ -36,6 +39,9 @@ const GeneralSection = styled(motion.div)`
       font-weight: 700;
       font-size: 1.4em;
     }
+  }
+  @media screen and (max-width: 420px) {
+    padding: 1em 10px;
   }
 `;
 

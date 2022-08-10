@@ -2,6 +2,7 @@ import isNil from "lodash/isNil";
 import isEmpty from "lodash/isEmpty";
 import isString from "lodash/isString";
 import platform from "platform";
+import isArray from "lodash/isArray";
 
 // Document field validation failed.
 // Document photo is too blurry.
@@ -170,13 +171,16 @@ class FrontFunctions {
         options
       );
       const response = await fetchDocument.json();
-
-      if (isEmpty(response) === false) {
+      if (isEmpty(response) === false && isArray(response)) {
         for (const element of response) {
           if (element.error) {
             throw messageApiMati[element.error.code];
           }
         }
+      } else {
+        throw isNil(response.message) === false
+          ? response.message
+          : "Error en los parámetros";
       }
       return response;
     } catch (error) {

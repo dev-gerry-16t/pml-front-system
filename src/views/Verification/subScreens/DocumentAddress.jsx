@@ -56,7 +56,7 @@ const DocumentAddress = (props) => {
         group: content.group,
         data: {
           type: dataForm.documentAddress,
-          country: dataProfile.country,
+          country: dataProfile.alpha2,
           page: "front",
           filename: `${dataForm.documentAddress}-1.jpeg`,
         },
@@ -87,7 +87,6 @@ const DocumentAddress = (props) => {
         setIsVisibleCamera(false);
         setLoadProcess(false);
         setDataSrcShot("");
-        setLoadProcess(false);
       }, 7000);
       frontFunctions.showMessageStatusApi(
         error,

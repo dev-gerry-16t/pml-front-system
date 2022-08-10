@@ -28,6 +28,9 @@ const Container = styled.div`
   @media screen and (max-width: ${max_width}) {
     font-size: 14px;
   }
+  @media screen and (max-width: 420px) {
+    font-size: 12px;
+  }
 `;
 
 const Header = styled.header`

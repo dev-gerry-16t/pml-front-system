@@ -117,12 +117,13 @@ const DocumentId = (props) => {
         );
         setDataUserProfile({
           ...dataProfile,
-          country: dataOptionCountry["Alpha-2"],
+          alpha2: dataOptionCountry["Alpha-2"],
         });
         await setPipeLine(
           {
             idStep,
             idStepLine: content.idStepLine,
+            alpha2: dataOptionCountry["Alpha-2"],
           },
           idPawn
         );
@@ -175,12 +176,13 @@ const DocumentId = (props) => {
         );
         setDataUserProfile({
           ...dataProfile,
-          country: dataOptionCountry["Alpha-2"],
+          alpha2: dataOptionCountry["Alpha-2"],
         });
         await setPipeLine(
           {
             idStep,
             idStepLine: content.idStepLine,
+            alpha2: dataOptionCountry["Alpha-2"],
           },
           idPawn
         );
