@@ -181,7 +181,7 @@ const Line = styled.div`
   }
 `;
 
-const CustomStepLine = ({ children, data }) => {
+const CustomStepLine = ({ children, data, goToActive = false }) => {
   const [content, setContent] = useState([]);
   const navigate = useNavigate();
 
@@ -206,7 +206,7 @@ const CustomStepLine = ({ children, data }) => {
               <ComponentStep
                 key={`stepLine-${ix}`}
                 onClick={() => {
-                  //navigate(row.path);
+                  if (goToActive === true) navigate(row.path);
                 }}
               >
                 <div className="title-description">
