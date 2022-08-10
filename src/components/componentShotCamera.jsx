@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import isNil from "lodash/isNil";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconCamera } from "../assets/icons";
-import { useEffect } from "react";
 
 let stream;
 
@@ -51,6 +50,16 @@ const ButtonCam = styled.div`
     justify-content: center;
     align-items: center;
   }
+  .change-camera-type{
+    position: absolute;
+    outline: none;
+    border: none;
+    width: 4em;
+    height: 4em;
+    border-radius: 50%;
+    background: var(--color-brand-secondary);
+    right: 3em;
+  }
 `;
 
 const LabelShot = styled.div`
@@ -68,48 +77,74 @@ const LabelShot = styled.div`
 
 const ComponentShotCamera = (props) => {
   const { labelImage, onClickShot, type } = props;
+  const [isUserFacing, setIsUserFacing] = useState(true);
+  const constraints = (window.constraints = {
+    audio: false,
+    video: true,
+  });
+
+  const handleSuccess = (stream) => {
+    const video = document.querySelector("video");
+    stream.getTracks().forEach((t) => {
+      t.onmute = (e) => {};
+      t.onunmute = (e) => {};
+      t.onended = (e) => {};
+    });
+    video.srcObject = stream;
+    video.play();
+  };
+
+  const handleError = (error) => {
+    window.alert("No otorgaste los permisos para continuar");
+  };
 
   const handlerOpenCamera = async () => {
     try {
-      if (
-        "mediaDevices" in navigator &&
-        "getUserMedia" in navigator.mediaDevices
-      ) {
-        const constraints = {
-          audio: false,
-          video: {
-            facingMode: type === "selfie" ? "user" : "environment",
-            width: { min: 600 },
-            height: { min: 600 },
-          },
-        };
-        const video = document.querySelector("video");
-        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-          video.srcObject = stream;
-          video.onloadedmetadata = () => {
-            video.play();
-          };
-        });
-      } else {
-        window.alert("Dispositivo no compatible");
-      }
+      window.stream = await navigator.mediaDevices.getUserMedia(constraints);
+      handleSuccess(window.stream);
     } catch (error) {
-      window.alert(
-        "No se encontró un dispositivo compatible con la configuración proporcionada"
-      );
+      handleError(error);
     }
+    // try {
+    //   if (
+    //     "mediaDevices" in navigator &&
+    //     "getUserMedia" in navigator.mediaDevices
+    //   ) {
+    //     const constraints = {
+    //       audio: false,
+    //       video: {
+    //         facingMode: type === "selfie" ? "user" : "environment",
+    //         width: { min: 600 },
+    //         height: { min: 600 },
+    //       },
+    //     };
+    //     const video = document.querySelector("video");
+    //     navigator.mediaDevices
+    //       .getUserMedia(constraints)
+    //       .then((stream) => {
+    //         video.srcObject = stream;
+    //         video.onloadedmetadata = () => {
+    //           video.play();
+    //         };
+    //       })
+    //       .catch((error) => {
+    //         window.alert(`Dispositivo no compatible ${error}`);
+    //       });
+    //   } else {
+    //     window.alert("Dispositivo no compatible");
+    //   }
+    // } catch (error) {
+    //   window.alert(
+    //     "No se encontró un dispositivo compatible con la configuración proporcionada"
+    //   );
+    // }
   };
 
   useEffect(() => {
     setTimeout(() => {
       handlerOpenCamera();
-    }, 500);
-    return () => {
-      console.log("stream", stream);
-      stream.getTracks().forEach(function (track) {
-        track.stop();
-      });
-    };
+    }, 1000);
+    return () => {};
   }, []);
 
   return (
@@ -132,8 +167,28 @@ const ComponentShotCamera = (props) => {
         <div className="mask-video">
           <div id="screen-shot" className={type}></div>
         </div>
-        <video id="video-shot" muted autoPlay playsInline></video>
+        <video id="video-shot" autoPlay playsInline></video>
         <ButtonCam>
+          <motion.button
+            whileHover={{ scale: 1.07 }}
+            whileTap={{ scale: 0.8 }}
+            className="change-camera-type"
+            onClick={async () => {
+              const facingMode = isUserFacing ? "environment" : "user";
+              const newStream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode },
+              });
+              const [newVideoTrack] = newStream.getVideoTracks();
+              const [oldVideoTrack] = window.stream.getVideoTracks();
+              handleSuccess(newStream);
+              window.stream.removeTrack(oldVideoTrack);
+              window.stream.addTrack(newVideoTrack);
+              oldVideoTrack.stop();
+              setIsUserFacing(false);
+            }}
+          >
+            Cambiar
+          </motion.button>
           <motion.button
             className="screen-shot"
             whileHover={{ scale: 1.07 }}
@@ -150,8 +205,11 @@ const ComponentShotCamera = (props) => {
                 type: "image/jpeg",
                 extension: "jpeg",
               };
-              video.pause();
-              video.currentTime = 0;
+              window.stream.getTracks().forEach(function (track) {
+                window.stream.removeTrack(track);
+                track.stop();
+                video.pause();
+              });
               onClickShot(srcImage, metadata);
             }}
           >
