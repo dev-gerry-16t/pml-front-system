@@ -26,6 +26,11 @@ const ComponentPresentation = ({ children, greet, subGreet }) => {
           src="https://prendamovil-assets.s3.us-east-2.amazonaws.com/pml-city.png"
           alt="Imagen-ciudad"
         />
+        <img
+          className="background-img-1"
+          srcSet="https://prendamovil-assets.s3.us-east-2.amazonaws.com/pml-city-mobile.png"
+          alt="Imagen-ciudad"
+        />
       </div>
       <div className="info-form">
         <motion.div

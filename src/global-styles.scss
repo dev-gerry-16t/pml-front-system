@@ -4,6 +4,15 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   font-size: 16px;
+  @media screen and (max-width: 820px) {
+    font-size: 14px;
+    grid-template-areas: "FormUser" "BackImage";
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  @media screen and (max-width: 420px) {
+    font-size: 12px;
+  }
 }
 
 .success-container {
@@ -28,6 +37,35 @@
     position: absolute;
     right: 0px;
   }
+  .background-img-1 {
+    display: none;
+    height: 100%;
+    position: absolute;
+    right: 0px;
+  }
+  @media screen and (max-width: 820px) {
+    grid-area: BackImage;
+    .background-img {
+      display: none;
+    }
+    .background-img-1 {
+      display: block;
+      width: 100%;
+    }
+    .logo-pml {
+      left: 0;
+      right: 0;
+      top: 12vh;
+      margin-left: auto;
+      margin-right: auto;
+      width: 150px;
+    }
+  }
+  @media screen and (max-width: 460px) {
+    .background-img-1 {
+      min-width: 430px;
+    }
+  }
 }
 
 .vertical-form {
@@ -40,6 +78,10 @@
 .info-form {
   display: flex;
   align-items: center;
+  @media screen and (max-width: 820px) {
+    grid-area: FormUser;
+    padding: 1em 2em;
+  }
 }
 
 .info-form-center {
@@ -58,6 +100,10 @@
 
 .container-form {
   min-width: 400px;
+  @media screen and (max-width: 820px) {
+    width: 100%;
+    min-width: 100%;
+  }
 }
 
 .option-user {
