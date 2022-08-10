@@ -15,7 +15,7 @@ const container = {
   },
 };
 
-const ModalImage = styled(motion.div)`
+const ModalImage = styled.div`
   background: transparent;
   position: fixed;
   top: 0px;
@@ -73,18 +73,7 @@ const ComponentViewDocument = (props) => {
   }, []);
 
   return (
-    <ModalImage
-      variants={container}
-      initial={{
-        scale: 0,
-      }}
-      animate={{
-        scale: 1,
-      }}
-      exit={{
-        scale: 0,
-      }}
-    >
+    <ModalImage>
       <div className="section-modal">
         <ResultImage>
           <div className="title-result">

@@ -4,8 +4,6 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconCamera } from "../assets/icons";
 
-let stream;
-
 const container = {
   hidden: { opacity: 0 },
   show: {
@@ -17,7 +15,7 @@ const container = {
   },
 };
 
-const ModalCamera = styled(motion.div)`
+const ModalCamera = styled.div`
   background: var(--color-backGround-section);
   position: fixed;
   top: 0px;
@@ -25,10 +23,6 @@ const ModalCamera = styled(motion.div)`
   height: 100vh;
   width: 100%;
   z-index: 100;
-  #video-shot {
-    width: 100vw;
-    height: 100vh;
-  }
 `;
 
 const ButtonCam = styled.div`
@@ -50,7 +44,7 @@ const ButtonCam = styled.div`
     justify-content: center;
     align-items: center;
   }
-  .change-camera-type{
+  .change-camera-type {
     position: absolute;
     outline: none;
     border: none;
@@ -167,7 +161,13 @@ const ComponentShotCamera = (props) => {
         <div className="mask-video">
           <div id="screen-shot" className={type}></div>
         </div>
-        <video id="video-shot" autoPlay playsInline></video>
+        <video
+          style={{
+            width: "100%",
+          }}
+          autoPlay
+          playsInline
+        ></video>
         <ButtonCam>
           <motion.button
             whileHover={{ scale: 1.07 }}

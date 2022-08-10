@@ -10,7 +10,7 @@ import CustomIndicationList from "./customIndicationList";
 import FrontFunctions from "../utils/actions/frontFunctions";
 import ENVIROMENT from "../utils/constants/enviroments";
 
-const ModalView = styled(motion.div)`
+const ModalView = styled.div`
   position: fixed;
   top: 0px;
   left: 0px;
@@ -163,41 +163,39 @@ const ComponentProcessDocument = (props) => {
   };
   return (
     <div className="section-shadow padding-2-1">
-      <AnimatePresence>
-        {selectedId && (
-          <ModalView layoutId={selectedId} onClick={handlerCloseModalFile}>
-            <div className="mask-section" onClick={(e) => e.stopPropagation()}>
-              <ButtonHeader>
-                <motion.button
-                  whileHover={{ scale: 1.07 }}
-                  whileTap={{ scale: 0.8 }}
-                  className="button-modal"
-                  onClick={handlerCloseModalFile}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path
-                      d="M15 5L5 15M5 5l5.03 5.03L15 15"
-                      fill="black"
-                      stroke-width="2"
-                      stroke=" var(--color-brand-primary)"
-                      stroke-linecap="round"
-                    ></path>
-                  </svg>
-                </motion.button>
-              </ButtonHeader>
-              {isVisibleDocument === true && (
-                <div className="contain-doc-view">
-                  <FileViewer
-                    fileType={selectDataFile.extension}
-                    filePath={`${ENVIROMENT}/api/v1/file/getFile/${bucketDocument}/${selectDataFile.idDocument}?type=${selectDataFile.mimeType}`}
-                    onError={() => {}}
-                  />
-                </div>
-              )}
-            </div>
-          </ModalView>
-        )}
-      </AnimatePresence>
+      {selectedId && (
+        <ModalView layoutId={selectedId} onClick={handlerCloseModalFile}>
+          <div className="mask-section" onClick={(e) => e.stopPropagation()}>
+            <ButtonHeader>
+              <motion.button
+                whileHover={{ scale: 1.07 }}
+                whileTap={{ scale: 0.8 }}
+                className="button-modal"
+                onClick={handlerCloseModalFile}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path
+                    d="M15 5L5 15M5 5l5.03 5.03L15 15"
+                    fill="black"
+                    stroke-width="2"
+                    stroke=" var(--color-brand-primary)"
+                    stroke-linecap="round"
+                  ></path>
+                </svg>
+              </motion.button>
+            </ButtonHeader>
+            {isVisibleDocument === true && (
+              <div className="contain-doc-view">
+                <FileViewer
+                  fileType={selectDataFile.extension}
+                  filePath={`${ENVIROMENT}/api/v1/file/getFile/${bucketDocument}/${selectDataFile.idDocument}?type=${selectDataFile.mimeType}`}
+                  onError={() => {}}
+                />
+              </div>
+            )}
+          </div>
+        </ModalView>
+      )}
       <CustomIndicationList
         stepNumber={stepNumber}
         subTitle={subTitle}

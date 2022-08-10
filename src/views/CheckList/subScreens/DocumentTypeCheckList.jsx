@@ -138,52 +138,46 @@ const DocumentTypeCheckList = (props) => {
   if (loadProcess === false) {
     component = (
       <>
-        <AnimatePresence>
-          {isVisibleCamera === true && (
-            <ComponentShotCamera
-              labelImage="Los datos deben ser visibles"
-              type="default-rectangle"
-              onClickShot={(src, data) => {
-                setDataSrcShot(src);
-                setIsVisibleImage(true);
-                setIsVisibleCamera(false);
-                setMetaDataFile(data);
-              }}
-            />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {isVisibleImage === true && (
-            <ComponentViewImage
-              src={dataSrcShot}
-              indication="Verifica que tu foto sea visible"
-              onClickContinue={handlerSetCustomerInDocument}
-              onClickOther={() => {
-                setIsVisibleImage(false);
-                if (
-                  isNil(content.canTakePhoto) === true ||
-                  content.canTakePhoto === true
-                ) {
-                  setIsVisibleCamera(true);
-                }
-              }}
-            />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {isVisibleFile === true && (
-            <ComponentViewDocument
-              src={dataSrcShot}
-              indication="Verifica que tu foto sea visible"
-              onClickContinue={handlerSetCustomerInDocument}
-              metaDataFile={metaDataFile}
-              onClickOther={() => {
-                setIsVisibleFile(false);
-                setDataSrcShot(null);
-              }}
-            />
-          )}
-        </AnimatePresence>
+        {isVisibleCamera === true && (
+          <ComponentShotCamera
+            labelImage="Los datos deben ser visibles"
+            type="default-rectangle"
+            onClickShot={(src, data) => {
+              setDataSrcShot(src);
+              setIsVisibleImage(true);
+              setIsVisibleCamera(false);
+              setMetaDataFile(data);
+            }}
+          />
+        )}
+        {isVisibleImage === true && (
+          <ComponentViewImage
+            src={dataSrcShot}
+            indication="Verifica que tu foto sea visible"
+            onClickContinue={handlerSetCustomerInDocument}
+            onClickOther={() => {
+              setIsVisibleImage(false);
+              if (
+                isNil(content.canTakePhoto) === true ||
+                content.canTakePhoto === true
+              ) {
+                setIsVisibleCamera(true);
+              }
+            }}
+          />
+        )}
+        {isVisibleFile === true && (
+          <ComponentViewDocument
+            src={dataSrcShot}
+            indication="Verifica que tu foto sea visible"
+            onClickContinue={handlerSetCustomerInDocument}
+            metaDataFile={metaDataFile}
+            onClickOther={() => {
+              setIsVisibleFile(false);
+              setDataSrcShot(null);
+            }}
+          />
+        )}
         <ComponentProcessDocument
           onClickOpenCamera={() => {
             setIsVisibleCamera(true);

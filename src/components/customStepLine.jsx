@@ -51,7 +51,7 @@ const ContainerStep = styled.div`
   }
 `;
 
-const ComponentStep = styled(motion.div)`
+const ComponentStep = styled.div`
   display: grid;
   grid-template-columns: 12em 6em 2em;
   min-height: 10em;
@@ -205,16 +205,6 @@ const CustomStepLine = ({ children, data }) => {
             return (
               <ComponentStep
                 key={`stepLine-${ix}`}
-                initial={{
-                  scale: 0,
-                }}
-                custom={ix}
-                animate={{
-                  transition: {
-                    delay: ix === 0 ? ix : ix / 2,
-                  },
-                  scale: 1,
-                }}
                 onClick={() => {
                   //navigate(row.path);
                 }}

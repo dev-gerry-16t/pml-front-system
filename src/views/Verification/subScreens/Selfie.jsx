@@ -100,32 +100,28 @@ const DocumentSelfie = (props) => {
   if (window.mobileCheck() === true && loadProcess === false) {
     component = (
       <>
-        <AnimatePresence>
-          {isVisibleCamera === true && (
-            <ComponentShotCamera
-              labelImage="Mira a la cámara"
-              type={content.matiDocumentType}
-              onClickShot={(src) => {
-                setDataSrcShot(src);
-                setIsVisibleImage(true);
-                setIsVisibleCamera(false);
-              }}
-            />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {isVisibleImage === true && (
-            <ComponentViewImage
-              src={dataSrcShot}
-              indication="Verifica que se vea bien tu rostro y si no te convence puedes tomarte otra"
-              onClickContinue={handlerContinueProcess}
-              onClickOther={() => {
-                setIsVisibleImage(false);
-                setIsVisibleCamera(true);
-              }}
-            />
-          )}
-        </AnimatePresence>
+        {isVisibleCamera === true && (
+          <ComponentShotCamera
+            labelImage="Mira a la cámara"
+            type={content.matiDocumentType}
+            onClickShot={(src) => {
+              setDataSrcShot(src);
+              setIsVisibleImage(true);
+              setIsVisibleCamera(false);
+            }}
+          />
+        )}
+        {isVisibleImage === true && (
+          <ComponentViewImage
+            src={dataSrcShot}
+            indication="Verifica que se vea bien tu rostro y si no te convence puedes tomarte otra"
+            onClickContinue={handlerContinueProcess}
+            onClickOther={() => {
+              setIsVisibleImage(false);
+              setIsVisibleCamera(true);
+            }}
+          />
+        )}
         <ComponentProcessDocument
           onClickOpenCamera={() => {
             setIsVisibleCamera(true);

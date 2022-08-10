@@ -232,32 +232,28 @@ const DocumentId = (props) => {
   if (window.mobileCheck() === true && loadProcess === false) {
     component = (
       <>
-        <AnimatePresence>
-          {isVisibleCamera === true && (
-            <ComponentShotCamera
-              labelImage={textFieType}
-              type={dataForm.documentId}
-              onClickShot={(src) => {
-                setDataSrcShot(src);
-                setIsVisibleImage(true);
-                setIsVisibleCamera(false);
-              }}
-            />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {isVisibleImage === true && (
-            <ComponentViewImage
-              src={dataSrcShot}
-              indication="Verifica que tu foto sea visible"
-              onClickContinue={handlerContinueProcess}
-              onClickOther={() => {
-                setIsVisibleImage(false);
-                setIsVisibleCamera(true);
-              }}
-            />
-          )}
-        </AnimatePresence>
+        {isVisibleCamera === true && (
+          <ComponentShotCamera
+            labelImage={textFieType}
+            type={dataForm.documentId}
+            onClickShot={(src) => {
+              setDataSrcShot(src);
+              setIsVisibleImage(true);
+              setIsVisibleCamera(false);
+            }}
+          />
+        )}
+        {isVisibleImage === true && (
+          <ComponentViewImage
+            src={dataSrcShot}
+            indication="Verifica que tu foto sea visible"
+            onClickContinue={handlerContinueProcess}
+            onClickOther={() => {
+              setIsVisibleImage(false);
+              setIsVisibleCamera(true);
+            }}
+          />
+        )}
         <ComponentProcessDocument
           onClickOpenCamera={() => {
             setIsVisibleCamera(true);
