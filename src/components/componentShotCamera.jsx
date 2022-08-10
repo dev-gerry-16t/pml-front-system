@@ -132,7 +132,7 @@ const ComponentShotCamera = (props) => {
         <div className="mask-video">
           <div id="screen-shot" className={type}></div>
         </div>
-        <video id="video-shot" muted autoplay playsinline></video>
+        <video id="video-shot" muted autoPlay playsInline></video>
         <ButtonCam>
           <motion.button
             className="screen-shot"
