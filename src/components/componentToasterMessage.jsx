@@ -21,6 +21,7 @@ const Toaster = styled(motion.div)`
   bottom: 0px;
   width: 100%;
   z-index: 1000;
+  font-size: 16px;
   .name-message {
     position: relative;
     padding: 1em;
@@ -38,8 +39,11 @@ const Toaster = styled(motion.div)`
       background: transparent;
       outline: none;
       border: none;
-      color #fff
+      color: #fff;
     }
+  }
+  @media screen and (max-width: 420px) {
+    font-size: 10px;
   }
 `;
 

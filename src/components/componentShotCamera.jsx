@@ -176,7 +176,9 @@ const ComponentShotCamera = (props) => {
             onClick={async () => {
               const facingMode = isUserFacing ? "environment" : "user";
               const newStream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode },
+                video: {
+                  facingMode,
+                },
               });
               const [newVideoTrack] = newStream.getVideoTracks();
               const [oldVideoTrack] = window.stream.getVideoTracks();
@@ -196,9 +198,11 @@ const ComponentShotCamera = (props) => {
             onClick={() => {
               const video = document.querySelector("video");
               const canvas = document.createElement("canvas");
-              canvas.width = video.videoWidth;
-              canvas.height = video.videoHeight;
-              canvas.getContext("2d").drawImage(video, 0, 0);
+              const WIDTH = video.videoWidth + video.videoWidth * 0.25;
+              const HEIGHT = video.videoHeight + video.videoHeight * 0.25;
+              canvas.width = WIDTH;
+              canvas.height = HEIGHT;
+              canvas.getContext("2d").drawImage(video, 0, 0, WIDTH, HEIGHT);
               const srcImage = canvas.toDataURL("image/jpeg");
               const metadata = {
                 name: window.crypto.randomUUID(),

@@ -35,7 +35,7 @@ const CreditAsigned = styled.div`
   .type-credit {
     color: var(--color-font-dark);
     font-weight: 900;
-    font-family: "Kometa";
+    font-family: "Kometa", "Lato";
     padding-top: 10px;
   }
   .format-amount {
@@ -43,7 +43,7 @@ const CreditAsigned = styled.div`
     align-items: baseline;
     column-gap: 0.5em;
     h1 {
-      font-family: "Kometa";
+      font-family: "Kometa", "Lato";
       font-style: normal;
       font-weight: 900;
       font-size: 2em;

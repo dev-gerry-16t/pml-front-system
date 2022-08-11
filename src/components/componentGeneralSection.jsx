@@ -34,7 +34,7 @@ const GeneralSection = styled(motion.div)`
     h2 {
       margin: 0px;
       color: var(--color-border-black);
-      font-family: "Kometa";
+      font-family: "Kometa", "Lato";
       font-style: normal;
       font-weight: 700;
       font-size: 1.4em;

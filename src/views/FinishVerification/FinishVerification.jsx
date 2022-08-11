@@ -26,7 +26,7 @@ const StaticCar = styled.div`
 `;
 
 const TextDescription = styled.div`
-  font-family: "Kometa";
+  font-family: "Kometa", "Lato";
   display: flex;
   justify-content: center;
   align-items: center;
