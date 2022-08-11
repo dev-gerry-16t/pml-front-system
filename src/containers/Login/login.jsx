@@ -53,7 +53,7 @@ const Login = (props) => {
       frontFunctions.showMessageStatusApi(
         error,
         GLOBAL_CONSTANTS.STATUS_API.ERROR
-      );     
+      );
     }
   };
 
@@ -118,7 +118,13 @@ const Login = (props) => {
           />
         </div>
         <div className="display-right">
-          <span>Olvide mi contraseña</span>
+          <span
+            onClick={() => {
+              navigate("/recovery-account");
+            }}
+          >
+            Olvide mi contraseña
+          </span>
         </div>
         <div>
           <CustomButton

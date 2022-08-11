@@ -16,6 +16,16 @@ const SignIn = Loadable({
   loading,
 });
 
+const RecoveryAccount = Loadable({
+  loader: () => import("./containers/Recovery/recoveryAccount"),
+  loading,
+});
+
+const RecoveryPassword = Loadable({
+  loader: () => import("./containers/Recovery/recoveryPassword"),
+  loading,
+});
+
 const Login = Loadable({
   loader: () => import("./containers/Login/login"),
   loading,
@@ -68,12 +78,13 @@ const App = ({ callGlobalActionApi, dataProfile }) => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/recovery-account" element={<RecoveryAccount />} />
+        <Route path="/recovery-password" element={<RecoveryPassword />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/activate-account" element={<ActivateAccount />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/logout" element={<Auth />} />
         <Route path="/testScreen" element={<TestScreen />} />
-
         <Route path="/websystem/*" element={<DefaultLayout />} />
       </Routes>
     </BrowserRouter>

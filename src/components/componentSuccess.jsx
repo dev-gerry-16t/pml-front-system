@@ -26,7 +26,7 @@ const ComponentSuccess = ({
     <div className="success-container">
       <div className="background-city">
         <img
-          className="background-img"
+          className="background-img-2"
           src="https://prendamovil-assets.s3.us-east-2.amazonaws.com/pml-city-middle.png"
           alt="Imagen-ciudad"
         />

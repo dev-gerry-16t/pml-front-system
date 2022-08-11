@@ -127,15 +127,20 @@ const SignIn = (props) => {
 
   const handlerOnSubmit = async () => {
     try {
-      setLoadedScreen(true);
-      await handlerSignInUser(dataForm.password);
-      setLoadedScreen(false);
-      setSendActivateAccount(true);
+      if (dataForm.password === dataForm.confirmPassword) {
+        setLoadedScreen(true);
+        await handlerSignInUser(dataForm.password);
+        setLoadedScreen(false);
+        setSendActivateAccount(true);
+      } else {
+        const err = "Las contraseñas no coinciden";
+        throw err;
+      }
     } catch (error) {
       setLoadedScreen(false);
       frontFunctions.showMessageStatusApi(
         error,
-        GLOBAL_CONSTANTS.STATUS_API.ERROR
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
       );
     }
   };
@@ -177,6 +182,7 @@ const SignIn = (props) => {
               placeholder="Contraseña"
               type="password"
               isRequired
+              pattern="^(?=.*[A-Za-z0-9]).{8,12}$"
             />
             <CustomInput
               value={dataForm.confirmPassword}
@@ -186,6 +192,15 @@ const SignIn = (props) => {
               type="password"
               isRequired
             />
+            <div className="format-required-pass">
+              La contraseña debe contener:
+              <p>
+                <ul>
+                  <li>Mínimo 8 caracteres</li>
+                  <li>Números y letras</li>
+                </ul>
+              </p>
+            </div>
             <CustomButton
               type="submit"
               formatType="secondary"

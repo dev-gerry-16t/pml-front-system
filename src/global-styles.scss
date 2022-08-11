@@ -21,6 +21,20 @@
   display: grid;
   grid-template-columns: 30% 70%;
   font-size: 16px;
+  @media screen and (max-width: 820px) {
+    font-size: 14px;
+    grid-template-areas: "FormUser" "BackImage";
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  @media screen and (max-width: 420px) {
+    font-size: 12px;
+  }
+}
+
+.format-required-pass {
+  font-family: "Lato";
+  font-size: 0.8em;
 }
 
 .background-city {
@@ -37,6 +51,11 @@
     position: absolute;
     right: 0px;
   }
+  .background-img-2 {
+    height: 100%;
+    position: absolute;
+    right: 0px;
+  }
   .background-img-1 {
     display: none;
     height: 100%;
@@ -48,6 +67,10 @@
     .background-img {
       display: none;
     }
+    .background-img-2 {
+      left: 0;
+    }
+
     .background-img-1 {
       display: block;
       width: 100%;
@@ -55,7 +78,7 @@
     .logo-pml {
       left: 0;
       right: 0;
-      top: 12vh;
+      top: 10vh;
       margin-left: auto;
       margin-right: auto;
       width: 150px;
@@ -95,6 +118,14 @@
     position: absolute;
     bottom: 2em;
     right: 2em;
+  }
+  @media screen and (max-width: 820px) {
+    .logo-pml {
+      position: fixed;
+      right: 1em;
+      bottom: 1em;
+      width: 150px;
+    }
   }
 }
 
@@ -138,6 +169,11 @@
     box-shadow: 0px 5px 15px rgba(192, 192, 192, 0.69);
     border-radius: 1.1em;
     padding: 2em;
+  }
+  @media screen and (max-width: 420px) {
+    font-size: 12px;
+  padding: 2em;
+
   }
 }
 

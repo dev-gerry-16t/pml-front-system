@@ -47,6 +47,7 @@ const CustomInput = ({
   type = "text",
   subType = null,
   isRequired = false,
+  pattern = null,
 }) => {
   return (
     <Border>
@@ -59,6 +60,7 @@ const CustomInput = ({
           placeholder={placeholder}
           type={type}
           required={isRequired}
+          pattern={pattern}
         />
       </Input>
     </Border>
@@ -73,6 +75,7 @@ CustomInput.propTypes = {
   type: PropTypes.string,
   subType: PropTypes.string,
   isRequired: PropTypes.bool,
+  pattern: PropTypes.string,
 };
 
 export default CustomInput;
