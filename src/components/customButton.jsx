@@ -24,12 +24,14 @@ const CustomButton = ({
   onClick = () => {},
 }) => {
   const color = {
+    primary: "var(--color-font-secondary)",
     secondary: "var(--color-font-secondary)",
     tertiary: "var(--color-brand-secondary)",
     "underline-secondary": "var(--color-brand-secondary)",
     close: "var(--color-brand-secondary)",
   };
   const background = {
+    primary: "var(--color-brand-primary)",
     secondary: "var(--color-brand-secondary)",
     tertiary: "var(--color-backGround-section)",
     "underline-secondary": "transparent",
@@ -43,6 +45,7 @@ const CustomButton = ({
   };
 
   const decoration = {
+    primary: "none",
     secondary: "none",
     tertiary: "none",
     "underline-secondary": "underline",
