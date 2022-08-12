@@ -172,8 +172,7 @@
   }
   @media screen and (max-width: 420px) {
     font-size: 12px;
-  padding: 2em;
-
+    padding: 2em;
   }
 }
 
@@ -203,6 +202,16 @@
 .flex-row {
   display: flex;
   flex-direction: column;
+}
+
+.car-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  @media screen and (max-width: 740px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
 }
 
 .grid-column-2 {

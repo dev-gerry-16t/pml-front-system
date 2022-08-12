@@ -56,6 +56,20 @@ const CreditAsigned = styled.div`
   }
 `;
 
+const ContainerEdit = styled.div`
+  @media screen and (max-width: 740px) {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: var(--color-backGround-section);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
 const ComponentEditInformation = ({
   data,
   isVisible,
@@ -82,116 +96,115 @@ const ComponentEditInformation = ({
   }, [data]);
 
   return (
-    <AnimatePresence>
+    <>
       {isVisible && (
-        <motion.div
-          initial={{ x: 300, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -300, opacity: 0 }}
-          style={{
-            width: "80%",
-            position: "relative",
-          }}
-        >
-          <CustomButton
+        <ContainerEdit>
+          <div
             style={{
-              position: "absolute",
-              right: "0px",
-              top: "1em",
-            }}
-            formatType="close"
-            onClick={onClick}
-          >
-            X
-          </CustomButton>
-          <CustomForm
-            onSubmit={(e) => {
-              onSaveInformation({
-                ...dataForm,
-                isUniqueOwner: dataForm.isUniqueOwner === "1" ? 1 : 0,
-              });
+              width: "80%",
+              position: "relative",
             }}
           >
-            <div className="vertical-form">
-              <CustomInput
-                value={dataForm.brand}
-                onChange={handlerOnChange}
-                name="brand"
-                placeholder="Marca"
-                type="text"
-                isRequired
-              />
-              <CustomInput
-                value={dataForm.model}
-                onChange={handlerOnChange}
-                name="model"
-                placeholder="Modelo"
-                type="text"
-                isRequired
-              />
-              <CustomInput
-                value={dataForm.year}
-                onChange={handlerOnChange}
-                name="year"
-                placeholder="Año"
-                type="number"
-                isRequired
-              />
-              <CustomInput
-                value={dataForm.version}
-                onChange={handlerOnChange}
-                name="version"
-                placeholder="Versión"
-                type="text"
-                isRequired
-              />
-              <CustomInput
-                value={dataForm.color}
-                onChange={(e) => {
-                  handlerOnChange(e);
-                  onChangeColor(e.target.value);
-                }}
-                name="color"
-                placeholder="Color"
-                type="color"
-                isRequired
-              />
-              <CustomInput
-                value={dataForm.km}
-                onChange={handlerOnChange}
-                name="km"
-                placeholder="Kilometraje"
-                type="number"
-                isRequired
-              />
-              <CustomSelect
-                value={dataForm.isUniqueOwner}
-                onChange={(e) => {
-                  handlerOnChange(e);
-                }}
-                name="isUniqueOwner"
-                placeholder="Dueño"
-                isRequired
-                data={[
-                  { id: "1", text: "Único dueño" },
-                  { id: "0", text: "Mas de un dueño" },
-                ]}
-              />
-              <CustomButton
-                type="submit"
-                formatType="secondary"
-                text="Guardar cambios"
-                style={{
-                  padding: "0.2em 0px",
-                  width: "100%",
-                }}
-                isRequired
-              />
-            </div>
-          </CustomForm>
-        </motion.div>
+            <CustomButton
+              style={{
+                position: "absolute",
+                right: "0px",
+                top: "1em",
+              }}
+              formatType="close"
+              onClick={onClick}
+            >
+              X
+            </CustomButton>
+            <CustomForm
+              onSubmit={(e) => {
+                onSaveInformation({
+                  ...dataForm,
+                  isUniqueOwner: dataForm.isUniqueOwner === "1" ? 1 : 0,
+                });
+              }}
+            >
+              <div className="vertical-form">
+                <CustomInput
+                  value={dataForm.brand}
+                  onChange={handlerOnChange}
+                  name="brand"
+                  placeholder="Marca"
+                  type="text"
+                  isRequired
+                />
+                <CustomInput
+                  value={dataForm.model}
+                  onChange={handlerOnChange}
+                  name="model"
+                  placeholder="Modelo"
+                  type="text"
+                  isRequired
+                />
+                <CustomInput
+                  value={dataForm.year}
+                  onChange={handlerOnChange}
+                  name="year"
+                  placeholder="Año"
+                  type="number"
+                  isRequired
+                />
+                <CustomInput
+                  value={dataForm.version}
+                  onChange={handlerOnChange}
+                  name="version"
+                  placeholder="Versión"
+                  type="text"
+                  isRequired
+                />
+                <CustomInput
+                  value={dataForm.color}
+                  onChange={(e) => {
+                    handlerOnChange(e);
+                    onChangeColor(e.target.value);
+                  }}
+                  name="color"
+                  placeholder="Color"
+                  type="color"
+                  isRequired
+                />
+                <CustomInput
+                  value={dataForm.km}
+                  onChange={handlerOnChange}
+                  name="km"
+                  placeholder="Kilometraje"
+                  type="number"
+                  isRequired
+                />
+                <CustomSelect
+                  value={dataForm.isUniqueOwner}
+                  onChange={(e) => {
+                    handlerOnChange(e);
+                  }}
+                  name="isUniqueOwner"
+                  placeholder="Dueño"
+                  isRequired
+                  data={[
+                    { id: "1", text: "Único dueño" },
+                    { id: "0", text: "Mas de un dueño" },
+                  ]}
+                />
+                <CustomButton
+                  type="submit"
+                  formatType="secondary"
+                  text="Guardar cambios"
+                  style={{
+                    padding: "0.2em 0px",
+                    width: "100%",
+                  }}
+                  isRequired
+                />
+              </div>
+            </CustomForm>
+          </div>
+        </ContainerEdit>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 
@@ -208,12 +221,9 @@ const ComponentCarInformation = ({ data, onClick, isVisible }) => {
   } = data;
 
   return (
-    <AnimatePresence>
+    <>
       {isVisible === false && (
-        <motion.div
-          initial={{ x: 300, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -300, opacity: 0 }}
+        <div
           className="grid-column-2"
           style={{
             columnGap: "1em",
@@ -271,9 +281,9 @@ const ComponentCarInformation = ({ data, onClick, isVisible }) => {
               Editar
             </CustomButton>
           </EditButton>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 
@@ -353,7 +363,7 @@ const CarInformation = (props) => {
           <ComponentBorderTopSection>
             <div className="flex-row">
               <div
-                className="grid-column-2"
+                className="car-info"
                 style={{
                   paddingBottom: "3em",
                   borderBottom: "1px solid var(--color-border-black)",

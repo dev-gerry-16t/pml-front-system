@@ -256,7 +256,17 @@ const DocumentId = (props) => {
         )}
         <ComponentProcessDocument
           onClickOpenCamera={() => {
-            setIsVisibleCamera(true);
+            if (
+              isEmpty(dataForm.nationality) === false &&
+              isEmpty(dataForm.documentId) === false
+            ) {
+              setIsVisibleCamera(true);
+            } else {
+              frontFunctions.showMessageStatusApi(
+                "Asegúrate de seleccionar tu nacionalidad y documento de identidad",
+                GLOBAL_CONSTANTS.STATUS_API.WARNING
+              );
+            }
           }}
           stepNumber="Paso 2 de 4"
           subTitle="Sube un documento de identidad vigente"

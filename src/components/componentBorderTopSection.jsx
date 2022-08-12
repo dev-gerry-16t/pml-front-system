@@ -13,7 +13,7 @@ const container = {
   },
 };
 
-const GeneralSection = styled(motion.div)`
+const GeneralSection = styled.div`
   width: 100%;
   padding: 2em;
   background: var(--color-backGround-section);

@@ -177,9 +177,9 @@ const ComponentProcessDocument = (props) => {
                   <path
                     d="M15 5L5 15M5 5l5.03 5.03L15 15"
                     fill="black"
-                    stroke-width="2"
+                    strokeWidth="2"
                     stroke=" var(--color-brand-primary)"
-                    stroke-linecap="round"
+                    strokeLinecap="round"
                   ></path>
                 </svg>
               </motion.button>
