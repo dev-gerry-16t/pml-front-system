@@ -57,6 +57,16 @@ const CreditAsigned = styled.div`
 `;
 
 const ContainerEdit = styled.div`
+  box-sizing: border-box;
+  .form-container-edit {
+    width: 100%;
+    position: relative;
+    .button-close {
+      position: absolute;
+      right: 0;
+      top: -2em;
+    }
+  }
   @media screen and (max-width: 740px) {
     position: fixed;
     width: 100%;
@@ -67,6 +77,7 @@ const ContainerEdit = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 1em 2em;
   }
 `;
 
@@ -99,18 +110,9 @@ const ComponentEditInformation = ({
     <>
       {isVisible && (
         <ContainerEdit>
-          <div
-            style={{
-              width: "80%",
-              position: "relative",
-            }}
-          >
+          <div className="form-container-edit">
             <CustomButton
-              style={{
-                position: "absolute",
-                right: "0px",
-                top: "1em",
-              }}
+              className="button-close"
               formatType="close"
               onClick={onClick}
             >
@@ -125,6 +127,9 @@ const ComponentEditInformation = ({
               }}
             >
               <div className="vertical-form">
+                <h2 style={{
+                  fontSize:"1.5em"
+                }}>Editar información</h2>
                 <CustomInput
                   value={dataForm.brand}
                   onChange={handlerOnChange}

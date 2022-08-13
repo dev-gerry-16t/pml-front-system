@@ -15,6 +15,8 @@ import Verification from "../../views/Verification/Verification";
 import FinishVerification from "../../views/FinishVerification/FinishVerification";
 import CheckList from "../../views/CheckList/CheckList";
 import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
+import IconLogout from "../../assets/icons/iconLogout";
+import CustomButton from "../../components/customButton";
 
 const max_width = "820px";
 
@@ -41,7 +43,7 @@ const Header = styled.header`
   background: var(--color-backGround-section);
   box-shadow: 0px 6px 15px rgba(192, 192, 192, 0.69);
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   .logo-pml {
     width: 11em;
@@ -191,6 +193,16 @@ const DefaultLayout = (props) => {
             src="https://prendamovil-assets.s3.us-east-2.amazonaws.com/logo-prenda-light.png"
             alt="Imagen-ciudad"
           />
+          <div>
+            <CustomButton
+              formatType="close"
+              onClick={() => {
+                navigate("/logout");
+              }}
+            >
+              <IconLogout size="2em" />
+            </CustomButton>
+          </div>
         </Header>
         {isNil(dataProfile) === false && (
           <Routes>

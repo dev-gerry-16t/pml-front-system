@@ -21,6 +21,7 @@ const CustomButton = ({
   type = "",
   text = "",
   children,
+  className = "",
   onClick = () => {},
 }) => {
   const color = {
@@ -62,6 +63,7 @@ const CustomButton = ({
       onClick={onClick}
       whileHover={{ scale: 1.07 }}
       whileTap={{ scale: 0.95 }}
+      className={className}
     >
       {children || text}
     </Button>
@@ -75,6 +77,7 @@ CustomButton.propTypes = {
   formatType: PropTypes.string,
   children: PropTypes.any,
   onClick: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default CustomButton;

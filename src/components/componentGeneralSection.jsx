@@ -15,7 +15,7 @@ const container = {
 
 const ContainerInfo = styled.div`
   padding: 1em 3em;
-  @media screen and (max-width: 420px) {
+  @media screen and (max-width: 740px) {
     padding: 1em 10px;
   }
 `;
@@ -40,7 +40,7 @@ const GeneralSection = styled.div`
       font-size: 1.4em;
     }
   }
-  @media screen and (max-width: 420px) {
+  @media screen and (max-width: 460px) {
     padding: 1em 10px;
   }
 `;
