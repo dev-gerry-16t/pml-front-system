@@ -59,6 +59,10 @@ const ResultImage = styled.div`
 
 const ComponentViewImage = (props) => {
   const { src, indication, onClickOther, onClickContinue } = props;
+
+  const handlerUrlImage = (blob) => {
+    return URL.createObjectURL(blob);
+  };
   return (
     <ModalImage>
       <div className="section-modal">
@@ -67,7 +71,11 @@ const ComponentViewImage = (props) => {
             <span>{indication}</span>
           </div>
           <div className="image-outline">
-            <img id="image-container-process" src={src} alt="screenImage" />
+            <img
+              id="image-container-process"
+              src={handlerUrlImage(src)}
+              alt="screenImage"
+            />
           </div>
           <div className="align-button-row">
             <CustomButton
@@ -75,9 +83,7 @@ const ComponentViewImage = (props) => {
                 padding: "0.5em 0px",
               }}
               onClick={async () => {
-                const urlObject = await fetch(src);
-                const blobFile = await urlObject.blob();
-                onClickContinue(blobFile);
+                onClickContinue(src);
               }}
             >
               Continuar

@@ -101,7 +101,7 @@ const DocumentId = (props) => {
             type: dataForm.documentId,
             country: dataOptionCountry["Alpha-2"],
             page: "front",
-            filename: `${dataForm.documentId}-${stepPage}.jpeg`,
+            filename: `${dataForm.documentId}-${stepPage}.png`,
           },
         };
         dataMetaMap.push(dataToMetaMap);
@@ -139,7 +139,7 @@ const DocumentId = (props) => {
             type: dataForm.documentId,
             country: dataOptionCountry["Alpha-2"],
             page: "front",
-            filename: `${dataForm.documentId}-${stepPage}.jpeg`,
+            filename: `${dataForm.documentId}-${stepPage}.png`,
           },
         };
         dataMetaMap.push(dataToMetaMap);
@@ -160,7 +160,7 @@ const DocumentId = (props) => {
             type: dataForm.documentId,
             country: dataOptionCountry["Alpha-2"],
             page: "back",
-            filename: `${dataForm.documentId}-${stepPage}.jpeg`,
+            filename: `${dataForm.documentId}-${stepPage}.png`,
           },
         };
         dataMetaMap.push(dataToMetaMap);

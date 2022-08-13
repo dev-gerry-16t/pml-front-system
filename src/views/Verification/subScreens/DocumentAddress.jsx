@@ -58,7 +58,7 @@ const DocumentAddress = (props) => {
           type: dataForm.documentAddress,
           country: dataProfile.alpha2,
           page: "front",
-          filename: `${dataForm.documentAddress}-1.jpeg`,
+          filename: `${dataForm.documentAddress}-1.png`,
         },
       };
       dataMetaMap.push(dataToMetaMap);

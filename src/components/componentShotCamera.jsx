@@ -3,6 +3,7 @@ import isNil from "lodash/isNil";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconCamera } from "../assets/icons";
+import FrontFunctions from "../utils/actions/frontFunctions";
 
 const container = {
   hidden: { opacity: 0 },
@@ -69,6 +70,10 @@ const LabelShot = styled.div`
   }
 `;
 
+let imageCapture;
+let widthImage;
+let heightImage;
+
 const ComponentShotCamera = (props) => {
   const { labelImage, onClickShot, type } = props;
   const [isUserFacing, setIsUserFacing] = useState(true);
@@ -76,6 +81,53 @@ const ComponentShotCamera = (props) => {
     audio: false,
     video: true,
   });
+
+  const frontFunctions = new FrontFunctions();
+
+  const valueOptimeSize = (sizes) => {
+    const widthObject = sizes.imageWidth;
+    const heightObject = sizes.imageHeight;
+    const ratio = widthObject.min / heightObject.min;
+
+    if (widthObject.min === widthObject.max) {
+      widthImage = widthObject.min;
+    } else {
+      let optimeWidth = widthObject.min * 2;
+      if (optimeWidth <= widthObject.max && optimeWidth >= 600) {
+        widthImage = optimeWidth;
+      }
+    }
+
+    if (heightObject.min === heightObject.max) {
+      heightImage = heightObject.min;
+    } else {
+      let optimeHeight = heightObject.min * 2;
+      if (optimeHeight <= heightObject.max && optimeHeight >= 600) {
+        heightImage = optimeHeight;
+      }
+    }
+
+    let resultRatio = widthImage / heightImage;
+
+    if (
+      ratio !== resultRatio &&
+      widthObject.min !== widthObject.max &&
+      heightObject.min !== heightObject.max
+    ) {
+      widthImage = (widthObject.min + widthObject.max) / 2;
+      heightImage = (heightObject.min + heightObject.max) / 2;
+    }
+  };
+
+  const handleSuccessV2 = async (stream) => {
+    const video = document.querySelector("video");
+    const track = stream.getVideoTracks()[0];
+    imageCapture = new ImageCapture(track);
+    const capabilitiesImage = await imageCapture.getPhotoCapabilities();
+    valueOptimeSize(capabilitiesImage);
+    video.srcObject = stream;
+    video.play();
+  };
 
   const handleSuccess = (stream) => {
     const video = document.querySelector("video");
@@ -92,6 +144,15 @@ const ComponentShotCamera = (props) => {
     window.alert("No otorgaste los permisos para continuar");
   };
 
+  const handlerOpenCameraV2 = async () => {
+    try {
+      window.stream = await navigator.mediaDevices.getUserMedia(constraints);
+      handleSuccessV2(window.stream);
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   const handlerOpenCamera = async () => {
     try {
       window.stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -99,44 +160,82 @@ const ComponentShotCamera = (props) => {
     } catch (error) {
       handleError(error);
     }
-    // try {
-    //   if (
-    //     "mediaDevices" in navigator &&
-    //     "getUserMedia" in navigator.mediaDevices
-    //   ) {
-    //     const constraints = {
-    //       audio: false,
-    //       video: {
-    //         facingMode: type === "selfie" ? "user" : "environment",
-    //         width: { min: 600 },
-    //         height: { min: 600 },
-    //       },
-    //     };
-    //     const video = document.querySelector("video");
-    //     navigator.mediaDevices
-    //       .getUserMedia(constraints)
-    //       .then((stream) => {
-    //         video.srcObject = stream;
-    //         video.onloadedmetadata = () => {
-    //           video.play();
-    //         };
-    //       })
-    //       .catch((error) => {
-    //         window.alert(`Dispositivo no compatible ${error}`);
-    //       });
-    //   } else {
-    //     window.alert("Dispositivo no compatible");
-    //   }
-    // } catch (error) {
-    //   window.alert(
-    //     "No se encontró un dispositivo compatible con la configuración proporcionada"
-    //   );
-    // }
+  };
+
+  const handlerTakePhoto = () => {
+    const video = document.querySelector("video");
+    const canvas = document.createElement("canvas");
+    const WIDTH = video.videoWidth + video.videoWidth * 0.05;
+    const HEIGHT = video.videoHeight + video.videoHeight * 0.05;
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+    canvas.getContext("2d").drawImage(video, 0, 0, WIDTH, HEIGHT);
+    const srcImage = canvas.toDataURL("image/jpeg");
+    const metadata = {
+      name: window.crypto.randomUUID(),
+      type: "image/jpeg",
+      extension: "jpeg",
+    };
+    window.stream.getTracks().forEach(function (track) {
+      window.stream.removeTrack(track);
+      track.stop();
+      video.pause();
+    });
+    onClickShot(srcImage, metadata);
+  };
+
+  const handlerTakePhotoV2 = () => {
+    imageCapture
+      .takePhoto({ imageHeight: heightImage, imageWidth: widthImage })
+      .then((blob) => {
+        const typeFile = blob.type;
+        const extensionFile = frontFunctions.getExtensionFile(typeFile);
+        const metadata = {
+          name: window.crypto.randomUUID(),
+          type: typeFile,
+          extension: extensionFile,
+        };
+        onClickShot(blob, metadata);
+      })
+      .catch((error) => {});
+  };
+
+  const handlerChangeCamera = async () => {
+    const facingMode = isUserFacing ? "environment" : "user";
+    const newStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode,
+      },
+    });
+    const [newVideoTrack] = newStream.getVideoTracks();
+    const [oldVideoTrack] = window.stream.getVideoTracks();
+    handleSuccess(newStream);
+    window.stream.removeTrack(oldVideoTrack);
+    window.stream.addTrack(newVideoTrack);
+    oldVideoTrack.stop();
+    setIsUserFacing(false);
+  };
+
+  const handlerChangeCameraV2 = async () => {
+    const facingMode = isUserFacing ? "environment" : "user";
+    const newStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode,
+      },
+    });
+    const [newVideoTrack] = newStream.getVideoTracks();
+    const [oldVideoTrack] = window.stream.getVideoTracks();
+    handleSuccessV2(newStream);
+    window.stream.removeTrack(oldVideoTrack);
+    window.stream.addTrack(newVideoTrack);
+    oldVideoTrack.stop();
+    setIsUserFacing(false);
   };
 
   useEffect(() => {
     setTimeout(() => {
-      handlerOpenCamera();
+      handlerOpenCameraV2();
+      //handlerOpenCamera();
     }, 1000);
     return () => {};
   }, []);
@@ -173,21 +272,7 @@ const ComponentShotCamera = (props) => {
             whileHover={{ scale: 1.07 }}
             whileTap={{ scale: 0.8 }}
             className="change-camera-type"
-            onClick={async () => {
-              const facingMode = isUserFacing ? "environment" : "user";
-              const newStream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                  facingMode,
-                },
-              });
-              const [newVideoTrack] = newStream.getVideoTracks();
-              const [oldVideoTrack] = window.stream.getVideoTracks();
-              handleSuccess(newStream);
-              window.stream.removeTrack(oldVideoTrack);
-              window.stream.addTrack(newVideoTrack);
-              oldVideoTrack.stop();
-              setIsUserFacing(false);
-            }}
+            onClick={handlerChangeCameraV2}
           >
             Cambiar
           </motion.button>
@@ -195,27 +280,7 @@ const ComponentShotCamera = (props) => {
             className="screen-shot"
             whileHover={{ scale: 1.07 }}
             whileTap={{ scale: 0.8 }}
-            onClick={() => {
-              const video = document.querySelector("video");
-              const canvas = document.createElement("canvas");
-              const WIDTH = video.videoWidth + video.videoWidth * 0.25;
-              const HEIGHT = video.videoHeight + video.videoHeight * 0.25;
-              canvas.width = WIDTH;
-              canvas.height = HEIGHT;
-              canvas.getContext("2d").drawImage(video, 0, 0, WIDTH, HEIGHT);
-              const srcImage = canvas.toDataURL("image/jpeg");
-              const metadata = {
-                name: window.crypto.randomUUID(),
-                type: "image/jpeg",
-                extension: "jpeg",
-              };
-              window.stream.getTracks().forEach(function (track) {
-                window.stream.removeTrack(track);
-                track.stop();
-                video.pause();
-              });
-              onClickShot(srcImage, metadata);
-            }}
+            onClick={handlerTakePhotoV2}
           >
             <IconCamera size="3em" />
           </motion.button>

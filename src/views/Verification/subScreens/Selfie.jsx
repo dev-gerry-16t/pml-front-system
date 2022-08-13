@@ -42,7 +42,7 @@ const DocumentSelfie = (props) => {
         group: content.group,
         data: {
           type: content.inputType,
-          filename: `${content.inputType}-1.jpeg`,
+          filename: `${content.inputType}-1.png`,
         },
       };
       dataMetaMap.push(dataToMetaMap);

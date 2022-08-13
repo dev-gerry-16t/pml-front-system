@@ -156,7 +156,7 @@ class FrontFunctions {
       const form = new FormData();
       form.append("inputs", JSON.stringify(metaData));
       file.forEach((element, ix) => {
-        form.append(documentType, element, `${nameFile}-${ix + 1}.jpeg`);
+        form.append(documentType, element, `${nameFile}-${ix + 1}.png`);
       });
       const options = {
         method: "POST",

@@ -62,6 +62,11 @@ const ComponentViewDocument = (props) => {
   const { src, indication, onClickOther, onClickContinue, metaDataFile } =
     props;
   const [isVisibleDocument, setIsVisibleDocument] = useState(false);
+
+  const handlerUrlImage = (blob) => {
+    return URL.createObjectURL(blob);
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setIsVisibleDocument(true);
@@ -83,7 +88,7 @@ const ComponentViewDocument = (props) => {
             {isVisibleDocument === true && (
               <FileViewer
                 fileType={metaDataFile.extension}
-                filePath={src}
+                filePath={handlerUrlImage(src)}
                 onError={() => {}}
               />
             )}
@@ -94,9 +99,9 @@ const ComponentViewDocument = (props) => {
                 padding: "0.5em 0px",
               }}
               onClick={async () => {
-                const urlObject = await fetch(src);
-                const blobFile = await urlObject.blob();
-                onClickContinue(blobFile);
+                // const urlObject = await fetch(src);
+                // const blobFile = await urlObject.blob();
+                onClickContinue(src);
               }}
             >
               Continuar
