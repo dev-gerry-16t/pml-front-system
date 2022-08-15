@@ -174,7 +174,9 @@ class FrontFunctions {
       if (isEmpty(response) === false && isArray(response)) {
         for (const element of response) {
           if (element.error) {
-            throw messageApiMati[element.error.code];
+            throw isNil(messageApiMati[element.error.code]) === false
+              ? messageApiMati[element.error.code]
+              : element.error.code;
           }
         }
       } else {

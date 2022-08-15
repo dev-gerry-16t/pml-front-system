@@ -123,7 +123,7 @@ const Login = (props) => {
               navigate("/recovery-account");
             }}
           >
-            Olvide mi contraseña
+            Olvidé mi contraseña
           </span>
         </div>
         <div>
