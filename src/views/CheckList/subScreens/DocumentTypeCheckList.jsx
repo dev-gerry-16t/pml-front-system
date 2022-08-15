@@ -190,6 +190,7 @@ const DocumentTypeCheckList = (props) => {
           bucketDocument={dataPawnDocument.bucketSource}
           stepNumber="Paso 3 de 4"
           subTitle={content.directions}
+          title={content.documentType}
           accept={content.extensions}
           onClickUploadFile={(src, data) => {
             setDataSrcShot(src);

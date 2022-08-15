@@ -211,7 +211,6 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
   }
-
 }
 
 .grid-column-2 {
@@ -338,6 +337,7 @@
 
 ::-webkit-scrollbar {
   width: 7px;
+  height: 5px;
 }
 
 /* Track */
@@ -354,4 +354,16 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-brand-secondary);
+}
+
+.title-responsive-mobile {
+  margin: 0px;
+  font-family: "Lato";
+  font-size: 1.8em;
+  color: var(--color-brand-primary);
+  display: none;
+  @media screen and (max-width: 820px) {
+    display: block;
+  }
+
 }

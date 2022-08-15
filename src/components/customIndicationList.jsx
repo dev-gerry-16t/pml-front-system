@@ -21,9 +21,11 @@ const CustomIndicationList = ({
   children,
   onClick = () => {},
   isVisibleButton = false,
+  title,
 }) => {
   return (
     <div>
+      <h1 className="title-responsive-mobile">{title}</h1>
       <div className="step-of-steps">{stepNumber}</div>
       <div>
         <span className="step-description-subTitle">{subTitle}</span>

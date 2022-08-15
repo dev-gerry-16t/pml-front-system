@@ -19,7 +19,6 @@ const CheckList = (props) => {
   } = dataContextLayout;
 
   let component = <LoaderApp />;
-
   if (isNil(config) === false && window.mobileCheck() === false) {
     component = (
       <div className="general-container">

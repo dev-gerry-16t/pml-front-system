@@ -125,6 +125,7 @@ const ComponentProcessDocument = (props) => {
     documents = [],
     bucketDocument = "",
     accept = "*",
+    title = "",
   } = props;
 
   const [selectedId, setSelectedId] = useState(null);
@@ -161,7 +162,7 @@ const ComponentProcessDocument = (props) => {
       setIsVisibleDocument(false);
     }, 1000);
   };
-  
+
   return (
     <div className="section-shadow padding-2-1">
       {selectedId && (
@@ -200,6 +201,7 @@ const ComponentProcessDocument = (props) => {
       <CustomIndicationList
         stepNumber={stepNumber}
         subTitle={subTitle}
+        title={title}
         isVisibleButton={false}
         onClick={async () => {}}
       >
