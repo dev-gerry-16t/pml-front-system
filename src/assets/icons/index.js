@@ -4,6 +4,8 @@ import IconSelfie from "./IconSelfie";
 import IconInstructions from "./IconInstructions";
 import IconArrowSquareRight from "./IconSquareRight";
 import IconCamera from "./iconCamera";
+import IconBackCamera from "./iconBackCamera";
+import IconFrontCamera from "./iconFrontCamera";
 import IconCar from "./iconCar";
 import IconInvoiceCar from "./iconInvoiceCar";
 import IconCarId from "./iconCarId";
@@ -18,6 +20,8 @@ export {
   IconInstructions,
   IconArrowSquareRight,
   IconCamera,
+  IconBackCamera,
+  IconFrontCamera,
   IconCar,
   IconInvoiceCar,
   IconCarId,

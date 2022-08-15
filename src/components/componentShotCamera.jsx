@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import isNil from "lodash/isNil";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { IconCamera } from "../assets/icons";
+import { IconCamera, IconBackCamera, IconFrontCamera } from "../assets/icons";
 import FrontFunctions from "../utils/actions/frontFunctions";
 
 const container = {
@@ -229,7 +229,7 @@ const ComponentShotCamera = (props) => {
     window.stream.removeTrack(oldVideoTrack);
     window.stream.addTrack(newVideoTrack);
     oldVideoTrack.stop();
-    setIsUserFacing(false);
+    setIsUserFacing(!isUserFacing);
   };
 
   useEffect(() => {
@@ -274,7 +274,11 @@ const ComponentShotCamera = (props) => {
             className="change-camera-type"
             onClick={handlerChangeCameraV2}
           >
-            Cambiar
+            {isUserFacing === true ? (
+              <IconBackCamera size="2em" />
+            ) : (
+              <IconFrontCamera size="2em" />
+            )}
           </motion.button>
           <motion.button
             className="screen-shot"
