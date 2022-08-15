@@ -41,7 +41,7 @@ const PrincipalContainer = styled.div`
 const ContainerStep = styled.div`
   display: flex;
   flex-direction: column;
-  max-height: 60vh;
+  max-height: 80vh;
   overflow-y: scroll;
   overflow-x: hidden;
   .line-step:last-child {
@@ -50,8 +50,6 @@ const ContainerStep = styled.div`
   @media screen and (max-width: ${max_width}) {
     flex-direction: row;
     justify-content: space-around;
-  }
-  @media screen and (max-width: 420px) {
     overflow-x: scroll;
     overflow-y: hidden;
   }
