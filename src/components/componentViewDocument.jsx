@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import isString from "lodash/isString";
+import isObject from "lodash/isObject";
 import { motion } from "framer-motion";
 import FileViewer from "react-file-viewer";
 import styled from "styled-components";
@@ -23,7 +25,7 @@ const ModalImage = styled.div`
   height: 100vh;
   width: 100%;
   z-index: 100;
-  padding: 1em;
+  /* padding: 1em; */
   box-sizing: border-box;
 `;
 
@@ -35,6 +37,8 @@ const ResultImage = styled.div`
   display: flex;
   flex-direction: column;
   //align-content: space-between;
+  max-width: 700px;
+  box-sizing: border-box;
   justify-content: space-between;
   .title-result {
     text-align: center;
@@ -64,7 +68,13 @@ const ComponentViewDocument = (props) => {
   const [isVisibleDocument, setIsVisibleDocument] = useState(false);
 
   const handlerUrlImage = (blob) => {
-    return URL.createObjectURL(blob);
+    let srcFile = "";
+    if (isString(blob) && isObject(blob) === false) {
+      srcFile = blob;
+    } else if (isString(blob) === false && isObject(blob)) {
+      srcFile = URL.createObjectURL(blob);
+    }
+    return srcFile;
   };
 
   useEffect(() => {
@@ -84,7 +94,7 @@ const ComponentViewDocument = (props) => {
           <div className="title-result">
             <span>{indication}</span>
           </div>
-          <div className="image-outline">
+          <div className="image-outline" style={{ textAlign: "center" }}>
             {isVisibleDocument === true && (
               <FileViewer
                 fileType={metaDataFile.extension}
@@ -99,9 +109,13 @@ const ComponentViewDocument = (props) => {
                 padding: "0.5em 0px",
               }}
               onClick={async () => {
-                // const urlObject = await fetch(src);
-                // const blobFile = await urlObject.blob();
-                onClickContinue(src);
+                if (isString(src) && isObject(src) === false) {
+                  const urlObject = await fetch(src);
+                  const blobFile = await urlObject.blob();
+                  onClickContinue(blobFile);
+                } else if (isString(src) === false && isObject(src)) {
+                  onClickContinue(src);
+                }
               }}
             >
               Continuar

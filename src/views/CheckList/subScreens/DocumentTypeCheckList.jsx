@@ -39,7 +39,7 @@ const DocumentTypeCheckList = (props) => {
   const [loadProcess, setLoadProcess] = useState(false);
   const [metaDataFile, setMetaDataFile] = useState({});
   const [dataPawnDocument, setDataPawnDocument] = useState({});
-
+  
   const frontFunctions = new FrontFunctions();
 
   const handlerGetPawnDocuments = async () => {
@@ -133,7 +133,7 @@ const DocumentTypeCheckList = (props) => {
     if (isEmpty(content) === false) {
       handlerGetPawnDocuments();
     }
-  }, [content]);
+  }, [content, documentTypeName]);
 
   if (loadProcess === false) {
     component = (

@@ -33,7 +33,7 @@ const PrincipalContainer = styled.div`
   display: grid;
   grid-template-columns: 21em 1fr;
   @media screen and (max-width: ${max_width}) {
-    grid-template-columns: 100%;
+    grid-template-columns: 1fr;
     grid-template-rows: 7em auto;
   }
 `;
@@ -41,13 +41,19 @@ const PrincipalContainer = styled.div`
 const ContainerStep = styled.div`
   display: flex;
   flex-direction: column;
+  max-height: 60vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
   .line-step:last-child {
     display: none;
   }
   @media screen and (max-width: ${max_width}) {
     flex-direction: row;
-    width: 100%;
     justify-content: space-around;
+  }
+  @media screen and (max-width: 420px) {
+    overflow-x: scroll;
+    overflow-y: hidden;
   }
 `;
 
@@ -199,72 +205,70 @@ const CustomStepLine = ({ children, data, goToActive = false }) => {
 
   return (
     <PrincipalContainer>
-      <div>
-        <ContainerStep>
-          {data.map((row, ix) => {
-            return (
-              <ComponentStep
-                key={`stepLine-${ix}`}
-                onClick={() => {
-                  if (goToActive === true) navigate(row.path);
-                }}
-              >
-                <div className="title-description">
-                  <span className="title">{row.name || row.documentType}</span>
-                  <span className="description">
-                    {row.description || row.directions}
-                  </span>
-                </div>
-                <div className="icon-step">
-                  <Step
-                    background={
-                      row.isCompleted === true || row.isCurrent === true
-                    }
-                    border={"3px solid var(--color-font-primary)"}
-                  >
-                    {isNil(IconsStep[row.icon]) === false &&
-                      React.createElement(IconsStep[row.icon], {
-                        size: "2.5em",
-                        fill:
-                          row.isCompleted === true || row.isCurrent === true
-                            ? "var(--color-backGround-section)"
-                            : "none",
-                        color:
-                          row.isCompleted === true || row.isCurrent === true
-                            ? "var(--color-backGround-section)"
-                            : "var(--color-font-primary)",
-                      })}
-                  </Step>
-                  <div className="line-mobile">
-                    <Line
-                      isCompleted={row.isCompleted === true}
-                      isVisible={data.length !== ix + 1}
-                    />
-                  </div>
-                </div>
-                <div className="line">
-                  <Point
-                    background={
-                      row.isCompleted === true || row.isCurrent === true
-                        ? "var(--color-brand-secondary)"
-                        : "var(--color-backGround-section)"
-                    }
-                    border={
-                      row.isCurrent === true
-                        ? "1px solid var(--color-brand-secondary)"
-                        : "1px solid var(--color-font-primary)"
-                    }
-                  />
+      <ContainerStep>
+        {data.map((row, ix) => {
+          return (
+            <ComponentStep
+              key={`stepLine-${ix}`}
+              onClick={() => {
+                if (goToActive === true) navigate(row.path);
+              }}
+            >
+              <div className="title-description">
+                <span className="title">{row.name || row.documentType}</span>
+                <span className="description">
+                  {row.description || row.directions}
+                </span>
+              </div>
+              <div className="icon-step">
+                <Step
+                  background={
+                    row.isCompleted === true || row.isCurrent === true
+                  }
+                  border={"3px solid var(--color-font-primary)"}
+                >
+                  {isNil(IconsStep[row.icon]) === false &&
+                    React.createElement(IconsStep[row.icon], {
+                      size: "2.5em",
+                      fill:
+                        row.isCompleted === true || row.isCurrent === true
+                          ? "var(--color-backGround-section)"
+                          : "none",
+                      color:
+                        row.isCompleted === true || row.isCurrent === true
+                          ? "var(--color-backGround-section)"
+                          : "var(--color-font-primary)",
+                    })}
+                </Step>
+                <div className="line-mobile">
                   <Line
                     isCompleted={row.isCompleted === true}
                     isVisible={data.length !== ix + 1}
                   />
                 </div>
-              </ComponentStep>
-            );
-          })}
-        </ContainerStep>
-      </div>
+              </div>
+              <div className="line">
+                <Point
+                  background={
+                    row.isCompleted === true || row.isCurrent === true
+                      ? "var(--color-brand-secondary)"
+                      : "var(--color-backGround-section)"
+                  }
+                  border={
+                    row.isCurrent === true
+                      ? "1px solid var(--color-brand-secondary)"
+                      : "1px solid var(--color-font-primary)"
+                  }
+                />
+                <Line
+                  isCompleted={row.isCompleted === true}
+                  isVisible={data.length !== ix + 1}
+                />
+              </div>
+            </ComponentStep>
+          );
+        })}
+      </ContainerStep>
       <ContextStepLine.Provider
         value={{
           content,

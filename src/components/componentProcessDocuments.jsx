@@ -161,6 +161,7 @@ const ComponentProcessDocument = (props) => {
       setIsVisibleDocument(false);
     }, 1000);
   };
+  
   return (
     <div className="section-shadow padding-2-1">
       {selectedId && (

@@ -22,7 +22,7 @@ const ModalImage = styled.div`
   height: 100vh;
   width: 100%;
   z-index: 100;
-  padding: 1em;
+  /* padding: 1em; */
   box-sizing: border-box;
 `;
 
