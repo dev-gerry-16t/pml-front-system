@@ -92,8 +92,8 @@ const ComponentShotCamera = (props) => {
     if (widthObject.min === widthObject.max) {
       widthImage = widthObject.min;
     } else {
-      let optimeWidth = widthObject.min * 2;
-      if (optimeWidth <= widthObject.max && optimeWidth >= 600) {
+      let optimeWidth = widthObject.max;
+      if (optimeWidth >= 600) {
         widthImage = optimeWidth;
       }
     }
@@ -101,8 +101,8 @@ const ComponentShotCamera = (props) => {
     if (heightObject.min === heightObject.max) {
       heightImage = heightObject.min;
     } else {
-      let optimeHeight = heightObject.min * 2;
-      if (optimeHeight <= heightObject.max && optimeHeight >= 600) {
+      let optimeHeight = heightObject.max;
+      if (optimeHeight >= 600) {
         heightImage = optimeHeight;
       }
     }
@@ -114,8 +114,8 @@ const ComponentShotCamera = (props) => {
       widthObject.min !== widthObject.max &&
       heightObject.min !== heightObject.max
     ) {
-      widthImage = (widthObject.min + widthObject.max) / 2;
-      heightImage = (heightObject.min + heightObject.max) / 2;
+      widthImage = widthObject.max;
+      heightImage = heightObject.max;
     }
   };
 

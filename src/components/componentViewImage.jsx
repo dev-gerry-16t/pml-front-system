@@ -51,7 +51,7 @@ const ResultImage = styled.div`
     img {
       width: 100%;
       height: 50vh;
-      object-fit: cover;
+      object-fit: contain;
       border-radius: 1em;
     }
   }

@@ -191,7 +191,7 @@ const ComponentEditInformation = ({
                   isRequired
                   data={[
                     { id: "1", text: "Único dueño" },
-                    { id: "0", text: "Mas de un dueño" },
+                    { id: "0", text: "Más de un dueño" },
                   ]}
                 />
                 <CustomButton
