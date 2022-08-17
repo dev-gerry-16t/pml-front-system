@@ -41,11 +41,7 @@ const InstructionsCheckList = () => {
                 },
                 idPawn
               );
-              if (window.mobileCheck()) {
-                await getPipeLine();
-              } else {
-                setNextStep(true);
-              }
+              await getPipeLine();
             } catch (error) {}
           }}
         >
@@ -53,23 +49,6 @@ const InstructionsCheckList = () => {
             content.map((row, ix) => {
               return <ComponentInstruction key={`list-${ix}`} row={row} />;
             })}
-        </CustomIndicationList>
-      </div>
-    );
-  }
-  if (nextStep === true) {
-    component = (
-      <div className="section-center">
-        <CustomIndicationList
-          stepNumber="Paso 1 de 4"
-          subTitle="Escanea el QR  y realiza el proceso desde tu dispositivo móvil"
-          labelReady=""
-          isVisibleButton={false}
-          onClick={() => {}}
-        >
-          <ComponentQrScan
-            src={`https://api.qrserver.com/v1/create-qr-code/?data=${window.location.origin}?token=${dataProfile.token}&amp;size=200x200`}
-          />
         </CustomIndicationList>
       </div>
     );
