@@ -75,7 +75,7 @@ const Verification = (props) => {
       isNil(dataProfile.idVerification) === true &&
       isNil(config) === false
     ) {
-      handlerGetConfigurationMetaMap();
+      // handlerGetConfigurationMetaMap();
     }
   }, [config]);
 
