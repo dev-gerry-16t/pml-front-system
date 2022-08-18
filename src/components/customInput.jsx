@@ -21,6 +21,7 @@ const Icon = styled.div`
 `;
 
 const Input = styled.div`
+  box-sizing: border-box;
   input {
     border: none;
     font-family: "Lato";
