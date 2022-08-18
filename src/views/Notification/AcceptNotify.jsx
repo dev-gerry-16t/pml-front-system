@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import Lottie from "react-lottie";
 import { connect } from "react-redux";
 import isNil from "lodash/isNil";
 import isEmpty from "lodash/isEmpty";
@@ -12,6 +13,16 @@ import { callGlobalActionApi } from "../../utils/actions/actions";
 import FrontFunctions from "../../utils/actions/frontFunctions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
+import animationData from "../../assets/lottie/kiss-of-the-heart.json";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: animationData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 const container = {
   hidden: { opacity: 0 },
@@ -69,7 +80,7 @@ const AcceptNotify = (props) => {
     dataProfile: { idSystemUser, idLoginHistory },
     callGlobalActionApi,
   } = props;
-
+  const [viewQrScan, setViewQrScan] = useState(false);
   const dataContextLayout = useContext(ContextLayout);
   const frontFunctions = new FrontFunctions();
   const {
@@ -119,7 +130,9 @@ const AcceptNotify = (props) => {
         handlerIsServiceReady();
       }, 10000);
     }, 15000);
-
+    setTimeout(() => {
+      setViewQrScan(!viewQrScan);
+    }, 5000);
     return () => {
       clearInterval(timeInterval);
       clearTimeout(timeInitTest);
@@ -170,13 +183,18 @@ const AcceptNotify = (props) => {
             </>
           ) : (
             <>
-              <img
-                src={config.qr_image_url}
-                alt="QR WhatsApp"
-                style={{
-                  marginTop: "5px",
-                }}
-              />
+              {viewQrScan === false ? (
+                <Lottie options={defaultOptions} height={300} width={300} />
+              ) : (
+                <img
+                  src={config.qr_image_url}
+                  alt="QR WhatsApp"
+                  style={{
+                    marginTop: "5px",
+                  }}
+                />
+              )}
+
               <TextOne>
                 <span>
                   Escanea el QR y permite que{" "}

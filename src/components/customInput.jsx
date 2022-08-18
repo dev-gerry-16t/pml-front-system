@@ -28,6 +28,7 @@ const Input = styled.div`
     font-size: 1.2em;
     width: 100%;
     height: 100%;
+    background: ${(props) => props.background};
   }
   ::placeholder {
     color: var(--color-font-light);
@@ -48,11 +49,12 @@ const CustomInput = ({
   subType = null,
   isRequired = false,
   pattern = null,
+  background = "transparent",
 }) => {
   return (
     <Border>
       <Icon>{Icons[subType || type]}</Icon>
-      <Input>
+      <Input background={background}>
         <input
           value={value}
           onChange={onChange}

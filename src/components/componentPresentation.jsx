@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import CustomPrincipalTitle from "./customTitleLogin";
 
 const container = {
@@ -33,15 +32,10 @@ const ComponentPresentation = ({ children, greet, subGreet }) => {
         />
       </div>
       <div className="info-form">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="container-form"
-        >
+        <div className="container-form">
           <CustomPrincipalTitle greet={greet} subGreet={subGreet} />
           {children}
-        </motion.div>
+        </div>
       </div>
     </div>
   );
