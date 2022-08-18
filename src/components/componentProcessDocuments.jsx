@@ -134,25 +134,33 @@ const ComponentProcessDocument = (props) => {
 
   const frontFunctions = new FrontFunctions();
 
-  const handlerUploadFile = (e) => {
-    const files = e.target.files[0];
-    if (files.size <= 10000000) {
-      const extension = frontFunctions.getExtensionFile(files.type);
-      const metadata = {
-        name: files.name,
-        type: files.type,
-        extension: extension,
-        size: files.size,
-      };
+  const handlerUploadFile = async (e) => {
+    try {
+      const files = e.target.files[0];
       if (!files) return;
-      const reader = new FileReader();
-      reader.readAsDataURL(files);
-      reader.onload = async (event) => {
-        const result = event.target.result;
-        onClickUploadFile(result, metadata);
-      };
-    } else {
-      alert("El tamaño del archivo supera el máximo permitido");
+
+      if (files.size <= 10000000) {
+        const extension = frontFunctions.getExtensionFile(files.type);
+        const metadata = {
+          name: files.name,
+          type: files.type,
+          extension: extension,
+          size: files.size,
+        };
+        if (!files) return;
+        const reader = new FileReader();
+        reader.readAsDataURL(files);
+        reader.onload = async (event) => {
+          const result = event.target.result;
+          onClickUploadFile(result, metadata);
+        };
+        document.getElementById("id-file-upload-checklist").value = "";
+      } else {
+        alert("El tamaño del archivo supera el máximo permitido");
+        document.getElementById("id-file-upload-checklist").value = "";
+      }
+    } catch (error) {
+      document.getElementById("id-file-upload-checklist").value = "";
     }
   };
 
@@ -244,12 +252,12 @@ const ComponentProcessDocument = (props) => {
               })}
 
             <div className="border-upload">
-              <label className="upload-file" for={`id-file`}>
+              <label className="upload-file" htmlFor={`id-file-upload-checklist`}>
                 <IconUploadFile size="5em" />
                 <span>Subir documento</span>
               </label>
               <input
-                id={`id-file`}
+                id={`id-file-upload-checklist`}
                 accept={accept}
                 style={{ display: "none" }}
                 type="file"

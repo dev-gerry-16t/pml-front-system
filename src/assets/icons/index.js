@@ -12,6 +12,10 @@ import IconCarId from "./iconCarId";
 import IconUploadFile from "./iconUploadFile";
 import IconDocument from "./iconDocument";
 import IconCarTenure from "./iconCarTenure";
+import IconTax from "./iconTax";
+import IconAct from "./iconAct";
+import IconProof from "./iconProof";
+import IconRecomend from "./iconRecomend";
 
 export {
   IconDocAddress,
@@ -28,4 +32,8 @@ export {
   IconUploadFile,
   IconDocument,
   IconCarTenure,
+  IconTax,
+  IconAct,
+  IconProof,
+  IconRecomend,
 };

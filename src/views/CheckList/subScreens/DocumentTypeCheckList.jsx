@@ -39,7 +39,7 @@ const DocumentTypeCheckList = (props) => {
   const [loadProcess, setLoadProcess] = useState(false);
   const [metaDataFile, setMetaDataFile] = useState({});
   const [dataPawnDocument, setDataPawnDocument] = useState({});
-  
+
   const frontFunctions = new FrontFunctions();
 
   const handlerGetPawnDocuments = async () => {
@@ -124,6 +124,10 @@ const DocumentTypeCheckList = (props) => {
       }, 1000);
     } catch (error) {
       setLoadProcess(false);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
     }
   };
 
