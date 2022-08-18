@@ -52,12 +52,13 @@ const ButtonHeader = styled.div`
     cursor: pointer;
     background: rgba(35, 50, 153, 0.3);
   }
-`;
+  `;
 const SectionInputUpload = styled.div`
   display: flex;
   column-gap: 0.5em;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   .border-upload {
     overflow: hidden;
     position: relative;
@@ -108,6 +109,10 @@ const SectionInputUpload = styled.div`
         font-weight: 700;
       }
     }
+  }
+  @media screen and (max-width: 820px) {
+    flex-direction: column;
+    row-gap: 1em;
   }
 `;
 
@@ -177,12 +182,7 @@ const ComponentProcessDocument = (props) => {
         <ModalView layoutId={selectedId} onClick={handlerCloseModalFile}>
           <div className="mask-section" onClick={(e) => e.stopPropagation()}>
             <ButtonHeader>
-              <motion.button
-                whileHover={{ scale: 1.07 }}
-                whileTap={{ scale: 0.8 }}
-                className="button-modal"
-                onClick={handlerCloseModalFile}
-              >
+              <button className="button-modal" onClick={handlerCloseModalFile}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path
                     d="M15 5L5 15M5 5l5.03 5.03L15 15"
@@ -192,7 +192,7 @@ const ComponentProcessDocument = (props) => {
                     strokeLinecap="round"
                   ></path>
                 </svg>
-              </motion.button>
+              </button>
             </ButtonHeader>
             {isVisibleDocument === true && (
               <div className="contain-doc-view">
@@ -220,7 +220,7 @@ const ComponentProcessDocument = (props) => {
               documents.map((row, ix) => {
                 if (isEmpty(row) === false) {
                   return (
-                    <motion.div
+                    <div
                       layoutId={row.idDocument}
                       key={`image-upload-${ix}`}
                       className="border-upload"
@@ -244,7 +244,7 @@ const ComponentProcessDocument = (props) => {
                           <span>{row.extension}</span>
                         </div>
                       )}
-                    </motion.div>
+                    </div>
                   );
                 } else {
                   return <></>;
@@ -252,7 +252,10 @@ const ComponentProcessDocument = (props) => {
               })}
 
             <div className="border-upload">
-              <label className="upload-file" htmlFor={`id-file-upload-checklist`}>
+              <label
+                className="upload-file"
+                htmlFor={`id-file-upload-checklist`}
+              >
                 <IconUploadFile size="5em" />
                 <span>Subir documento</span>
               </label>
