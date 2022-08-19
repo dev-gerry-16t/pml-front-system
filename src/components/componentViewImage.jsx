@@ -34,10 +34,11 @@ const ResultImage = styled.div`
   display: flex;
   flex-direction: column;
   //align-content: space-between;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   .title-result {
     text-align: center;
     font-weight: 900;
+    margin-bottom: 2em;
     span {
       font-size: 1.2em;
     }
@@ -48,6 +49,7 @@ const ResultImage = styled.div`
     padding: 1em;
     min-height: 300px;
     box-sizing: border-box;
+    margin-bottom: 2em;
     img {
       width: 100%;
       height: 50vh;

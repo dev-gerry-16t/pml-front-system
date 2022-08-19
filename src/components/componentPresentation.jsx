@@ -19,6 +19,12 @@ const ComponentPresentation = ({ children, greet, subGreet }) => {
           className="logo-pml"
           src="https://prendamovil-assets.s3.us-east-2.amazonaws.com/logo-prenda-dark.png"
           alt="Imagen-ciudad"
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            window.location.href = "/login";
+          }}
         />
         <img
           className="background-img"

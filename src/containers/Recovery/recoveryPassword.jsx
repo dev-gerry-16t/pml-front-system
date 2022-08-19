@@ -134,7 +134,7 @@ const RecoveryPassword = (props) => {
               placeholder="Contraseña"
               type="password"
               isRequired
-              pattern="^(?=.*[A-Za-z0-9]).{8,12}$"
+              pattern="^[A-Za-z0-9]{8,}$"
             />
             <CustomInput
               value={dataForm.confirmPassword}
@@ -149,7 +149,6 @@ const RecoveryPassword = (props) => {
               <p>
                 <ul>
                   <li>Mínimo 8 caracteres</li>
-                  <li>Números y letras</li>
                 </ul>
               </p>
             </div>

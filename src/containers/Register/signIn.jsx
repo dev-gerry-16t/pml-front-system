@@ -164,7 +164,7 @@ const SignIn = (props) => {
         <CustomForm onSubmit={handlerOnSubmit}>
           <div className="vertical-form">
             <span className="indication">
-              Ingresa tus datos para dar de alta tu perfil
+              Para iniciar confirma tu número móvil y crea una contraseña
             </span>
             <CustomInput
               value={dataForm.mobilephone}
@@ -182,7 +182,7 @@ const SignIn = (props) => {
               placeholder="Contraseña"
               type="password"
               isRequired
-              pattern="^(?=.*[A-Za-z0-9]).{8,12}$"
+              pattern="^[A-Za-z0-9]{8,}$"
             />
             <CustomInput
               value={dataForm.confirmPassword}
@@ -197,7 +197,6 @@ const SignIn = (props) => {
               <p>
                 <ul>
                   <li>Mínimo 8 caracteres</li>
-                  <li>Números y letras</li>
                 </ul>
               </p>
             </div>

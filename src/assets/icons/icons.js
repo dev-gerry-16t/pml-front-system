@@ -45,6 +45,79 @@ const Icons = {
       />
     </svg>
   ),
+  show: (
+    <svg
+      width="20"
+      height="17"
+      viewBox="0 0 20 17"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M13.1615 8.05311C13.1615 9.79911 11.7455 11.2141 9.9995 11.2141C8.2535 11.2141 6.8385 9.79911 6.8385 8.05311C6.8385 6.30611 8.2535 4.89111 9.9995 4.89111C11.7455 4.89111 13.1615 6.30611 13.1615 8.05311Z"
+        stroke="#8D8EA6"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M9.998 15.3549C13.806 15.3549 17.289 12.6169 19.25 8.05285C17.289 3.48885 13.806 0.750854 9.998 0.750854H10.002C6.194 0.750854 2.711 3.48885 0.75 8.05285C2.711 12.6169 6.194 15.3549 10.002 15.3549H9.998Z"
+        stroke="#8D8EA6"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  hide: (
+    <svg
+      width="20"
+      height="18"
+      viewBox="0 0 20 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7.76057 11.3668C7.18557 10.7928 6.83557 10.0128 6.83557 9.1378C6.83557 7.3848 8.24757 5.9718 9.99957 5.9718C10.8666 5.9718 11.6646 6.3228 12.2296 6.8968"
+        stroke="#8D8EA6"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M13.1047 9.69897C12.8727 10.989 11.8567 12.007 10.5677 12.241"
+        stroke="#8D8EA6"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M4.65457 14.4724C3.06757 13.2264 1.72357 11.4064 0.749573 9.13735C1.73357 6.85835 3.08657 5.02835 4.68357 3.77235C6.27057 2.51635 8.10157 1.83435 9.99957 1.83435C11.9086 1.83435 13.7386 2.52635 15.3356 3.79135"
+        stroke="#8D8EA6"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M17.4476 5.99084C18.1356 6.90484 18.7406 7.95984 19.2496 9.13684C17.2826 13.6938 13.8066 16.4388 9.99959 16.4388C9.13659 16.4388 8.28559 16.2988 7.46759 16.0258"
+        stroke="#8D8EA6"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M17.887 1.24963L2.11298 17.0236"
+        stroke="#8D8EA6"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
 };
 
 export default Icons;

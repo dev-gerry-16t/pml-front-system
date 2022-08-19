@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Icons from "../assets/icons/icons";
 
 const Border = styled.div`
+  position: relative;
   border: 2px solid var(--color-brand-primary);
   border-radius: 10px;
   padding: 0.4em;
@@ -18,6 +19,16 @@ const Icon = styled.div`
   svg {
     width: 1.5em;
   }
+`;
+
+const IconRight = styled.div`
+  position: absolute;
+  right: 0px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0px 1em;
+  cursor: pointer;
 `;
 
 const Input = styled.div`
@@ -52,6 +63,7 @@ const CustomInput = ({
   pattern = null,
   background = "transparent",
 }) => {
+  const [isVisibleDefault, setIsVisibleDefault] = useState(true);
   return (
     <Border>
       <Icon>{Icons[subType || type]}</Icon>
@@ -61,11 +73,20 @@ const CustomInput = ({
           onChange={onChange}
           name={name}
           placeholder={placeholder}
-          type={type}
+          type={isVisibleDefault === true ? type : "text"}
           required={isRequired}
           pattern={pattern}
         />
       </Input>
+      {type === "password" && name !== "confirmPassword" && (
+        <IconRight
+          onClick={() => {
+            setIsVisibleDefault(!isVisibleDefault);
+          }}
+        >
+          {isVisibleDefault === true ? Icons["show"] : Icons["hide"]}
+        </IconRight>
+      )}
     </Border>
   );
 };

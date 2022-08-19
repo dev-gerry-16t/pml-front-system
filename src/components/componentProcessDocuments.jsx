@@ -35,6 +35,18 @@ const ModalView = styled.div`
     }
   }
 `;
+const ButtonCapture = styled.label`
+  background: var(--color-brand-secondary);
+  border-radius: 0.6em;
+  font-family: "Lato";
+  font-size: 1.2em;
+  font-weight: 500;
+  padding: 0.5em 2em;
+  color: var(--color-font-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const ButtonHeader = styled.div`
   min-height: 50px;
@@ -52,7 +64,7 @@ const ButtonHeader = styled.div`
     cursor: pointer;
     background: rgba(35, 50, 153, 0.3);
   }
-  `;
+`;
 const SectionInputUpload = styled.div`
   display: flex;
   column-gap: 0.5em;
@@ -169,6 +181,56 @@ const ComponentProcessDocument = (props) => {
     }
   };
 
+  const handlerUploadFileV2 = async (e) => {
+    try {
+      const files = e.target.files[0];
+      if (!files) return;
+
+      const extension = frontFunctions.getExtensionFile(files.type);
+      const metadata = {
+        name: files.name,
+        type: files.type,
+        extension: extension,
+        size: files.size,
+      };
+      console.log("extension", extension);
+      if (!files) return;
+      const reader = new FileReader();
+      reader.readAsDataURL(files);
+      reader.onload = async (event) => {
+        if (extension == "png" || extension == "jpg" || extension == "jpeg") {
+          const imgElement = document.createElement("img");
+          imgElement.src = event.target.result;
+          imgElement.onload = async (event1) => {
+            const canvas = document.createElement("canvas");
+            const width = event1.target.width;
+            const height = event1.target.height;
+
+            const MAX_WIDTH = 1200;
+            const scaleSize = MAX_WIDTH / width;
+
+            canvas.width = MAX_WIDTH;
+            canvas.height = height * scaleSize;
+
+            const ctx = canvas.getContext("2d");
+            console.log("ctx", ctx);
+            ctx.drawImage(event1.target, 0, 0, canvas.width, canvas.height);
+            canvas.remove();
+            const result = ctx.canvas.toDataURL("image/jpeg", 0.9);
+            onClickUploadFile(result, metadata);
+          };
+          imgElement.remove();
+        } else {
+          onClickUploadFile(event.target.result, metadata);
+        }
+      };
+      document.getElementById("id-file-camera-checklist").value = "";
+    } catch (error) {
+      console.log("error", error);
+      document.getElementById("id-file-camera-checklist").value = "";
+    }
+  };
+
   const handlerCloseModalFile = () => {
     setSelectedId(null);
     setTimeout(() => {
@@ -221,7 +283,7 @@ const ComponentProcessDocument = (props) => {
                 if (isEmpty(row) === false) {
                   return (
                     <div
-                      layoutId={row.idDocument}
+                      // layoutId={row.idDocument}
                       key={`image-upload-${ix}`}
                       className="border-upload"
                       onClick={() => {
@@ -277,14 +339,24 @@ const ComponentProcessDocument = (props) => {
               padding: "3em 0px",
             }}
           >
-            <CustomButton
+            <ButtonCapture htmlFor={`id-file-camera-checklist`}>
+              <span>Tomar foto</span>
+            </ButtonCapture>
+            <input
+              id={`id-file-camera-checklist`}
+              type="file"
+              capture="camera"
+              style={{ display: "none" }}
+              onChange={handlerUploadFileV2}
+            />
+            {/* <CustomButton
               style={{
                 padding: "0.5em 2em",
               }}
               onClick={onClickOpenCamera}
             >
               Tomar foto
-            </CustomButton>
+            </CustomButton> */}
           </div>
         )}
       </CustomIndicationList>
