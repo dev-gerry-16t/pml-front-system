@@ -89,8 +89,8 @@ const ActivateAccount = (props) => {
       <ComponentSuccess
         greet="¡Felicidades!"
         subGreet=""
-        status="Tu cuenta se ha validado correctamente"
-        labelButton="Continuar"
+        status="Tu cuenta se ha activado correctamente"
+        labelButton="Iniciar"
         onClick={handlerOnClickStart}
       />
     );

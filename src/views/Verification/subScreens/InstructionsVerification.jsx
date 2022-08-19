@@ -42,15 +42,12 @@ const InstructionsVerification = () => {
               <CustomReactMati
                 clientId={config.clientId}
                 country={config.alpha2}
-                loaded={() => {
-                  console.log("loaded");
-                }}
+                loaded={() => {}}
                 metadata={config.metadata}
-                exited={() => {
-                  console.log("exited");
+                exited={async () => {
+                  await getPipeLine();
                 }}
                 finished={async () => {
-                  console.log("finished");
                   try {
                     await setPipeLine(
                       {

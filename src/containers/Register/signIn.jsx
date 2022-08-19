@@ -182,7 +182,7 @@ const SignIn = (props) => {
               placeholder="Contraseña"
               type="password"
               isRequired
-              pattern="^[A-Za-z0-9]{8,}$"
+              pattern="^[A-Za-z0-9\d@$!%*#?&]{8,}$"
             />
             <CustomInput
               value={dataForm.confirmPassword}

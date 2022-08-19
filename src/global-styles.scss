@@ -1,6 +1,6 @@
 .present-container {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   font-size: 16px;
@@ -16,10 +16,27 @@
 }
 
 .success-container {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: 100vh;
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 40% 70%;
+  font-size: 16px;
+  @media screen and (max-width: 820px) {
+    font-size: 14px;
+    grid-template-areas: "FormUser" "BackImage";
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  @media screen and (max-width: 420px) {
+    font-size: 12px;
+  }
+}
+
+.success-container-2 {
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 40% 60%;
   font-size: 16px;
   @media screen and (max-width: 820px) {
     font-size: 14px;
@@ -157,7 +174,7 @@
 
 .container-send-email {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   font-size: 16px;
   padding: 4em;
   box-sizing: border-box;
@@ -275,7 +292,7 @@
 .content-video {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -284,7 +301,7 @@
 .mask-video {
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

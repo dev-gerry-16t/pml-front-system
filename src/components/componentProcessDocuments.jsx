@@ -193,7 +193,6 @@ const ComponentProcessDocument = (props) => {
         extension: extension,
         size: files.size,
       };
-      console.log("extension", extension);
       if (!files) return;
       const reader = new FileReader();
       reader.readAsDataURL(files);
@@ -213,7 +212,6 @@ const ComponentProcessDocument = (props) => {
             canvas.height = height * scaleSize;
 
             const ctx = canvas.getContext("2d");
-            console.log("ctx", ctx);
             ctx.drawImage(event1.target, 0, 0, canvas.width, canvas.height);
             canvas.remove();
             const result = ctx.canvas.toDataURL("image/jpeg", 0.9);
@@ -226,7 +224,6 @@ const ComponentProcessDocument = (props) => {
       };
       document.getElementById("id-file-camera-checklist").value = "";
     } catch (error) {
-      console.log("error", error);
       document.getElementById("id-file-camera-checklist").value = "";
     }
   };

@@ -14,6 +14,7 @@ import ContextLayout from "../../context/contextLayout";
 import Verification from "../../views/Verification/Verification";
 import FinishVerification from "../../views/FinishVerification/FinishVerification";
 import CheckList from "../../views/CheckList/CheckList";
+import CompletedSuccess from "../../views/Completed/CompletedSuccess";
 import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 import IconLogout from "../../assets/icons/iconLogout";
 import CustomButton from "../../components/customButton";
@@ -22,7 +23,7 @@ const max_width = "820px";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   font-size: 16px;
   font-family: "Lato";
   background: var(--color-backGround-light);
@@ -101,7 +102,7 @@ const DefaultLayout = (props) => {
       setIdItem(responseIdItem);
       setIdPawn(responseIdPawn);
       const findCurrentScreen = responsePipeLine.find((rowFind) => {
-        return rowFind.isCompleted === false && rowFind.isCurrent === true;
+        return rowFind.isCurrent === true;
       });
       if (isNil(findCurrentScreen) === false) {
         setDataConfigStep(findCurrentScreen);
@@ -214,6 +215,7 @@ const DefaultLayout = (props) => {
               element={<FinishVerification />}
             />
             <Route path="check-list/*" element={<CheckList />} />
+            <Route path="completed-success" element={<CompletedSuccess />} />
           </Routes>
         )}
       </ContextLayout.Provider>
