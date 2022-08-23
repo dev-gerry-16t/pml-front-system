@@ -19,7 +19,7 @@
   width: 100%;
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 40% 70%;
+  grid-template-columns: 40% 60%;
   font-size: 16px;
   @media screen and (max-width: 820px) {
     font-size: 14px;
@@ -73,6 +73,7 @@
     height: 100%;
     position: absolute;
     right: 0px;
+    left: 0px;
   }
   .background-img-1 {
     display: none;

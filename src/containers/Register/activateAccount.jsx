@@ -79,7 +79,9 @@ const ActivateAccount = (props) => {
   };
 
   useEffect(() => {
-    handlerVerifyEnroll();
+    if (isNil(token) === false) {
+      handlerVerifyEnroll();
+    }
   }, []);
 
   if (loadedScreen === true) {
