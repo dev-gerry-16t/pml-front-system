@@ -105,8 +105,9 @@ const Login = (props) => {
             onChange={handlerOnChange}
             name="username"
             placeholder="Correo"
-            type="email"
+            type="text"
             isRequired
+            subType="email"
           />
           <CustomInput
             value={dataForm.password}
