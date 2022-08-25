@@ -18,6 +18,8 @@ import CompletedSuccess from "../../views/Completed/CompletedSuccess";
 import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 import IconLogout from "../../assets/icons/iconLogout";
 import CustomButton from "../../components/customButton";
+import TableAdminPawn from "../../views/Admin/TableAdmin";
+import "../../assets/css/styles-tabulator.css";
 
 const max_width = "820px";
 
@@ -49,6 +51,12 @@ const Header = styled.header`
   .logo-pml {
     width: 11em;
     height: 2.5em;
+  }
+  @media screen and (max-width: 500px) {
+    .logo-pml {
+      width: 8em;
+      height: 2em;
+    }
   }
 `;
 
@@ -216,6 +224,7 @@ const DefaultLayout = (props) => {
             />
             <Route path="check-list/*" element={<CheckList />} />
             <Route path="completed-success" element={<CompletedSuccess />} />
+            <Route path="admin" element={<TableAdminPawn />} />
           </Routes>
         )}
       </ContextLayout.Provider>
