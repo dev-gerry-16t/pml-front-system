@@ -80,6 +80,11 @@ const SectionInputUpload = styled.div`
     width: 12em;
     height: 8.8em;
     cursor: pointer;
+    .delete-doc-process {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+    }
     .contain-image {
       position: absolute;
       left: 0px;
@@ -143,6 +148,7 @@ const ComponentProcessDocument = (props) => {
     bucketDocument = "",
     accept = "*",
     title = "",
+    onDeleteFile = () => {},
   } = props;
 
   const [selectedId, setSelectedId] = useState(null);
@@ -303,6 +309,30 @@ const ComponentProcessDocument = (props) => {
                           <span>{row.extension}</span>
                         </div>
                       )}
+                      <div className="delete-doc-process">
+                        <CustomButton
+                          style={{
+                            padding: "1em",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (
+                              window.confirm(
+                                "¿Seguro que deseas eliminar tu documento?"
+                              ) === true
+                            ) {
+                              onDeleteFile({
+                                idDocument: row.idDocument,
+                                isActive: false,
+                              });
+                            } else {
+                            }
+                          }}
+                          formatType="underline-secondary"
+                        >
+                          Eliminar
+                        </CustomButton>
+                      </div>
                     </div>
                   );
                 } else {

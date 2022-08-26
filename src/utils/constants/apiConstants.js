@@ -35,6 +35,8 @@ const API_CONSTANTS = {
     SET_VEHICLE: `${API.SYSTEM_USER}/setVehicle/`,
     GET_PAWN_DOCUMENTS: `${API.SYSTEM_USER}/getPawnDocuments`,
     SET_CUSTOMER_IN_DOCUMENT: `${API.SYSTEM_USER}/setCustomerInDocument`,
+    SET_CUSTOMER_IN_DELETE_DOCUMENT: `${API.SYSTEM_USER}/setCustomerInDeleteDocument`,
+    
   },
   CATALOGS: {
     GET_ALL_COUNTRIES: `${API.CATALOGS}/getAllCountries`,

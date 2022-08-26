@@ -96,7 +96,7 @@ const DocumentTypeCheckList = (props) => {
     }
   };
 
-  const handlerSetCustomerInDocument = async (file) => {
+  const handlerSetCustomerInDocument = async (file, data) => {
     try {
       setLoadProcess(true);
       await callSetCustomerInDocument(
@@ -104,14 +104,7 @@ const DocumentTypeCheckList = (props) => {
         {
           idSystemUser,
           idLoginHistory,
-          idCustomer: null,
-          idDocument: null,
-          name: metaDataFile.name,
-          extension: metaDataFile.extension,
-          metadata: JSON.stringify(dataPawnDocument.metadata),
-          mimeType: metaDataFile.type,
-          isActive: true,
-          bucketSource: dataPawnDocument.bucketSource,
+          ...data,
         },
         () => {},
         "PUT"
@@ -128,6 +121,30 @@ const DocumentTypeCheckList = (props) => {
         error,
         GLOBAL_CONSTANTS.STATUS_API.WARNING
       );
+    }
+  };
+
+  const handlerDeleteCustomerInDocuments = async (data) => {
+    try {
+      await callGlobalActionApi(
+        {
+          idSystemUser,
+          idLoginHistory,
+          idCustomer: null,
+          ...data,
+        },
+        null,
+        API_CONSTANTS.SYSTEM_USER.SET_CUSTOMER_IN_DELETE_DOCUMENT,
+        "POST",
+        true
+      );
+      handlerGetPawnDocuments();
+    } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
+      throw error;
     }
   };
 
@@ -158,7 +175,19 @@ const DocumentTypeCheckList = (props) => {
           <ComponentViewImage
             src={dataSrcShot}
             indication="Verifica que tu foto sea visible"
-            onClickContinue={handlerSetCustomerInDocument}
+            onClickContinue={(file) => {
+              const data = {
+                idCustomer: null,
+                idDocument: null,
+                name: metaDataFile.name,
+                extension: metaDataFile.extension,
+                metadata: JSON.stringify(dataPawnDocument.metadata),
+                mimeType: metaDataFile.type,
+                isActive: true,
+                bucketSource: dataPawnDocument.bucketSource,
+              };
+              handlerSetCustomerInDocument(file, data);
+            }}
             onClickOther={() => {
               setIsVisibleImage(false);
               if (
@@ -174,7 +203,19 @@ const DocumentTypeCheckList = (props) => {
           <ComponentViewDocument
             src={dataSrcShot}
             indication="Verifica que tu foto sea visible"
-            onClickContinue={handlerSetCustomerInDocument}
+            onClickContinue={(file) => {
+              const data = {
+                idCustomer: null,
+                idDocument: null,
+                name: metaDataFile.name,
+                extension: metaDataFile.extension,
+                metadata: JSON.stringify(dataPawnDocument.metadata),
+                mimeType: metaDataFile.type,
+                isActive: true,
+                bucketSource: dataPawnDocument.bucketSource,
+              };
+              handlerSetCustomerInDocument(file, data);
+            }}
             metaDataFile={metaDataFile}
             onClickOther={() => {
               setIsVisibleFile(false);
@@ -185,6 +226,9 @@ const DocumentTypeCheckList = (props) => {
         <ComponentProcessDocument
           onClickOpenCamera={() => {
             setIsVisibleCamera(true);
+          }}
+          onDeleteFile={(data) => {
+            handlerDeleteCustomerInDocuments(data);
           }}
           onClickNextStep={handlerContinueProcess}
           canGoNextStep={true}
