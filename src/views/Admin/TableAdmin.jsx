@@ -14,6 +14,7 @@ let tableDad = null;
 const TableAdminPawn = () => {
   useEffect(() => {
     tableDad = new Tabulator("#tabulator-admin-pawn", {
+      movableColumns: true,
       columns: [
         {
           title: "Name",
