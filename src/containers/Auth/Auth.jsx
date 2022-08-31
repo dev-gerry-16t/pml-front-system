@@ -1,15 +1,18 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import isNil from "lodash/isNil";
+import isEmpty from "lodash/isEmpty";
 import { callGlobalActionApi } from "../../utils/actions/actions";
 import LoaderApp from "../../components/loaderApp";
 import { useNavigate } from "react-router-dom";
 import FrontFunctions from "../../utils/actions/frontFunctions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
+import { setDataUserProfile } from "../../utils/dispatchs/userProfileDispatch";
 
 const Auth = (props) => {
-  const { dataProfile, callGlobalActionApi, purgeStore } = props;
+  const { dataProfile, callGlobalActionApi, purgeStore, setDataUserProfile } =
+    props;
   const navigate = useNavigate();
   const frontFunctions = new FrontFunctions();
 
@@ -38,51 +41,40 @@ const Auth = (props) => {
     }
   };
 
-  const handlerCallGetAllUserProfile = async () => {
+  const handlerCallGetAllUserProfile = async (data) => {
     try {
-      //   const response = await callGetAllUserProfile({
-      //     idSystemUser: dataProfile.dataProfile.idSystemUser,
-      //     token: dataProfile.dataProfile.token,
-      //   });
-      //   const responseResult =
-      //     isNil(response) === false &&
-      //     isNil(response.response) === false &&
-      //     isEmpty(response.response) === false
-      //       ? response.response
-      //       : {};
-      //   const idSystemUser =
-      //     isEmpty(responseResult) === false &&
-      //     isNil(responseResult.idSystemUser) === false
-      //       ? responseResult.idSystemUser
-      //       : null;
-      //   const idLoginHistory =
-      //     isEmpty(responseResult) === false &&
-      //     isNil(responseResult.idLoginHistory) === false
-      //       ? responseResult.idLoginHistory
-      //       : null;
-      //   const responseMenu = await callGetAllMenuProfile({
-      //     idSystemUser,
-      //     idLoginHistory,
-      //   });
-      //   const responseResultMenu =
-      //     isNil(responseMenu) === false &&
-      //     isNil(responseMenu.response) === false &&
-      //     isEmpty(responseMenu.response) === false
-      //       ? responseMenu.response
-      //       : [];
-      //   await setDataUserMenu(responseResultMenu);
-      //   await setDataUserProfile({
-      //     ...dataProfile.dataProfile,
-      //     ...responseResult,
-      //   });
-      //   history.push(
-      //     isEmpty(responseResult) === false &&
-      //       isNil(responseResult.path) === false
-      //       ? responseResult.path
-      //       : "/websystem"
-      //   );
-      navigate("/websystem");
-    } catch (error) {}
+      const response = await callGlobalActionApi(
+        {
+          idSystemUser: data.idSystemUser,
+          idLoginHistory: data.idLoginHistory,
+        },
+        null,
+        API_CONSTANTS.LOG_IN.GET_USER_PROFILE,
+        "POST",
+        true
+      );
+      const responseResult =
+        isNil(response) === false &&
+        isNil(response.response) === false &&
+        isEmpty(response.response) === false
+          ? response.response
+          : {};
+      await setDataUserProfile({
+        ...dataProfile,
+        idSystemUser: responseResult.idSystemUser,
+        darkTheme: responseResult.darkTheme,
+        givenName: responseResult.givenName,
+        path: responseResult.path,
+        language: responseResult.language,
+      });
+      if (isNil(responseResult.path) === false) {
+        navigate(responseResult.path);
+      } else {
+        navigate("/websystem");
+      }
+    } catch (error) {
+      navigate("/logout");
+    }
   };
 
   const handlerAsyncCallApis = async () => {
@@ -97,7 +89,10 @@ const Auth = (props) => {
         },
         dataProfile.idLoginHistory
       );
-      await handlerCallGetAllUserProfile();
+      await handlerCallGetAllUserProfile({
+        idSystemUser: dataProfile.idSystemUser,
+        idLoginHistory: dataProfile.idLoginHistory,
+      });
     } else {
       navigate("/login");
     }
@@ -132,6 +127,7 @@ const mapDispatchToProps = (dispatch) => ({
   callGlobalActionApi: (data, id, constant, method, token) =>
     dispatch(callGlobalActionApi(data, id, constant, method, token)),
   purgeStore: () => dispatch({ type: "PURGE" }),
+  setDataUserProfile: (data) => dispatch(setDataUserProfile(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);

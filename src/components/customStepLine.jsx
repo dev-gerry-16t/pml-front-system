@@ -228,7 +228,9 @@ const CustomStepLine = ({ children, data, goToActive = false }) => {
                 }}
               >
                 <div className="title-description">
-                  <span className="title">{row.name || row.documentType}</span>
+                  <span className="title">
+                    {row.name || row.documentType || row.step}
+                  </span>
                   <span className="description">
                     {row.description || row.directions}
                   </span>

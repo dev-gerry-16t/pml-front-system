@@ -20,6 +20,8 @@ import IconLogout from "../../assets/icons/iconLogout";
 import CustomButton from "../../components/customButton";
 import TableAdminPawn from "../../views/Admin/TableAdmin";
 import "../../assets/css/styles-tabulator.css";
+import ImageLogoCar from "../../assets/img/pml-logo-car.png";
+import PipeLineUser from "../../views/Admin/PipeLineUser";
 
 const max_width = "820px";
 
@@ -48,22 +50,26 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .logo-pml {
-    width: 11em;
-    height: 2.5em;
+  .header-welcome {
+    display: flex;
+    column-gap: 1em;
+    align-items: center;
+    h1 {
+      font-family: "Lato";
+      font-size: 1.5em;
+      color: var(--color-brand-primary);
+      span {
+        color: var(--color-brand-secondary);
+      }
+    }
   }
   @media screen and (max-width: 500px) {
-    .logo-pml {
-      width: 8em;
-      height: 2em;
-    }
   }
 `;
 
 const DefaultLayout = (props) => {
   const { dataProfile, callGlobalActionApi } = props;
   const navigate = useNavigate();
-
   const [idItem, setIdItem] = useState(null);
   const [idPawn, setIdPawn] = useState(null);
   const [dataConfigStep, setDataConfigStep] = useState([]);
@@ -197,11 +203,15 @@ const DefaultLayout = (props) => {
         }}
       >
         <Header>
-          <img
-            className="logo-pml"
-            src="https://prendamovil-assets.s3.us-east-2.amazonaws.com/logo-prenda-light.png"
-            alt="Imagen-ciudad"
-          />
+          <div className="header-welcome">
+            <img
+              src={ImageLogoCar} //"https://prendamovil-assets.s3.us-east-2.amazonaws.com/logo-prenda-light.png"
+              alt="Imagen-ciudad"
+            />
+            <h1>
+              <span>¡Hola!</span> {dataProfile.givenName}
+            </h1>
+          </div>
           <div>
             <CustomButton
               formatType="close"
@@ -225,6 +235,10 @@ const DefaultLayout = (props) => {
             <Route path="check-list/*" element={<CheckList />} />
             <Route path="completed-success" element={<CompletedSuccess />} />
             <Route path="admin" element={<TableAdminPawn />} />
+            <Route
+              path="admin/pipeline-user/:idPawn"
+              element={<PipeLineUser />}
+            />
           </Routes>
         )}
       </ContextLayout.Provider>

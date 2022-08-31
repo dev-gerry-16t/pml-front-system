@@ -1,7 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
+import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import isNil from "lodash/isNil";
+import isEmpty from "lodash/isEmpty";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
-import { reactFormatter } from "react-tabulator";
 import styled from "styled-components";
+import { callGlobalActionApi } from "../../utils/actions/actions";
+import FrontFunctions from "../../utils/actions/frontFunctions";
+import { API_CONSTANTS } from "../../utils/constants/apiConstants";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
+import CustomButton from "../../components/customButton";
+import ComponentPagination from "../../components/componentPagination";
 
 const Container = styled.div`
   padding: 1em;
@@ -11,70 +21,126 @@ const Container = styled.div`
 `;
 let tableDad = null;
 
-const TableAdminPawn = () => {
+const TableAdminPawn = (props) => {
+  const { dataProfile, callGlobalActionApi, setDataUserProfile } = props;
+  const { idSystemUser, idLoginHistory } = dataProfile;
+  const [total, setTotal] = useState(0);
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  const navigate = useNavigate();
+
+  const frontFunctions = new FrontFunctions();
+
+  const buttonDetail = (cell, formatterParams, onRendered) => {
+    onRendered(() => {
+      const data = cell.getData();
+      if (isNil(data.path) === false) {
+        ReactDOM.render(
+          <CustomButton
+            type="primary"
+            onClick={(event) => {
+              navigate(data.path);
+            }}
+          >
+            Ver detalle
+          </CustomButton>,
+          cell.getElement()
+        );
+      } else {
+        ReactDOM.render(<div></div>, cell.getElement());
+      }
+    });
+  };
+
+  const handlerSetUserInObject = async () => {
+    try {
+      const response = await callGlobalActionApi(
+        {
+          idSystemUser,
+          idLoginHistory,
+          type: 0,
+        },
+        null,
+        API_CONSTANTS.ADMIN.SET_USER_IN_OBJECT,
+        "POST",
+        true
+      );
+      const responseResult =
+        isEmpty(response) === false &&
+        isNil(response.response) === false &&
+        isEmpty(response.response) === false
+          ? response.response
+          : {};
+      if (isEmpty(responseResult) === false) {
+        const columns = responseResult.columns.map((row) => {
+          let objectColumns = {};
+          if (row.idComponentType === 1) {
+            objectColumns = {
+              title: row.title,
+              field: row.field,
+              headerSort: row.headerSort,
+              sorter: row.sorter,
+            };
+          } else if (row.idComponentType === 2) {
+            objectColumns = {
+              title: row.title,
+              field: row.field,
+              headerSort: row.headerSort,
+              sorter: row.sorter,
+              formatter: buttonDetail,
+            };
+          }
+          return objectColumns;
+        });
+        tableDad.setColumns(columns);
+      }
+    } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
+    }
+  };
+
+  const handlerGetPawnCoincidences = async () => {
+    try {
+      const response = await callGlobalActionApi(
+        {
+          idSystemUser,
+          idLoginHistory,
+        },
+        null,
+        API_CONSTANTS.ADMIN.GET_PAWN_COINCIDENCES,
+        "POST",
+        true
+      );
+      const responseResult =
+        isEmpty(response) === false &&
+        isNil(response.response) === false &&
+        isEmpty(response.response) === false
+          ? response.response
+          : {};
+      if (isEmpty(responseResult) === false) {
+        setTotal(responseResult.total);
+        tableDad.setData(responseResult.coincidences);
+      }
+    } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
+    }
+  };
+
   useEffect(() => {
     tableDad = new Tabulator("#tabulator-admin-pawn", {
       movableColumns: true,
-      columns: [
-        {
-          title: "Name",
-          field: "name",
-          headerSort: true,
-          sorter: "string",
-        },
-        {
-          title: "Inicio de empeño",
-          field: "startPawn",
-          headerSort: true,
-          sorter: "string",
-        },
-        {
-          title: "Estatus",
-          field: "status",
-          headerSort: true,
-          sorter: "string",
-        },
-        {
-          title: "Detalle",
-          field: "detail",
-          headerSort: false,
-          sorter: false,
-          cellClick: function (e, cell) {
-            const data = cell.getData();
-            console.log("subData", data);
-          },
-          formatter: reactFormatter(
-            <button
-              onClick={(event) => {
-                //rowDetail(event);
-              }}
-            >
-              Ver
-            </button>
-          ),
-        },
-      ],
-      data: [
-        {
-          name: "Gerardo Gonzalez Jimenez",
-          startPawn: "14 Junio 2022",
-          status: "En proceso",
-          detail: "1",
-        },
-        {
-          name: "Noe Hinojosa Torres",
-          startPawn: "15 Junio 2022",
-          status: "Terminado",
-          detail: "1",
-        },
-        {
-          name: "Juan Guzman Ortiz",
-          startPawn: "16 Junio 2022",
-          status: "Reachazado",
-          detail: "1",
-        },
-      ],
+      columns: [],
+      data: [],
     });
+    handlerSetUserInObject();
+    handlerGetPawnCoincidences();
   }, []);
 
   return (
@@ -87,9 +153,31 @@ const TableAdminPawn = () => {
           <div></div>
         </div>
         <div id="tabulator-admin-pawn"></div>
+        <ComponentPagination
+          current={current}
+          total={total}
+          pageSize={pageSize}
+          pageSizeOptions={[10, 20, 50, 100]}
+          onChange={(page, sizePage) => {
+            setCurrent(page);
+            setPageSize(sizePage);
+          }}
+        />
       </div>
     </Container>
   );
 };
 
-export default TableAdminPawn;
+const mapStateToProps = (state) => {
+  const { dataProfile } = state;
+  return {
+    dataProfile: dataProfile.dataProfile,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  callGlobalActionApi: (data, id, constant, method, token) =>
+    dispatch(callGlobalActionApi(data, id, constant, method, token)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TableAdminPawn);

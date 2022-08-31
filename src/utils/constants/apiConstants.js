@@ -9,6 +9,7 @@ const API = {
   SYSTEM_USER: "/api/v1/systemUser",
   CATALOGS: "/api/v1/catalogs",
   META_MAP: "/api/v1/verification",
+  ADMIN: "/api/v1/admin",
 };
 
 const API_CONSTANTS = {
@@ -36,13 +37,17 @@ const API_CONSTANTS = {
     GET_PAWN_DOCUMENTS: `${API.SYSTEM_USER}/getPawnDocuments`,
     SET_CUSTOMER_IN_DOCUMENT: `${API.SYSTEM_USER}/setCustomerInDocument`,
     SET_CUSTOMER_IN_DELETE_DOCUMENT: `${API.SYSTEM_USER}/setCustomerInDeleteDocument`,
-    
   },
   CATALOGS: {
     GET_ALL_COUNTRIES: `${API.CATALOGS}/getAllCountries`,
   },
   META_MAP: {
     CREATE_VERIFICATION: `${API.META_MAP}/createVerification`,
+  },
+  ADMIN: {
+    SET_USER_IN_OBJECT: `${API.ADMIN}/setUserInObject`,
+    GET_PAWN_COINCIDENCES: `${API.ADMIN}/getPawnCoincidences`,
+    GET_PIPELINE_ADMIN: `${API.ADMIN}/getPipelineAdmin`,
   },
 };
 
