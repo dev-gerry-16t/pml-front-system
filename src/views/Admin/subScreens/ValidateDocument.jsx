@@ -315,7 +315,6 @@ const ValidateDocument = (props) => {
                                 "Estas por aceptar el documento, ¿Deseas continuar?"
                               )
                             ) {
-                              console.log("ok");
                               await handlerReviewDocument(
                                 {
                                   isApproved: true,
