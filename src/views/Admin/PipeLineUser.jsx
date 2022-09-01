@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import isNil from "lodash/isNil";
 import isEmpty from "lodash/isEmpty";
+import { Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
 import { callGlobalActionApi } from "../../utils/actions/actions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
@@ -9,9 +10,10 @@ import FrontFunctions from "../../utils/actions/frontFunctions";
 import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 import ComponentGeneralSection from "../../components/componentGeneralSection";
 import CustomStepLine from "../../components/customStepLine";
+import ValidateDocument from "./subScreens/ValidateDocument";
 
 const PipeLineUser = (props) => {
-  const { dataProfile, callGlobalActionApi, setDataUserProfile } = props;
+  const { dataProfile, callGlobalActionApi } = props;
   const { idSystemUser, idLoginHistory } = dataProfile;
   const [pipeLine, setPipeLine] = useState([]);
   const frontFunctions = new FrontFunctions();
@@ -60,7 +62,14 @@ const PipeLineUser = (props) => {
             color: "var(--color-font-black)",
           }}
         ></div>
-        <CustomStepLine data={pipeLine} goToActive={false}></CustomStepLine>
+        <CustomStepLine data={pipeLine} goToActive={false}>
+          <Routes>
+            <Route
+              path="validate-document"
+              element={<ValidateDocument idPawn={idPawn} />}
+            />
+          </Routes>
+        </CustomStepLine>
       </ComponentGeneralSection>
     </div>
   );

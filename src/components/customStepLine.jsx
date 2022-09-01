@@ -209,7 +209,9 @@ const CustomStepLine = ({ children, data, goToActive = false }) => {
         return rowFind.isCompleted === false && rowFind.isCurrent === true;
       });
       if (isNil(findCurrentScreen) === false) {
-        navigate(findCurrentScreen.path);
+        if (isNil(findCurrentScreen.path) === false) {
+          navigate(findCurrentScreen.path);
+        }
         setContent(isNil(findCurrentScreen) === false ? findCurrentScreen : []);
       }
     }

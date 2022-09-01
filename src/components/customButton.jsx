@@ -30,6 +30,8 @@ const CustomButton = ({
     tertiary: "var(--color-brand-secondary)",
     "underline-secondary": "var(--color-brand-secondary)",
     close: "var(--color-brand-secondary)",
+    evaluate: "#040534",
+    evaluateBlock: "#00D0B0",
   };
   const background = {
     primary: "var(--color-brand-primary)",
@@ -37,12 +39,16 @@ const CustomButton = ({
     tertiary: "var(--color-backGround-section)",
     "underline-secondary": "transparent",
     close: "transparent",
+    evaluate: "transparent",
+    evaluateBlock: "transparent",
   };
   const border = {
     secondary: "none",
     tertiary: "1px solid var(--color-brand-secondary)",
     "underline-secondary": "none",
     close: "none",
+    evaluate: "2px solid #040534",
+    evaluateBlock: "2px solid #00D0B0",
   };
 
   const decoration = {
@@ -51,6 +57,8 @@ const CustomButton = ({
     tertiary: "none",
     "underline-secondary": "underline",
     close: "none",
+    evaluate: "none",
+    evaluateBlock: "none",
   };
   return (
     <Button

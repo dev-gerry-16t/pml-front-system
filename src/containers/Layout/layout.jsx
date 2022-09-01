@@ -236,7 +236,7 @@ const DefaultLayout = (props) => {
             <Route path="completed-success" element={<CompletedSuccess />} />
             <Route path="admin" element={<TableAdminPawn />} />
             <Route
-              path="admin/pipeline-user/:idPawn"
+              path="admin/pipeline-user/:idPawn/*"
               element={<PipeLineUser />}
             />
           </Routes>

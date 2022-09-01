@@ -48,6 +48,8 @@ const API_CONSTANTS = {
     SET_USER_IN_OBJECT: `${API.ADMIN}/setUserInObject`,
     GET_PAWN_COINCIDENCES: `${API.ADMIN}/getPawnCoincidences`,
     GET_PIPELINE_ADMIN: `${API.ADMIN}/getPipelineAdmin`,
+    GET_PAWN_DOCUMENTS_FOR_ADMIN: `${API.ADMIN}/getPawnDocumentsForAdmin`,
+    REVIEW_DOCUMENT: `${API.ADMIN}/reviewDocument/`,
   },
 };
 
