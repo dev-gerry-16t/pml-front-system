@@ -18,6 +18,10 @@ import {
   IconAct,
   IconProof,
   IconRecomend,
+  IconOffer,
+  IconDate,
+  IconPhoto,
+  IconWaiting as IconWait,
 } from "../assets/icons";
 
 const max_width = "820px";
@@ -35,6 +39,10 @@ const IconsStep = {
   IconAct,
   IconProof,
   IconRecomend,
+  IconOffer,
+  IconDate,
+  IconPhoto,
+  IconWait,
 };
 
 const PrincipalContainer = styled.div`

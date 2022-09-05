@@ -97,6 +97,11 @@ class FrontFunctions {
     }
     return resultNumber;
   };
+  localStringToNumber = (s) => {
+    return isEmpty(s) === false
+      ? Number(String(s).replace(/[^0-9.-]+/g, ""))
+      : "";
+  };
   showMessageStatusApi = (text, status) => {
     const event = new CustomEvent("displayMessage", {
       detail: { message: text, type: status },

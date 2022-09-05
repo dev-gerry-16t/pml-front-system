@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Icons from "../assets/icons/icons";
+import FrontFunctions from "../utils/actions/frontFunctions";
 
 const Border = styled.div`
   position: relative;
@@ -64,18 +65,42 @@ const CustomInput = ({
   background = "transparent",
 }) => {
   const [isVisibleDefault, setIsVisibleDefault] = useState(true);
+
+  const frontFunctions = new FrontFunctions();
+
   return (
     <Border>
       <Icon>{Icons[subType || type]}</Icon>
       <Input background={background}>
         <input
           value={value}
-          onChange={onChange}
+          onChange={(e) => {
+            const value = e.target.value;
+            onChange(e, value);
+          }}
           name={name}
           placeholder={placeholder}
           type={isVisibleDefault === true ? type : "text"}
           required={isRequired}
           pattern={pattern}
+          onFocus={(e) => {
+            if (type === "currency") {
+              const value = e.target.value;
+              const notFormat = frontFunctions.localStringToNumber(value);
+              onChange(e, notFormat);
+            }
+          }}
+          onBlur={(e) => {
+            if (type === "currency") {
+              const value = e.target.value;
+              const valueOnchange = frontFunctions.parseFormatCurrency(
+                value,
+                2,
+                2
+              );
+              onChange(e, valueOnchange);
+            }
+          }}
         />
       </Input>
       {type === "password" && name !== "confirmPassword" && (

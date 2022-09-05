@@ -71,6 +71,9 @@ const ContainerDocument = styled.div`
   .info-text-action {
     display: grid;
     grid-template-rows: 2fr 1fr auto;
+    .data-info {
+      padding: 0px 1em;
+    }
     .buttons-action {
       display: flex;
       align-items: center;
@@ -108,7 +111,7 @@ const ContainerDocument = styled.div`
 `;
 
 const ValidateDocument = (props) => {
-  const { dataProfile, callGlobalActionApi, idPawn } = props;
+  const { dataProfile, callGlobalActionApi, idPawn, onGetPipeLine } = props;
   const { idSystemUser, idLoginHistory } = dataProfile;
   const dataContent = useContext(ContextStepLine);
   const [dataSelect, setDataSelect] = useState({});
@@ -196,6 +199,7 @@ const ValidateDocument = (props) => {
         error,
         GLOBAL_CONSTANTS.STATUS_API.WARNING
       );
+      throw error;
     }
   };
 
@@ -301,7 +305,11 @@ const ValidateDocument = (props) => {
                       </div>
                     </div>
                     <div className="info-text-action">
-                      <div>información</div>
+                      <div className="data-info">
+                        <div>
+                          <strong>Nombre del archivo:</strong> {row.name}
+                        </div>
+                      </div>
                       <div className="buttons-action">
                         <CustomButton
                           style={{
@@ -309,20 +317,25 @@ const ValidateDocument = (props) => {
                           }}
                           formatType="evaluate"
                           onClick={async () => {
-                            setIsVisibleComment(false);
-                            if (
-                              window.confirm(
-                                "Estas por aceptar el documento, ¿Deseas continuar?"
-                              )
-                            ) {
-                              await handlerReviewDocument(
-                                {
-                                  isApproved: true,
-                                  comment: null,
-                                },
-                                row.idDocument
-                              );
-                            }
+                            try {
+                              await setIsVisibleComment(false);
+                              setTimeout(async () => {
+                                if (
+                                  window.confirm(
+                                    "Estas por aceptar el documento, ¿Deseas continuar?"
+                                  )
+                                ) {
+                                  await handlerReviewDocument(
+                                    {
+                                      isApproved: true,
+                                      comment: null,
+                                    },
+                                    row.idDocument
+                                  );
+                                  onGetPipeLine();
+                                }
+                              }, 500);
+                            } catch (error) {}
                           }}
                         >
                           <svg
@@ -397,26 +410,29 @@ const ValidateDocument = (props) => {
                           ></TextArea>
                           <CustomButton
                             onClick={async () => {
-                              if (isEmpty(comment) === false) {
-                                if (
-                                  window.confirm(
-                                    "Estas por rechazar el documento, ¿Deseas continuar?"
-                                  )
-                                ) {
-                                  await handlerReviewDocument(
-                                    {
-                                      isApproved: false,
-                                      comment,
-                                    },
-                                    row.idDocument
+                              try {
+                                if (isEmpty(comment) === false) {
+                                  if (
+                                    window.confirm(
+                                      "Estas por rechazar el documento, ¿Deseas continuar?"
+                                    )
+                                  ) {
+                                    await handlerReviewDocument(
+                                      {
+                                        isApproved: false,
+                                        comment,
+                                      },
+                                      row.idDocument
+                                    );
+                                    onGetPipeLine();
+                                  }
+                                } else {
+                                  frontFunctions.showMessageStatusApi(
+                                    "Aún no escribes el motivo del rechazo",
+                                    GLOBAL_CONSTANTS.STATUS_API.WARNING
                                   );
                                 }
-                              } else {
-                                frontFunctions.showMessageStatusApi(
-                                  "Aún no escribes el motivo del rechazo",
-                                  GLOBAL_CONSTANTS.STATUS_API.WARNING
-                                );
-                              }
+                              } catch (error) {}
                             }}
                             style={{
                               padding: "0.2em 0.5em",

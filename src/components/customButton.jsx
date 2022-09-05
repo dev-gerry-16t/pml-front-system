@@ -43,6 +43,7 @@ const CustomButton = ({
     evaluateBlock: "transparent",
   };
   const border = {
+    primary: "none",
     secondary: "none",
     tertiary: "1px solid var(--color-brand-secondary)",
     "underline-secondary": "none",

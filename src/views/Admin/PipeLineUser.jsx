@@ -4,6 +4,7 @@ import isNil from "lodash/isNil";
 import isEmpty from "lodash/isEmpty";
 import { Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
+import ContextAdmin from "../../context/contextAdmin";
 import { callGlobalActionApi } from "../../utils/actions/actions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import FrontFunctions from "../../utils/actions/frontFunctions";
@@ -11,6 +12,8 @@ import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 import ComponentGeneralSection from "../../components/componentGeneralSection";
 import CustomStepLine from "../../components/customStepLine";
 import ValidateDocument from "./subScreens/ValidateDocument";
+import Waiting from "./subScreens/Waiting";
+import Offer from "./subScreens/Offer";
 
 const PipeLineUser = (props) => {
   const { dataProfile, callGlobalActionApi } = props;
@@ -39,7 +42,7 @@ const PipeLineUser = (props) => {
         isEmpty(response.response) === false
           ? response.response
           : {};
-      setPipeLine(responseResult.pipeline);
+      setPipeLine(responseResult);
     } catch (error) {
       frontFunctions.showMessageStatusApi(
         error,
@@ -62,14 +65,38 @@ const PipeLineUser = (props) => {
             color: "var(--color-font-black)",
           }}
         ></div>
-        <CustomStepLine data={pipeLine} goToActive={false}>
-          <Routes>
-            <Route
-              path="validate-document"
-              element={<ValidateDocument idPawn={idPawn} />}
-            />
-          </Routes>
-        </CustomStepLine>
+        <ContextAdmin.Provider
+          value={{
+            amount: pipeLine.amount,
+          }}
+        >
+          <CustomStepLine
+            data={
+              isEmpty(pipeLine) === false &&
+              isNil(pipeLine.pipeline) === false &&
+              isEmpty(pipeLine.pipeline) === false
+                ? pipeLine.pipeline
+                : []
+            }
+            goToActive={false}
+          >
+            <Routes>
+              <Route
+                path="validate-document"
+                element={
+                  <ValidateDocument
+                    idPawn={idPawn}
+                    onGetPipeLine={() => {
+                      handlerGetPipelineAdmin();
+                    }}
+                  />
+                }
+              />
+              <Route path="waiting" element={<Waiting />} />
+              <Route path="offer" element={<Offer />} />
+            </Routes>
+          </CustomStepLine>
+        </ContextAdmin.Provider>
       </ComponentGeneralSection>
     </div>
   );

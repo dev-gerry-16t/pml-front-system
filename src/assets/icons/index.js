@@ -16,6 +16,10 @@ import IconTax from "./iconTax";
 import IconAct from "./iconAct";
 import IconProof from "./iconProof";
 import IconRecomend from "./iconRecomend";
+import IconOffer from "./iconOffer";
+import IconDate from "./iconDate";
+import IconPhoto from "./iconPhoto";
+import IconWaiting from "./iconWaiting";
 
 export {
   IconDocAddress,
@@ -36,4 +40,8 @@ export {
   IconAct,
   IconProof,
   IconRecomend,
+  IconOffer,
+  IconDate,
+  IconPhoto,
+  IconWaiting,
 };
