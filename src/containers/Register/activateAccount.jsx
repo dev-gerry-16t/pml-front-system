@@ -80,6 +80,19 @@ const ActivateAccount = (props) => {
 
   useEffect(() => {
     if (isNil(token) === false) {
+      fetch(
+        "https://hooks.slack.com/services/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",
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          body: {
+            location: window.location.href,
+            date: Date(),
+          },
+        }
+      );
       handlerVerifyEnroll();
     }
   }, []);
