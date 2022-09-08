@@ -1,0 +1,397 @@
+import React,{useState} from "react";
+import isEmpty from "lodash/isEmpty";
+import styled from "styled-components";
+import CustomIndicationList from "../../../components/customIndicationList";
+import ENVIROMENT from "../../../utils/constants/enviroments";
+import CustomButton from "../../../components/customButton";
+import { IconUploadFile } from "../../../assets/icons";
+import FrontFunctions from "../../../utils/actions/frontFunctions";
+import CustomInput from "../../../components/customInput";
+
+const ModalView = styled.div`
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100vh;
+  z-index: 101;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  .mask-section {
+    width: 60vw;
+    min-height: 50vh;
+    box-shadow: 0px 0px 0px 100vh rgba(35, 50, 153, 0.6);
+    padding: 1em;
+    background: var(--color-backGround-light);
+    border-radius: 1em;
+    border: none;
+    .contain-doc-view {
+      width: 100%;
+      height: 70vh;
+    }
+  }
+`;
+
+const ButtonHeader = styled.div`
+  min-height: 50px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  .button-modal {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: rgba(35, 50, 153, 0.3);
+  }
+`;
+
+const SectionInputUpload = styled.div`
+  display: flex;
+  column-gap: 0.5em;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  .border-upload {
+    overflow: hidden;
+    position: relative;
+    padding: 2em;
+    border: 3px solid var(--color-brand-primary);
+    border-radius: 1em;
+    width: 12em;
+    height: 8.8em;
+    cursor: pointer;
+    .delete-doc-process {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+    }
+    .contain-image {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .title-file-type {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      span {
+        font-size: 2.5em;
+        color: var(--color-brand-primary);
+        text-align: center;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+    }
+    .upload-file {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
+      padding: 1em 0;
+      cursor: pointer;
+      span {
+        font-size: 1.2em;
+        color: var(--color-brand-primary);
+        text-align: center;
+        font-weight: 700;
+      }
+    }
+  }
+  @media screen and (max-width: 820px) {
+    flex-direction: column;
+    row-gap: 1em;
+  }
+`;
+
+const FormDocument=styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+row-gap: 1em;
+.contain-image{
+  width: 28em;
+  height: 25em;
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.form-info-document{
+  display: flex;
+  flex-direction: column;
+  width: 28em;
+  row-gap: 1em;
+}
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid var(--color-font-primary);
+  padding: 1em;
+  box-sizing: border-box;
+  font-size: 1.2em;
+  font-family: "Lato";
+  background: transparent;
+`;
+
+
+const PhotoCar=()=>{
+    const [selectedId, setSelectedId] = useState(null);
+  const [selectDataFile, setSelectDataFile] = useState({});
+  const [isVisibleDocument, setIsVisibleDocument] = useState(false);
+  const [isVisibleViewImage, setIsVisibleViewImage] = useState(false);
+  const [dataFile, setDataFile] = useState("");
+
+    const documents=[];
+    const bucketDocument="";
+
+    const onDeleteFile=()=>{};
+    const accept=".png,.jpg,.jpeg";
+    const onClickUploadFile=(file)=>{
+        setIsVisibleViewImage(true);
+        setDataFile(file);
+    };
+    
+    const frontFunctions = new FrontFunctions();
+
+    const handlerCloseModalFile = () => {
+        setSelectedId(null);
+        setTimeout(() => {
+          setIsVisibleDocument(false);
+        }, 1000);
+      };
+
+    const handlerUploadFileV2 = async (e) => {
+        try {
+          const files = e.target.files[0];
+          if (!files) return;
+    
+          const extension = frontFunctions.getExtensionFile(files.type);
+          const metadata = {
+            name: files.name,
+            type: files.type,
+            extension: extension,
+            size: files.size,
+          };
+          if (!files) return;
+          const reader = new FileReader();
+          reader.readAsDataURL(files);
+          reader.onload = async (event) => {
+            if (extension == "png" || extension == "jpg" || extension == "jpeg") {
+              const imgElement = document.createElement("img");
+              imgElement.src = event.target.result;
+              imgElement.onload = async (event1) => {
+                const canvas = document.createElement("canvas");
+                const width = event1.target.width;
+                const height = event1.target.height;
+    
+                const MAX_WIDTH = 1200;
+                const scaleSize = MAX_WIDTH / width;
+    
+                canvas.width = MAX_WIDTH;
+                canvas.height = height * scaleSize;
+    
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(event1.target, 0, 0, canvas.width, canvas.height);
+                canvas.remove();
+                const result = ctx.canvas.toDataURL("image/jpeg", 0.9);
+                onClickUploadFile(result, metadata);
+              };
+              imgElement.remove();
+            } else {
+              onClickUploadFile(event.target.result, metadata);
+            }
+          };
+          document.getElementById("id-file-upload-checklist").value = "";
+        } catch (error) {
+          document.getElementById("id-file-upload-checklist").value = "";
+        }
+      };
+
+    return(
+        <div className="section-shadow padding-2-1">
+             {selectedId && (
+        <ModalView layoutId={selectedId} onClick={handlerCloseModalFile}>
+          <div className="mask-section" onClick={(e) => e.stopPropagation()}>
+            <ButtonHeader>
+              <button className="button-modal" onClick={handlerCloseModalFile}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path
+                    d="M15 5L5 15M5 5l5.03 5.03L15 15"
+                    fill="black"
+                    strokeWidth="2"
+                    stroke=" var(--color-brand-primary)"
+                    strokeLinecap="round"
+                  ></path>
+                </svg>
+              </button>
+            </ButtonHeader>
+            {isVisibleDocument === true && (
+              <div className="contain-doc-view">
+                {/* <FileViewer
+                  fileType={selectDataFile.extension}
+                  filePath={`${ENVIROMENT}/api/v1/file/getFile/${bucketDocument}/${selectDataFile.idDocument}?type=${selectDataFile.mimeType}`}
+                  onError={() => {}}
+                /> */}
+              </div>
+            )}
+          </div>
+        </ModalView>
+      )}
+
+      {isVisibleViewImage && (
+        <ModalView  onClick={()=>{
+            setIsVisibleViewImage(false);
+        }}>
+          <div className="mask-section" onClick={(e) => e.stopPropagation()}>
+            <ButtonHeader>
+              <button className="button-modal" onClick={()=>{
+            setIsVisibleViewImage(false);
+
+              }}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path
+                    d="M15 5L5 15M5 5l5.03 5.03L15 15"
+                    fill="black"
+                    strokeWidth="2"
+                    stroke=" var(--color-brand-primary)"
+                    strokeLinecap="round"
+                  ></path>
+                </svg>
+              </button>
+            </ButtonHeader>
+              <div className="contain-doc-view">
+                <FormDocument>
+                    <div className="contain-image">
+                <img src={dataFile} alt="" />
+                    </div>
+                    <div className="form-info-document">
+                      <CustomInput
+                      placeholder="Ingresa el titulo de la imagen"
+                      name="title"
+                      />
+                      <TextArea name="" placeholder="Ingresa la descripción de la imagen"/>
+                      <div>
+                        <CustomButton style={{
+                          width:"100%",
+                          padding:"0.5em 0px"
+                        }}
+                        onClick={()=>{
+                          setIsVisibleViewImage(false);
+                        }}
+                        >
+                          Continuar
+                        </CustomButton>
+                      </div>
+                    </div>
+                </FormDocument>
+              </div>            
+          </div>
+        </ModalView>
+      )}
+            < CustomIndicationList>
+            <SectionInputUpload>
+            {isEmpty(documents) === false &&
+              documents.map((row, ix) => {
+                if (isEmpty(row) === false) {
+                  return (
+                    <div
+                      // layoutId={row.idDocument}
+                      key={`image-upload-${ix}`}
+                      className="border-upload"
+                      onClick={() => {
+                        setSelectedId(row.idDocument);
+                        setSelectDataFile(row);
+                        setTimeout(() => {
+                          setIsVisibleDocument(true);
+                        }, 1000);
+                      }}
+                    >
+                      {isEmpty(row.mimeType) === false &&
+                      row.mimeType.indexOf("image") !== -1 ? (
+                        <img
+                          className="contain-image"
+                          src={`${ENVIROMENT}/api/v1/file/getFile/${bucketDocument}/${row.idDocument}?type=${row.mimeType}`}
+                          alt={row.idDocument}
+                        />
+                      ) : (
+                        <div className="title-file-type">
+                          <span>{row.extension}</span>
+                        </div>
+                      )}
+                      <div className="delete-doc-process">
+                        <CustomButton
+                          style={{
+                            padding: "1em",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (
+                              window.confirm(
+                                "¿Seguro que deseas eliminar tu documento?"
+                              ) === true
+                            ) {
+                              onDeleteFile({
+                                idDocument: row.idDocument,
+                                isActive: false,
+                              });
+                            } else {
+                            }
+                          }}
+                          formatType="underline-secondary"
+                        >
+                          Eliminar
+                        </CustomButton>
+                      </div>
+                    </div>
+                  );
+                } else {
+                  return <></>;
+                }
+              })}
+
+            <div className="border-upload">
+              <label
+                className="upload-file"
+                htmlFor={`id-file-upload-checklist`}
+              >
+                <IconUploadFile size="5em" />
+                <span>Subir documento</span>
+              </label>
+              <input
+                id={`id-file-upload-checklist`}
+                accept={accept}
+                style={{ display: "none" }}
+                type="file"
+                capture="camera"
+                onChange={handlerUploadFileV2}
+              />
+            </div>
+          </SectionInputUpload>
+        </CustomIndicationList>
+
+        </div>
+    );
+};
+
+export default PhotoCar;

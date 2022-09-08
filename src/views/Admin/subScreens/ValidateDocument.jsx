@@ -127,9 +127,9 @@ const ValidateDocument = (props) => {
   const handlerSelectCurrentDocument = () => {
     const subPipeLine =
       isNil(dataContent.content) === false &&
-      isEmpty(dataContent.content) === false &&
-      isEmpty(dataContent.content.config) === false &&
-      isEmpty(dataContent.content.config.stepLine) === false
+        isEmpty(dataContent.content) === false &&
+        isEmpty(dataContent.content.config) === false &&
+        isEmpty(dataContent.content.config.stepLine) === false
         ? dataContent.content.config.stepLine
         : [];
     const findCurrentScreen = subPipeLine.find((rowFind) => {
@@ -154,22 +154,22 @@ const ValidateDocument = (props) => {
       );
       const responseResult =
         isEmpty(response) === false &&
-        isNil(response.response) === false &&
-        isEmpty(response.response) === false
+          isNil(response.response) === false &&
+          isEmpty(response.response) === false
           ? response.response
           : [];
       const documents =
         isEmpty(responseResult) === false &&
-        isNil(responseResult.documents) === false &&
-        isEmpty(responseResult.documents) === false &&
-        isNil(responseResult.documents[0]) === false
+          isNil(responseResult.documents) === false &&
+          isEmpty(responseResult.documents) === false &&
+          isNil(responseResult.documents[0]) === false
           ? responseResult.documents[0]
           : {};
       const document =
         isEmpty(documents) === false && isNil(documents.document) === false
           ? documents.document.filter((row) => {
-              return row.canBeEvaluated === true;
-            })
+            return row.canBeEvaluated === true;
+          })
           : {};
       setDataDocuments(document);
     } catch (error) {
@@ -273,7 +273,7 @@ const ValidateDocument = (props) => {
           subTitle=""
           title=""
           isVisibleButton={false}
-          onClick={async () => {}}
+          onClick={async () => { }}
         >
           <Container>
             <h2>{dataSelect.documentType}</h2>
@@ -291,7 +291,7 @@ const ValidateDocument = (props) => {
                         }}
                       >
                         {isEmpty(row.mimeType) === false &&
-                        row.mimeType.indexOf("image") !== -1 ? (
+                          row.mimeType.indexOf("image") !== -1 ? (
                           <img
                             className="contain-image"
                             src={row.path}
@@ -332,10 +332,12 @@ const ValidateDocument = (props) => {
                                     },
                                     row.idDocument
                                   );
+                                  setComment("");
+                                  setIsVisibleComment(false);
                                   onGetPipeLine();
                                 }
                               }, 500);
-                            } catch (error) {}
+                            } catch (error) { }
                           }}
                         >
                           <svg
@@ -424,6 +426,8 @@ const ValidateDocument = (props) => {
                                       },
                                       row.idDocument
                                     );
+                                    setComment("");
+                                    setIsVisibleComment(false);
                                     onGetPipeLine();
                                   }
                                 } else {
@@ -432,7 +436,7 @@ const ValidateDocument = (props) => {
                                     GLOBAL_CONSTANTS.STATUS_API.WARNING
                                   );
                                 }
-                              } catch (error) {}
+                              } catch (error) { }
                             }}
                             style={{
                               padding: "0.2em 0.5em",

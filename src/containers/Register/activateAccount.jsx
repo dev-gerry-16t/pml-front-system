@@ -29,7 +29,9 @@ const ActivateAccount = (props) => {
     try {
       setLoadedScreen(true);
       const response = await callGlobalActionApi(
-        { tokenEnroll: token, language: "es-ES" },
+        { tokenEnroll: token, language: "es-ES",
+        location: window.location.href,      
+      },
         null,
         API_CONSTANTS.SIGN_IN.VERIFY_ENROLL,
         "POST",
@@ -80,19 +82,6 @@ const ActivateAccount = (props) => {
 
   useEffect(() => {
     if (isNil(token) === false) {
-      fetch(
-        "https://hooks.slack.com/services/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",
-        {
-          headers: {
-            "Content-type": "application/json",
-          },
-          method: "POST",
-          body: {
-            location: window.location.href,
-            date: Date(),
-          },
-        }
-      );
       handlerVerifyEnroll();
     }
   }, []);

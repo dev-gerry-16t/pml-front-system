@@ -50,6 +50,7 @@ const API_CONSTANTS = {
     GET_PIPELINE_ADMIN: `${API.ADMIN}/getPipelineAdmin`,
     GET_PAWN_DOCUMENTS_FOR_ADMIN: `${API.ADMIN}/getPawnDocumentsForAdmin`,
     REVIEW_DOCUMENT: `${API.ADMIN}/reviewDocument/`,
+    SET_PIPELINE_ADMIN_STEP:`${API.ADMIN}/setPipelineAdminStep/`,
   },
 };
 

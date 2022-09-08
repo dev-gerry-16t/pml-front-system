@@ -218,7 +218,7 @@ const CustomStepLine = ({ children, data, goToActive = false }) => {
       });
       if (isNil(findCurrentScreen) === false) {
         if (isNil(findCurrentScreen.path) === false) {
-          navigate(findCurrentScreen.path);
+        navigate(findCurrentScreen.path);
         }
         setContent(isNil(findCurrentScreen) === false ? findCurrentScreen : []);
       }

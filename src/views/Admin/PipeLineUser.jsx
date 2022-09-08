@@ -14,6 +14,8 @@ import CustomStepLine from "../../components/customStepLine";
 import ValidateDocument from "./subScreens/ValidateDocument";
 import Waiting from "./subScreens/Waiting";
 import Offer from "./subScreens/Offer";
+import ScheduleDate from "./subScreens/Date";
+import PhotoCar from "./subScreens/PhotoCar";
 
 const PipeLineUser = (props) => {
   const { dataProfile, callGlobalActionApi } = props;
@@ -93,7 +95,10 @@ const PipeLineUser = (props) => {
                 }
               />
               <Route path="waiting" element={<Waiting />} />
+              <Route path="pre-offer" element={<Offer />} />
               <Route path="offer" element={<Offer />} />
+              <Route path="schedule-date" element={<ScheduleDate />} />
+              <Route path="photo-car" element={<PhotoCar />} />
             </Routes>
           </CustomStepLine>
         </ContextAdmin.Provider>
