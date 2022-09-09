@@ -40,8 +40,8 @@ const PipeLineUser = (props) => {
       );
       const responseResult =
         isEmpty(response) === false &&
-        isNil(response.response) === false &&
-        isEmpty(response.response) === false
+          isNil(response.response) === false &&
+          isEmpty(response.response) === false
           ? response.response
           : {};
       setPipeLine(responseResult);
@@ -50,6 +50,28 @@ const PipeLineUser = (props) => {
         error,
         GLOBAL_CONSTANTS.STATUS_API.WARNING
       );
+    }
+  };
+
+  const handlerSetPipelineAdminStep = async (data) => {
+    try {
+      await callGlobalActionApi(
+        {
+          ...data,
+          idSystemUser,
+          idLoginHistory,
+        },
+        idPawn,
+        API_CONSTANTS.ADMIN.SET_PIPELINE_ADMIN_STEP,
+        "PUT",
+        true
+      );
+    } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
+      throw error;
     }
   };
 
@@ -70,13 +92,25 @@ const PipeLineUser = (props) => {
         <ContextAdmin.Provider
           value={{
             amount: pipeLine.amount,
+            getPipeLineAdmin: () => {
+              handlerGetPipelineAdmin();
+            },
+            setPipeLineAdminStep: async (data) => {
+              try {
+                await handlerSetPipelineAdminStep(data);
+                handlerGetPipelineAdmin();
+              } catch (error) {
+                throw error;
+
+              }
+            }
           }}
         >
           <CustomStepLine
             data={
               isEmpty(pipeLine) === false &&
-              isNil(pipeLine.pipeline) === false &&
-              isEmpty(pipeLine.pipeline) === false
+                isNil(pipeLine.pipeline) === false &&
+                isEmpty(pipeLine.pipeline) === false
                 ? pipeLine.pipeline
                 : []
             }

@@ -119,9 +119,28 @@ const Offer = () => {
                 />
                 <div className="button-actions-amount">
                   <CustomButton
-                    onClick={() => {
-                      setIsVisibleAmount(false);
-
+                    onClick={async() => {
+                      try {        
+                        if (isNil(valueAmount)||valueAmount===0) {
+                          window.alert("Antes de guardar ingresa el monto nuevo")
+                        } else{
+                          await dataAdmin.setPipeLineAdminStep({
+                            idStep:dataContent.content.idStep,
+                            idStepLine:null,
+                            metadata:JSON.stringify({
+                              preOffer:valueAmount,
+                              isPreOfferAccepted:null,
+                            })
+                          });
+                          setIsVisibleAmount(false);
+                          setValueAmount(0);
+                          setValueAmountFormat("");
+                        }               
+                      } catch (error) {
+                        setValueAmount(0);
+                        setValueAmountFormat("");
+                        setIsVisibleAmount(false);                        
+                      }
                     }}
                     style={{
                       padding: "0.5em 2em",
@@ -132,6 +151,8 @@ const Offer = () => {
                   <CustomButton
                     onClick={() => {
                       setIsVisibleAmount(false);
+                      setValueAmount(0);
+                      setValueAmountFormat("");
                     }}
                     style={{
                       padding: "0.5em 2em",
@@ -150,12 +171,52 @@ const Offer = () => {
                 padding: "0.5em 2em",
               }}
               formatType="tertiary"
+              onClick={async()=>{
+                try {
+                  if (
+                    window.confirm(
+                      "¿Estas seguro que el usuario rechazó la oferta?"
+                    )
+                  ) {
+                    await dataAdmin.setPipeLineAdminStep({
+                      idStep:dataContent.content.idStep,
+                      idStepLine:null,
+                      metadata:JSON.stringify({
+                        preOffer:null,
+                        isPreOfferAccepted:false,
+                      })
+                    });
+                  }
+                } catch (error) {
+                  
+                }
+              }}
             >
               Rechazó la oferta
             </CustomButton>
             <CustomButton
               style={{
                 padding: "0.5em 2em",
+              }}
+              onClick={async()=>{
+                try {
+                  if (
+                    window.confirm(
+                      "¿Estas seguro que el usuario aceptó la oferta?"
+                    )
+                  ) {
+                    await dataAdmin.setPipeLineAdminStep({
+                      idStep:dataContent.content.idStep,
+                      idStepLine:null,
+                      metadata:JSON.stringify({
+                        preOffer:null,
+                        isPreOfferAccepted:true,
+                      })
+                    });
+                  }
+                } catch (error) {
+                  
+                }
               }}
             >
               Acepto la oferta

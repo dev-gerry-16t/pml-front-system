@@ -163,9 +163,9 @@ const Step = styled.div`
     width: 3.6875em;
     height: 3.6875em;
     background: ${(props) =>
-      props.background === true
-        ? "var(--color-font-primary)"
-        : "var(--color-backGround-light)"};
+    props.background === true
+      ? "var(--color-font-primary)"
+      : "var(--color-backGround-light)"};
   }
 `;
 
@@ -198,9 +198,9 @@ const Line = styled.div`
     width: 18vw;
     border-left: none;
     border-top: ${(props) =>
-      props.isCompleted === true
-        ? "2px solid var(--color-font-primary)"
-        : "2px dashed var(--color-font-primary)"};
+    props.isCompleted === true
+      ? "2px solid var(--color-font-primary)"
+      : "2px dashed var(--color-font-primary)"};
     height: 2px;
     left: 0px;
     top: 0px;
@@ -218,7 +218,7 @@ const CustomStepLine = ({ children, data, goToActive = false }) => {
       });
       if (isNil(findCurrentScreen) === false) {
         if (isNil(findCurrentScreen.path) === false) {
-        navigate(findCurrentScreen.path);
+          navigate(findCurrentScreen.path);
         }
         setContent(isNil(findCurrentScreen) === false ? findCurrentScreen : []);
       }
@@ -248,7 +248,7 @@ const CustomStepLine = ({ children, data, goToActive = false }) => {
                 <div className="icon-step">
                   <Step
                     background={
-                      row.isCompleted === true || row.isCurrent === true
+                      (row.isCompleted === true && row.isCurrent === true) || (row.isCompleted === true && row.isCurrent === false)
                     }
                     border={"3px solid var(--color-font-primary)"}
                   >
@@ -256,11 +256,11 @@ const CustomStepLine = ({ children, data, goToActive = false }) => {
                       React.createElement(IconsStep[row.icon], {
                         size: "2.5em",
                         fill:
-                          row.isCompleted === true || row.isCurrent === true
+                          (row.isCompleted === true && row.isCurrent === true) || (row.isCompleted === true && row.isCurrent === false)
                             ? "var(--color-backGround-section)"
                             : "none",
                         color:
-                          row.isCompleted === true || row.isCurrent === true
+                          (row.isCompleted === true && row.isCurrent === true) || (row.isCompleted === true && row.isCurrent === false)
                             ? "var(--color-backGround-section)"
                             : "var(--color-font-primary)",
                       })}
@@ -275,7 +275,7 @@ const CustomStepLine = ({ children, data, goToActive = false }) => {
                 <div className="line">
                   <Point
                     background={
-                      row.isCompleted === true || row.isCurrent === true
+                      (row.isCompleted === true && row.isCurrent === true) || (row.isCompleted === true && row.isCurrent === false)
                         ? "var(--color-brand-secondary)"
                         : "var(--color-backGround-section)"
                     }
