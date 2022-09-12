@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import isNil from "lodash/isNil";
 import isEmpty from "lodash/isEmpty";
+import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
 import ContextAdmin from "../../context/contextAdmin";
@@ -16,6 +17,35 @@ import Waiting from "./subScreens/Waiting";
 import Offer from "./subScreens/Offer";
 import ScheduleDate from "./subScreens/Date";
 import PhotoCar from "./subScreens/PhotoCar";
+
+const SectionInfo = styled.div`
+  display: flex;
+  column-gap: 0.5em;
+  flex-wrap: wrap;
+  .card-info{
+    cursor: pointer;
+    border: 1px solid var(--color-font-primary);
+    color: var(--color-font-primary);
+    background: rgba(0,208,176,.15);
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    border-radius: 0.6em;
+    row-gap: 0.5em;
+    .format-amount{
+      display: flex;
+      align-items: baseline;
+      h1{
+        font-size: 1.5em;
+        margin: 0px;
+      }
+    }
+  }
+  .card-info:hover{
+    background: rgba(0,208,176,.50);
+
+  }
+`;
 
 const PipeLineUser = (props) => {
   const { dataProfile, callGlobalActionApi } = props;
@@ -82,6 +112,38 @@ const PipeLineUser = (props) => {
   return (
     <div className="general-container">
       <ComponentGeneralSection title="Proceso de empeño">
+        {isEmpty(pipeLine) === false && (
+          <SectionInfo>
+            <div className="card-info">
+              <span>Tipo de empeño:</span>
+              <strong>{pipeLine.pawnType}</strong>
+            </div>
+            <div className="card-info">
+              <span>Nombre:</span>
+              <strong>{pipeLine.customer}</strong>
+            </div>
+            <div className="card-info">
+              <span>Teléfono:</span>
+              <strong>{pipeLine.customerPhoneNumber}</strong>
+            </div>
+            <div className="card-info">
+              <span>Correo:</span>
+              <strong>{pipeLine.customerEmailAddress}</strong>
+            </div>
+            <div className="card-info">
+              <span>Vehículo:</span>
+              <strong>-</strong>
+            </div>
+            <div className="card-info">
+              <span>Monto actual:</span>
+              <strong>
+                <div dangerouslySetInnerHTML={{
+                  __html: pipeLine.amount
+                }}></div>
+              </strong>
+            </div>
+          </SectionInfo>
+        )}
         <div
           style={{
             marginTop: "1em",
@@ -128,7 +190,7 @@ const PipeLineUser = (props) => {
                   />
                 }
               />
-              <Route path="waiting" element={<Waiting />} />
+              <Route path=":pathDinamyc" element={<Waiting />} />
               <Route path="pre-offer" element={<Offer />} />
               <Route path="offer" element={<Offer />} />
               <Route path="schedule-date" element={<ScheduleDate />} />

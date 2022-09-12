@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
+import isEmpty  from "lodash/isEmpty";
 import styled from "styled-components";
 import CustomButton from "../../../components/customButton";
 import CustomIndicationList from "../../../components/customIndicationList";
 import ContextStepLine from "../../../context/contextStepLine";
 import ContextAdmin from "../../../context/contextAdmin";
-import { isEmpty } from "lodash";
 
 const DateAsigned = styled.div`
   text-align: center;
