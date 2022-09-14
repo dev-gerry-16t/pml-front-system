@@ -104,7 +104,12 @@ class FrontFunctions {
   };
   showMessageStatusApi = (text, status) => {
     const event = new CustomEvent("displayMessage", {
-      detail: { message: text, type: status },
+      detail: {
+        message: isString(text)
+          ? text
+          : "Ocurrio un error, revisa tu conexión a internet",
+        type: status,
+      },
     });
     document.dispatchEvent(event);
   };

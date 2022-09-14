@@ -66,7 +66,7 @@ const Container = styled.div``;
 const ContainerDocument = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
-
+  margin-top: 2em;
   /* border-bottom: 1px solid #090c41; */
   .info-text-action {
     display: grid;
@@ -171,7 +171,7 @@ const ValidateDocument = (props) => {
             return row.canBeEvaluated === true;
           })
           : {};
-      setDataDocuments(document);
+      setDataDocuments(isEmpty(documents) === false && isNil(documents.document) === false ? documents.document : []);
     } catch (error) {
       frontFunctions.showMessageStatusApi(
         error,
@@ -309,79 +309,43 @@ const ValidateDocument = (props) => {
                         <div>
                           <strong>Nombre del archivo:</strong> {row.name}
                         </div>
+                        <div>
+                          <strong>Comentario de rechazo:</strong> <a href={row.reviewedPath} target="_blank" rel="noopener noreferrer">
+                            {row.comment}
+                          </a>
+                        </div>
                       </div>
-                      <div className="buttons-action">
-                        <CustomButton
-                          style={{
-                            padding: "0.2em 0.5em",
-                          }}
-                          formatType="evaluate"
-                          onClick={async () => {
-                            try {
-                              await setIsVisibleComment(false);
-                              setTimeout(async () => {
-                                if (
-                                  window.confirm(
-                                    "Estas por aceptar el documento, ¿Deseas continuar?"
-                                  )
-                                ) {
-                                  await handlerReviewDocument(
-                                    {
-                                      isApproved: true,
-                                      comment: null,
-                                    },
-                                    row.idDocument
-                                  );
-                                  setComment("");
-                                  setIsVisibleComment(false);
-                                  onGetPipeLine();
-                                }
-                              }, 500);
-                            } catch (error) { }
-                          }}
-                        >
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
+                      {row.canBeEvaluated === true && (
+                        <div className="buttons-action">
+                          <CustomButton
+                            style={{
+                              padding: "0.2em 0.5em",
+                            }}
+                            formatType="evaluate"
+                            onClick={async () => {
+                              try {
+                                await setIsVisibleComment(false);
+                                setTimeout(async () => {
+                                  if (
+                                    window.confirm(
+                                      "Estas por aceptar el documento, ¿Deseas continuar?"
+                                    )
+                                  ) {
+                                    await handlerReviewDocument(
+                                      {
+                                        isApproved: true,
+                                        comment: null,
+                                      },
+                                      row.idDocument
+                                    );
+                                    setComment("");
+                                    setIsVisibleComment(false);
+                                    onGetPipeLine();
+                                  }
+                                }, 500);
+                              } catch (error) { }
+                            }}
                           >
-                            <circle cx="8" cy="8" r="7.5" stroke="black" />
-                          </svg>{" "}
-                          Aceptar
-                        </CustomButton>
-                        <CustomButton
-                          style={{
-                            padding: "0.2em 0.5em",
-                          }}
-                          formatType={
-                            isVisibleComment === true
-                              ? "evaluateBlock"
-                              : "evaluate"
-                          }
-                          onClick={() => {
-                            setIsVisibleComment(!isVisibleComment);
-                          }}
-                        >
-                          {isVisibleComment === true ? (
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 16 16"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <circle cx="8" cy="8" r="7.5" stroke="#00D0B0" />
-                              <circle
-                                cx="8"
-                                cy="8"
-                                r="5.5"
-                                fill="#00D0B0"
-                                stroke="#00D0B0"
-                              />
-                            </svg>
-                          ) : (
                             <svg
                               width="16"
                               height="16"
@@ -390,11 +354,54 @@ const ValidateDocument = (props) => {
                               xmlns="http://www.w3.org/2000/svg"
                             >
                               <circle cx="8" cy="8" r="7.5" stroke="black" />
-                            </svg>
-                          )}{" "}
-                          Rechazar
-                        </CustomButton>
-                      </div>
+                            </svg>{" "}
+                            Aceptar
+                          </CustomButton>
+                          <CustomButton
+                            style={{
+                              padding: "0.2em 0.5em",
+                            }}
+                            formatType={
+                              isVisibleComment === true
+                                ? "evaluateBlock"
+                                : "evaluate"
+                            }
+                            onClick={() => {
+                              setIsVisibleComment(!isVisibleComment);
+                            }}
+                          >
+                            {isVisibleComment === true ? (
+                              <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <circle cx="8" cy="8" r="7.5" stroke="#00D0B0" />
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  r="5.5"
+                                  fill="#00D0B0"
+                                  stroke="#00D0B0"
+                                />
+                              </svg>
+                            ) : (
+                              <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <circle cx="8" cy="8" r="7.5" stroke="black" />
+                              </svg>
+                            )}{" "}
+                            Rechazar
+                          </CustomButton>
+                        </div>
+                      )}
                       {isVisibleComment === true && (
                         <div
                           style={{

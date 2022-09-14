@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import isNil from "lodash/isNil";
 import isEmpty from "lodash/isEmpty";
 import styled from "styled-components";
@@ -18,9 +18,24 @@ import Offer from "./subScreens/Offer";
 import ScheduleDate from "./subScreens/Date";
 import PhotoCar from "./subScreens/PhotoCar";
 
+const BackActions = styled.div`
+  background: var(--color-brand-primary);
+  color: #fff;
+  padding: 1em;
+  width: fit-content;
+  position: absolute;
+  top: 1.5em;
+  left: 0px;
+  border-radius: 0px 5px 5px 0px;
+  cursor: pointer;
+  &:hover{
+    opacity: 0.5;
+  }
+`;
+
 const SectionInfo = styled.div`
   display: flex;
-  column-gap: 0.5em;
+  gap: 0.5em;
   flex-wrap: wrap;
   .card-info{
     cursor: pointer;
@@ -32,18 +47,18 @@ const SectionInfo = styled.div`
     padding: 1em;
     border-radius: 0.6em;
     row-gap: 0.5em;
+    font-size: 0.8em;
     .format-amount{
       display: flex;
       align-items: baseline;
       h1{
-        font-size: 1.5em;
+        font-size: 1.2em;
         margin: 0px;
       }
     }
   }
   .card-info:hover{
     background: rgba(0,208,176,.50);
-
   }
 `;
 
@@ -52,6 +67,8 @@ const PipeLineUser = (props) => {
   const { idSystemUser, idLoginHistory } = dataProfile;
   const [pipeLine, setPipeLine] = useState([]);
   const frontFunctions = new FrontFunctions();
+
+  const navigate = useNavigate();
 
   const { idPawn } = useParams();
 
@@ -111,6 +128,11 @@ const PipeLineUser = (props) => {
 
   return (
     <div className="general-container">
+      <BackActions onClick={()=>{
+        navigate("/websystem/admin");
+      }}>
+        Regresar
+      </BackActions>
       <ComponentGeneralSection title="Proceso de empeño">
         {isEmpty(pipeLine) === false && (
           <SectionInfo>
@@ -132,7 +154,7 @@ const PipeLineUser = (props) => {
             </div>
             <div className="card-info">
               <span>Vehículo:</span>
-              <strong>-</strong>
+              <strong>{pipeLine.vehicle}</strong>
             </div>
             <div className="card-info">
               <span>Monto actual:</span>
