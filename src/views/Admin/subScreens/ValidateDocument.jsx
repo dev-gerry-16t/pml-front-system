@@ -127,9 +127,9 @@ const ValidateDocument = (props) => {
   const handlerSelectCurrentDocument = () => {
     const subPipeLine =
       isNil(dataContent.content) === false &&
-        isEmpty(dataContent.content) === false &&
-        isEmpty(dataContent.content.config) === false &&
-        isEmpty(dataContent.content.config.stepLine) === false
+      isEmpty(dataContent.content) === false &&
+      isEmpty(dataContent.content.config) === false &&
+      isEmpty(dataContent.content.config.stepLine) === false
         ? dataContent.content.config.stepLine
         : [];
     const findCurrentScreen = subPipeLine.find((rowFind) => {
@@ -154,24 +154,28 @@ const ValidateDocument = (props) => {
       );
       const responseResult =
         isEmpty(response) === false &&
-          isNil(response.response) === false &&
-          isEmpty(response.response) === false
+        isNil(response.response) === false &&
+        isEmpty(response.response) === false
           ? response.response
           : [];
       const documents =
         isEmpty(responseResult) === false &&
-          isNil(responseResult.documents) === false &&
-          isEmpty(responseResult.documents) === false &&
-          isNil(responseResult.documents[0]) === false
+        isNil(responseResult.documents) === false &&
+        isEmpty(responseResult.documents) === false &&
+        isNil(responseResult.documents[0]) === false
           ? responseResult.documents[0]
           : {};
       const document =
         isEmpty(documents) === false && isNil(documents.document) === false
           ? documents.document.filter((row) => {
-            return row.canBeEvaluated === true;
-          })
+              return row.canBeEvaluated === true;
+            })
           : {};
-      setDataDocuments(isEmpty(documents) === false && isNil(documents.document) === false ? documents.document : []);
+      setDataDocuments(
+        isEmpty(documents) === false && isNil(documents.document) === false
+          ? documents.document
+          : []
+      );
     } catch (error) {
       frontFunctions.showMessageStatusApi(
         error,
@@ -273,7 +277,7 @@ const ValidateDocument = (props) => {
           subTitle=""
           title=""
           isVisibleButton={false}
-          onClick={async () => { }}
+          onClick={async () => {}}
         >
           <Container>
             <h2>{dataSelect.documentType}</h2>
@@ -291,7 +295,7 @@ const ValidateDocument = (props) => {
                         }}
                       >
                         {isEmpty(row.mimeType) === false &&
-                          row.mimeType.indexOf("image") !== -1 ? (
+                        row.mimeType.indexOf("image") !== -1 ? (
                           <img
                             className="contain-image"
                             src={row.path}
@@ -309,85 +313,64 @@ const ValidateDocument = (props) => {
                         <div>
                           <strong>Nombre del archivo:</strong> {row.name}
                         </div>
-                        <div>
-                          <strong>Comentario de rechazo:</strong> <a href={row.reviewedPath} target="_blank" rel="noopener noreferrer">
-                            {row.comment}
-                          </a>
-                        </div>
+                        {row.isApproved === false && (
+                          <div
+                            style={{
+                              color: "var(--color-brand-primary)",
+                            }}
+                          >
+                            <strong>
+                              Este documento fue rechazado por{" "}
+                              <u>{row.reviewedByUser}</u>
+                            </strong>
+                          </div>
+                        )}
+                        {isEmpty(row.reviewedPath) === false &&
+                          isEmpty(row.reviewedPath) === false && (
+                            <div>
+                              <strong>Comentario de rechazo:</strong>{" "}
+                              <a
+                                href={row.reviewedPath}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {row.comment}
+                              </a>
+                            </div>
+                          )}
                       </div>
                       {row.canBeEvaluated === true && (
-                        <div className="buttons-action">
-                          <CustomButton
-                            style={{
-                              padding: "0.2em 0.5em",
-                            }}
-                            formatType="evaluate"
-                            onClick={async () => {
-                              try {
-                                await setIsVisibleComment(false);
-                                setTimeout(async () => {
-                                  if (
-                                    window.confirm(
-                                      "Estas por aceptar el documento, ¿Deseas continuar?"
-                                    )
-                                  ) {
-                                    await handlerReviewDocument(
-                                      {
-                                        isApproved: true,
-                                        comment: null,
-                                      },
-                                      row.idDocument
-                                    );
-                                    setComment("");
-                                    setIsVisibleComment(false);
-                                    onGetPipeLine();
-                                  }
-                                }, 500);
-                              } catch (error) { }
-                            }}
-                          >
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 16 16"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
+                        <>
+                          <div className="buttons-action">
+                            <CustomButton
+                              style={{
+                                padding: "0.2em 0.5em",
+                              }}
+                              formatType="evaluate"
+                              onClick={async () => {
+                                try {
+                                  await setIsVisibleComment(false);
+                                  setTimeout(async () => {
+                                    if (
+                                      window.confirm(
+                                        "Estas por aceptar el documento, ¿Deseas continuar?"
+                                      )
+                                    ) {
+                                      await handlerReviewDocument(
+                                        {
+                                          isApproved: true,
+                                          comment: null,
+                                        },
+                                        row.idDocument
+                                      );
+                                      setComment("");
+                                      setIsVisibleComment(false);
+                                      onGetPipeLine();
+                                    }
+                                  }, 500);
+                                } catch (error) {}
+                              }}
                             >
-                              <circle cx="8" cy="8" r="7.5" stroke="black" />
-                            </svg>{" "}
-                            Aceptar
-                          </CustomButton>
-                          <CustomButton
-                            style={{
-                              padding: "0.2em 0.5em",
-                            }}
-                            formatType={
-                              isVisibleComment === true
-                                ? "evaluateBlock"
-                                : "evaluate"
-                            }
-                            onClick={() => {
-                              setIsVisibleComment(!isVisibleComment);
-                            }}
-                          >
-                            {isVisibleComment === true ? (
-                              <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 16 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <circle cx="8" cy="8" r="7.5" stroke="#00D0B0" />
-                                <circle
-                                  cx="8"
-                                  cy="8"
-                                  r="5.5"
-                                  fill="#00D0B0"
-                                  stroke="#00D0B0"
-                                />
-                              </svg>
-                            ) : (
                               <svg
                                 width="16"
                                 height="16"
@@ -396,62 +379,118 @@ const ValidateDocument = (props) => {
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <circle cx="8" cy="8" r="7.5" stroke="black" />
-                              </svg>
-                            )}{" "}
-                            Rechazar
-                          </CustomButton>
-                        </div>
-                      )}
-                      {isVisibleComment === true && (
-                        <div
-                          style={{
-                            marginTop: "1em",
-                            display: "flex",
-                          }}
-                        >
-                          <TextArea
-                            maxLength={256}
-                            value={comment}
-                            onChange={(e) => {
-                              setComment(e.target.value);
-                            }}
-                            placeholder="Escribir al usuario el motivo por el que estas rechazando el documento"
-                          ></TextArea>
-                          <CustomButton
-                            onClick={async () => {
-                              try {
-                                if (isEmpty(comment) === false) {
-                                  if (
-                                    window.confirm(
-                                      "Estas por rechazar el documento, ¿Deseas continuar?"
-                                    )
-                                  ) {
-                                    await handlerReviewDocument(
-                                      {
-                                        isApproved: false,
-                                        comment,
-                                      },
-                                      row.idDocument
-                                    );
-                                    setComment("");
-                                    setIsVisibleComment(false);
-                                    onGetPipeLine();
-                                  }
-                                } else {
-                                  frontFunctions.showMessageStatusApi(
-                                    "Aún no escribes el motivo del rechazo",
-                                    GLOBAL_CONSTANTS.STATUS_API.WARNING
-                                  );
-                                }
-                              } catch (error) { }
-                            }}
-                            style={{
-                              padding: "0.2em 0.5em",
-                            }}
-                          >
-                            Enviar
-                          </CustomButton>
-                        </div>
+                              </svg>{" "}
+                              Aceptar
+                            </CustomButton>
+                            <CustomButton
+                              style={{
+                                padding: "0.2em 0.5em",
+                              }}
+                              formatType={
+                                isVisibleComment === true
+                                  ? "evaluateBlock"
+                                  : "evaluate"
+                              }
+                              onClick={() => {
+                                setIsVisibleComment(!isVisibleComment);
+                              }}
+                            >
+                              {isVisibleComment === true ? (
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <circle
+                                    cx="8"
+                                    cy="8"
+                                    r="7.5"
+                                    stroke="#00D0B0"
+                                  />
+                                  <circle
+                                    cx="8"
+                                    cy="8"
+                                    r="5.5"
+                                    fill="#00D0B0"
+                                    stroke="#00D0B0"
+                                  />
+                                </svg>
+                              ) : (
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <circle
+                                    cx="8"
+                                    cy="8"
+                                    r="7.5"
+                                    stroke="black"
+                                  />
+                                </svg>
+                              )}{" "}
+                              {isVisibleComment === false
+                                ? "Rechazar"
+                                : "Cancelar"}
+                            </CustomButton>
+                          </div>
+
+                          {isVisibleComment === true && (
+                            <div
+                              style={{
+                                marginTop: "1em",
+                                display: "flex",
+                              }}
+                            >
+                              <TextArea
+                                maxLength={256}
+                                value={comment}
+                                onChange={(e) => {
+                                  setComment(e.target.value);
+                                }}
+                                placeholder="Escribir al usuario el motivo por el que estas rechazando el documento"
+                              ></TextArea>
+                              <CustomButton
+                                onClick={async () => {
+                                  try {
+                                    if (isEmpty(comment) === false) {
+                                      if (
+                                        window.confirm(
+                                          "Estas por rechazar el documento, ¿Deseas continuar?"
+                                        )
+                                      ) {
+                                        await handlerReviewDocument(
+                                          {
+                                            isApproved: false,
+                                            comment,
+                                          },
+                                          row.idDocument
+                                        );
+                                        setComment("");
+                                        setIsVisibleComment(false);
+                                        onGetPipeLine();
+                                      }
+                                    } else {
+                                      frontFunctions.showMessageStatusApi(
+                                        "Aún no escribes el motivo del rechazo",
+                                        GLOBAL_CONSTANTS.STATUS_API.WARNING
+                                      );
+                                    }
+                                  } catch (error) {}
+                                }}
+                                style={{
+                                  padding: "0.2em 0.5em",
+                                }}
+                              >
+                                Enviar
+                              </CustomButton>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
                   </ContainerDocument>

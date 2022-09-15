@@ -28,7 +28,7 @@ const BackActions = styled.div`
   left: 0px;
   border-radius: 0px 5px 5px 0px;
   cursor: pointer;
-  &:hover{
+  &:hover {
     opacity: 0.5;
   }
 `;
@@ -37,28 +37,28 @@ const SectionInfo = styled.div`
   display: flex;
   gap: 0.5em;
   flex-wrap: wrap;
-  .card-info{
+  .card-info {
     cursor: pointer;
     border: 1px solid var(--color-font-primary);
     color: var(--color-font-primary);
-    background: rgba(0,208,176,.15);
+    background: rgba(0, 208, 176, 0.15);
     display: flex;
     flex-direction: column;
     padding: 1em;
     border-radius: 0.6em;
     row-gap: 0.5em;
     font-size: 0.8em;
-    .format-amount{
+    .format-amount {
       display: flex;
       align-items: baseline;
-      h1{
+      h1 {
         font-size: 1.2em;
         margin: 0px;
       }
     }
   }
-  .card-info:hover{
-    background: rgba(0,208,176,.50);
+  .card-info:hover {
+    background: rgba(0, 208, 176, 0.5);
   }
 `;
 
@@ -87,8 +87,8 @@ const PipeLineUser = (props) => {
       );
       const responseResult =
         isEmpty(response) === false &&
-          isNil(response.response) === false &&
-          isEmpty(response.response) === false
+        isNil(response.response) === false &&
+        isEmpty(response.response) === false
           ? response.response
           : {};
       setPipeLine(responseResult);
@@ -128,9 +128,11 @@ const PipeLineUser = (props) => {
 
   return (
     <div className="general-container">
-      <BackActions onClick={()=>{
-        navigate("/websystem/admin");
-      }}>
+      <BackActions
+        onClick={() => {
+          navigate("/websystem/admin");
+        }}
+      >
         Regresar
       </BackActions>
       <ComponentGeneralSection title="Proceso de empeño">
@@ -159,9 +161,11 @@ const PipeLineUser = (props) => {
             <div className="card-info">
               <span>Monto actual:</span>
               <strong>
-                <div dangerouslySetInnerHTML={{
-                  __html: pipeLine.amount
-                }}></div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: pipeLine.amount,
+                  }}
+                ></div>
               </strong>
             </div>
           </SectionInfo>
@@ -185,16 +189,15 @@ const PipeLineUser = (props) => {
                 handlerGetPipelineAdmin();
               } catch (error) {
                 throw error;
-
               }
-            }
+            },
           }}
         >
           <CustomStepLine
             data={
               isEmpty(pipeLine) === false &&
-                isNil(pipeLine.pipeline) === false &&
-                isEmpty(pipeLine.pipeline) === false
+              isNil(pipeLine.pipeline) === false &&
+              isEmpty(pipeLine.pipeline) === false
                 ? pipeLine.pipeline
                 : []
             }

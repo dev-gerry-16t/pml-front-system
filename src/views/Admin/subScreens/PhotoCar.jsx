@@ -484,7 +484,7 @@ const PhotoCar = (props) => {
         </ModalView>
       )}
       <CustomIndicationList>
-        <h2>Fotos del vehículo</h2>
+        <h2>{dataContent.content.step}</h2>
         <SectionInputUpload>
           {isEmpty(dataDocuments) === false &&
             dataDocuments.map((row, ix) => {
