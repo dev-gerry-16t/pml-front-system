@@ -324,6 +324,7 @@ const ComponentProcessDocument = (props) => {
                               onDeleteFile({
                                 idDocument: row.idDocument,
                                 isActive: false,
+                                bucketSource: bucketDocument,
                               });
                             } else {
                             }

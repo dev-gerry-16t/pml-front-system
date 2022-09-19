@@ -26,7 +26,7 @@ const LocationDate = styled.div`
   width: 100%;
   box-sizing: border-box;
   position: relative;
-  height: 30em;
+  min-height: 40em;
   /* .location {
     width: 100%;
     height: 15em;
@@ -218,6 +218,10 @@ const ScheduleDate = () => {
           </ContainerInput>
           <LocationDate>
             <div>
+              <span>
+                Calle Número, Colonia, Delegación/Municipio, Código postal,
+                Estado
+              </span>
               <CustomInput
                 value={valueAddress}
                 placeholder="Ingresa la dirección"

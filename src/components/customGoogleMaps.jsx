@@ -12,6 +12,7 @@ const CustomMapContainer = (props) => {
   } = props;
   const mapStyles = {
     width: "100%",
+    height:"35em"
   };
   const [initialPosition] = useState(location);
   

@@ -531,6 +531,8 @@ const PhotoCar = (props) => {
                               handlerDeleteCustomerInDocuments({
                                 idDocument: row.idDocument,
                                 isActive: false,
+                                bucketSource:
+                                  dataContent.content.config.bucketSource,
                               });
                             } else {
                             }
