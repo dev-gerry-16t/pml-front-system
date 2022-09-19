@@ -13,7 +13,10 @@ import { IconUploadFile } from "../../../assets/icons";
 import FrontFunctions from "../../../utils/actions/frontFunctions";
 import CustomInput from "../../../components/customInput";
 import GLOBAL_CONSTANTS from "../../../utils/constants/globalConstants";
-import { callGlobalActionApi, callSetCustomerInDocument } from "../../../utils/actions/actions";
+import {
+  callGlobalActionApi,
+  callSetCustomerInDocument,
+} from "../../../utils/actions/actions";
 import useOnChangeInput from "../../../hooks/useOnChangeInput";
 import { API_CONSTANTS } from "../../../utils/constants/apiConstants";
 
@@ -130,26 +133,26 @@ const SectionInputUpload = styled.div`
 `;
 
 const FormDocument = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-row-gap: 1em;
-.contain-image{
-  width: 28em;
-  height: 25em;
-  img{
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-}
-
-.form-info-document{
   display: flex;
   flex-direction: column;
-  width: 28em;
+  align-items: center;
   row-gap: 1em;
-}
+  .contain-image {
+    width: 28em;
+    height: 25em;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .form-info-document {
+    display: flex;
+    flex-direction: column;
+    width: 28em;
+    row-gap: 1em;
+  }
 `;
 
 const TextArea = styled.textarea`
@@ -164,28 +167,23 @@ const TextArea = styled.textarea`
 `;
 
 const Description = styled.div`
-margin-top: 0.5em;
-  h3{
+  margin-top: 0.5em;
+  h3 {
     margin: 0px;
   }
-  p{
+  p {
     margin: 0px;
   }
 `;
 
-
 const PhotoCar = (props) => {
-  const {
-    callSetCustomerInDocument,
-    dataProfile,
-    callGlobalActionApi,
-  } = props;
+  const { callSetCustomerInDocument, dataProfile, callGlobalActionApi } = props;
 
   const initialState = {
     title: "",
     description: "",
   };
-  
+
   const dataContent = useContext(ContextStepLine);
   const dataAdmin = useContext(ContextAdmin);
   const [dataForm, onChangeForm, setDataForm] = useOnChangeInput(initialState);
@@ -279,7 +277,7 @@ const PhotoCar = (props) => {
           idLoginHistory,
           ...data,
         },
-        () => { },
+        () => {},
         "PUT"
       );
     } catch (error) {
@@ -307,18 +305,18 @@ const PhotoCar = (props) => {
       );
       const responseResult =
         isEmpty(response) === false &&
-          isNil(response.response) === false &&
-          isEmpty(response.response) === false
+        isNil(response.response) === false &&
+        isEmpty(response.response) === false
           ? response.response
           : [];
       const documents =
         isEmpty(responseResult) === false &&
-          isNil(responseResult.documents) === false &&
-          isEmpty(responseResult.documents) === false &&
-          isNil(responseResult.documents[0]) === false &&
-          isEmpty(responseResult.documents[0]) === false &&
-          isNil(responseResult.documents[0].document) === false &&
-          isEmpty(responseResult.documents[0]) === false
+        isNil(responseResult.documents) === false &&
+        isEmpty(responseResult.documents) === false &&
+        isNil(responseResult.documents[0]) === false &&
+        isEmpty(responseResult.documents[0]) === false &&
+        isNil(responseResult.documents[0].document) === false &&
+        isEmpty(responseResult.documents[0]) === false
           ? responseResult.documents[0].document
           : [];
       setDataDocuments(documents);
@@ -367,11 +365,13 @@ const PhotoCar = (props) => {
   };
 
   useEffect(() => {
-    if (isEmpty(dataContent) === false && isEmpty(dataContent.content) === false) {
+    if (
+      isEmpty(dataContent) === false &&
+      isEmpty(dataContent.content) === false
+    ) {
       handlerGetPawnDocumentsForAdmin();
     }
   }, [dataContent]);
-
 
   return (
     <div className="section-shadow padding-2-1">
@@ -396,7 +396,7 @@ const PhotoCar = (props) => {
                 <FileViewer
                   fileType={selectDataFile.extension}
                   filePath={selectDataFile.path}
-                  onError={() => { }}
+                  onError={() => {}}
                 />
               </div>
             )}
@@ -405,15 +405,19 @@ const PhotoCar = (props) => {
       )}
 
       {isVisibleViewImage && (
-        <ModalView onClick={() => {
-          setIsVisibleViewImage(false);
-        }}>
+        <ModalView
+          onClick={() => {
+            setIsVisibleViewImage(false);
+          }}
+        >
           <div className="mask-section" onClick={(e) => e.stopPropagation()}>
             <ButtonHeader>
-              <button className="button-modal" onClick={() => {
-                setIsVisibleViewImage(false);
-
-              }}>
+              <button
+                className="button-modal"
+                onClick={() => {
+                  setIsVisibleViewImage(false);
+                }}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path
                     d="M15 5L5 15M5 5l5.03 5.03L15 15"
@@ -444,34 +448,31 @@ const PhotoCar = (props) => {
                     onChange={onChangeForm}
                   />
                   <div>
-                    <CustomButton style={{
-                      width: "100%",
-                      padding: "0.5em 0px"
-                    }}
+                    <CustomButton
+                      style={{
+                        width: "100%",
+                        padding: "0.5em 0px",
+                      }}
                       onClick={async () => {
                         try {
-                          if (isEmpty(dataForm.title) || isEmpty(dataForm.description)) {
-                            window.alert("Para continuar agrega un titulo y descripción de la imagen");
-                          } else {
-                            const metaData = {
-                              ...dataContent.content.metadata,
-                              ...dataForm,
-                            };
-                            const data = {
-                              idCustomer,
-                              idDocument: null,
-                              name: dataInfoFile.name,
-                              extension: dataInfoFile.extension,
-                              metadata: JSON.stringify(metaData),
-                              mimeType: dataInfoFile.type,
-                              isActive: true,
-                              bucketSource: dataContent.content.config.bucketSource,
-                            };
-                            await handlerGenerateBlobImage(dataFile, data);
-                            setIsVisibleViewImage(false);
-                          }
-                        } catch (error) {
-                        }
+                          const metaData = {
+                            ...dataContent.content.metadata,
+                            ...dataForm,
+                          };
+                          const data = {
+                            idCustomer,
+                            idDocument: null,
+                            name: dataInfoFile.name,
+                            extension: dataInfoFile.extension,
+                            metadata: JSON.stringify(metaData),
+                            mimeType: dataInfoFile.type,
+                            isActive: true,
+                            bucketSource:
+                              dataContent.content.config.bucketSource,
+                          };
+                          await handlerGenerateBlobImage(dataFile, data);
+                          setIsVisibleViewImage(false);
+                        } catch (error) {}
                       }}
                     >
                       Continuar
@@ -491,7 +492,6 @@ const PhotoCar = (props) => {
               if (isEmpty(row) === false) {
                 return (
                   <div>
-
                     <div
                       // layoutId={row.idDocument}
                       key={`image-upload-${ix}`}
@@ -505,7 +505,7 @@ const PhotoCar = (props) => {
                       }}
                     >
                       {isEmpty(row.mimeType) === false &&
-                        row.mimeType.indexOf("image") !== -1 ? (
+                      row.mimeType.indexOf("image") !== -1 ? (
                         <img
                           className="contain-image"
                           src={`${row.path}?type=${row.mimeType}`}
@@ -553,10 +553,7 @@ const PhotoCar = (props) => {
             })}
 
           <div className="border-upload">
-            <label
-              className="upload-file"
-              htmlFor={`id-file-upload-checklist`}
-            >
+            <label className="upload-file" htmlFor={`id-file-upload-checklist`}>
               <IconUploadFile size="5em" />
               <span>Tomar foto</span>
             </label>
@@ -584,19 +581,15 @@ const PhotoCar = (props) => {
           onClick={async () => {
             try {
               if (
-                window.confirm(
-                  "¿Estas seguro de avanzar al siguiente paso?"
-                )
+                window.confirm("¿Estas seguro de avanzar al siguiente paso?")
               ) {
                 await dataAdmin.setPipeLineAdminStep({
                   idStep: dataContent.content.idStep,
                   idStepLine: null,
-                  metadata: null
+                  metadata: null,
                 });
               }
-            } catch (error) {
-
-            }
+            } catch (error) {}
           }}
         >
           Siguiente paso
@@ -620,7 +613,4 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(callSetCustomerInDocument(file, data, callback, method)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PhotoCar);
+export default connect(mapStateToProps, mapDispatchToProps)(PhotoCar);

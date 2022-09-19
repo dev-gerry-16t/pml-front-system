@@ -101,7 +101,7 @@ const Offer = () => {
                     }}
                     formatType="primary"
                   >
-                    Asignar una nueva pre-oferta
+                    Asignar una {dataContent.content.step}
                   </CustomButton>
                 </div>
               </>
@@ -119,27 +119,37 @@ const Offer = () => {
                 />
                 <div className="button-actions-amount">
                   <CustomButton
-                    onClick={async() => {
-                      try {        
-                        if (isNil(valueAmount)||valueAmount===0) {
-                          window.alert("Antes de guardar ingresa el monto nuevo")
-                        } else{
+                    onClick={async () => {
+                      try {
+                        if (isNil(valueAmount) || valueAmount === 0) {
+                          window.alert(
+                            "Antes de guardar ingresa el monto nuevo"
+                          );
+                        } else {
+                          const pathService =
+                            dataContent.content.path === "pre-offer";
                           await dataAdmin.setPipeLineAdminStep({
-                            idStep:dataContent.content.idStep,
-                            idStepLine:null,
-                            metadata:JSON.stringify({
-                              preOffer:valueAmount,
-                              isPreOfferAccepted:null,
-                            })
+                            idStep: dataContent.content.idStep,
+                            idStepLine: null,
+                            metadata:
+                              pathService === true
+                                ? JSON.stringify({
+                                    preOffer: valueAmount,
+                                    isPreOfferAccepted: null,
+                                  })
+                                : JSON.stringify({
+                                    amount: valueAmount,
+                                    isAccepted: null,
+                                  }),
                           });
                           setIsVisibleAmount(false);
                           setValueAmount(0);
                           setValueAmountFormat("");
-                        }               
+                        }
                       } catch (error) {
                         setValueAmount(0);
                         setValueAmountFormat("");
-                        setIsVisibleAmount(false);                        
+                        setIsVisibleAmount(false);
                       }
                     }}
                     style={{
@@ -171,25 +181,31 @@ const Offer = () => {
                 padding: "0.5em 2em",
               }}
               formatType="tertiary"
-              onClick={async()=>{
+              onClick={async () => {
                 try {
                   if (
                     window.confirm(
                       "¿Estas seguro que el usuario rechazó la oferta?"
                     )
                   ) {
+                    const pathService =
+                      dataContent.content.path === "pre-offer";
                     await dataAdmin.setPipeLineAdminStep({
-                      idStep:dataContent.content.idStep,
-                      idStepLine:null,
-                      metadata:JSON.stringify({
-                        preOffer:null,
-                        isPreOfferAccepted:false,
-                      })
+                      idStep: dataContent.content.idStep,
+                      idStepLine: null,
+                      metadata:
+                        pathService === true
+                          ? JSON.stringify({
+                              preOffer: null,
+                              isPreOfferAccepted: false,
+                            })
+                          : JSON.stringify({
+                              amount: null,
+                              isAccepted: false,
+                            }),
                     });
                   }
-                } catch (error) {
-                  
-                }
+                } catch (error) {}
               }}
             >
               Rechazó la oferta
@@ -198,25 +214,31 @@ const Offer = () => {
               style={{
                 padding: "0.5em 2em",
               }}
-              onClick={async()=>{
+              onClick={async () => {
                 try {
                   if (
                     window.confirm(
                       "¿Estas seguro que el usuario aceptó la oferta?"
                     )
                   ) {
+                    const pathService =
+                      dataContent.content.path === "pre-offer";
                     await dataAdmin.setPipeLineAdminStep({
-                      idStep:dataContent.content.idStep,
-                      idStepLine:null,
-                      metadata:JSON.stringify({
-                        preOffer:null,
-                        isPreOfferAccepted:true,
-                      })
+                      idStep: dataContent.content.idStep,
+                      idStepLine: null,
+                      metadata:
+                        pathService === true
+                          ? JSON.stringify({
+                              preOffer: null,
+                              isPreOfferAccepted: true,
+                            })
+                          : JSON.stringify({
+                              amount: null,
+                              isAccepted: true,
+                            }),
                     });
                   }
-                } catch (error) {
-                  
-                }
+                } catch (error) {}
               }}
             >
               Acepto la oferta
