@@ -218,7 +218,11 @@ const ScheduleDate = () => {
           </ContainerInput>
           <LocationDate>
             <div>
-              <span>
+              <span
+                style={{
+                  opacity: "0.4",
+                }}
+              >
                 Calle Número, Colonia, Delegación/Municipio, Código postal,
                 Estado
               </span>
