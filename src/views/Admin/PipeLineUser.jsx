@@ -17,6 +17,7 @@ import Waiting from "./subScreens/Waiting";
 import Offer from "./subScreens/Offer";
 import ScheduleDate from "./subScreens/Date";
 import PhotoCar from "./subScreens/PhotoCar";
+import ComponentChipInfo from "../../components/componentChipInfo";
 
 const BackActions = styled.div`
   background: var(--color-brand-primary);
@@ -138,36 +139,30 @@ const PipeLineUser = (props) => {
       <ComponentGeneralSection title="Proceso de empeño">
         {isEmpty(pipeLine) === false && (
           <SectionInfo>
-            <div className="card-info">
-              <span>Tipo de empeño:</span>
-              <strong>{pipeLine.pawnType}</strong>
-            </div>
-            <div className="card-info">
-              <span>Nombre:</span>
-              <strong>{pipeLine.customer}</strong>
-            </div>
-            <div className="card-info">
-              <span>Teléfono:</span>
-              <strong>{pipeLine.customerPhoneNumber}</strong>
-            </div>
-            <div className="card-info">
-              <span>Correo:</span>
-              <strong>{pipeLine.customerEmailAddress}</strong>
-            </div>
-            <div className="card-info">
-              <span>Vehículo:</span>
-              <strong>{pipeLine.vehicle}</strong>
-            </div>
-            <div className="card-info">
-              <span>Monto actual:</span>
-              <strong>
+            <ComponentChipInfo
+              title="Tipo de empeño:"
+              info={pipeLine.pawnType}
+            />
+            <ComponentChipInfo title="Nombre:" info={pipeLine.customer} />
+            <ComponentChipInfo
+              title="Teléfono:"
+              info={pipeLine.customerPhoneNumber}
+            />
+            <ComponentChipInfo
+              title="Correo:"
+              info={pipeLine.customerEmailAddress}
+            />
+            <ComponentChipInfo title="Vehículo:" info={pipeLine.vehicle} />
+            <ComponentChipInfo
+              title="Monto actual:"
+              info={
                 <div
                   dangerouslySetInnerHTML={{
                     __html: pipeLine.amount,
                   }}
-                ></div>
-              </strong>
-            </div>
+                />
+              }
+            />
           </SectionInfo>
         )}
         <div

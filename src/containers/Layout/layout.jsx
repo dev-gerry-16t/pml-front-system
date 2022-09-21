@@ -22,6 +22,7 @@ import TableAdminPawn from "../../views/Admin/TableAdmin";
 import "../../assets/css/styles-tabulator.css";
 import ImageLogoCar from "../../assets/img/pml-logo-car.png";
 import PipeLineUser from "../../views/Admin/PipeLineUser";
+import DetailUser from "../../views/Admin/DetailUser";
 
 const max_width = "820px";
 
@@ -238,6 +239,10 @@ const DefaultLayout = (props) => {
             <Route
               path="admin/pipeline-user/:idPawn/*"
               element={<PipeLineUser />}
+            />
+            <Route
+              path="admin/detail-user/:idPawn"
+              element={<DetailUser />}
             />
           </Routes>
         )}

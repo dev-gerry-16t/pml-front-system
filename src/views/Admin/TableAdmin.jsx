@@ -22,7 +22,7 @@ const Container = styled.div`
 let tableDad = null;
 
 const TableAdminPawn = (props) => {
-  const { dataProfile, callGlobalActionApi, setDataUserProfile } = props;
+  const { dataProfile, callGlobalActionApi } = props;
   const { idSystemUser, idLoginHistory } = dataProfile;
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
