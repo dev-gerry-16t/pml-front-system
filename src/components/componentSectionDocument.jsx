@@ -191,7 +191,7 @@ const ContainerDocument = styled.div`
 `;
 
 const ComponentSectionDocument = (props) => {
-  const { data } = props;
+  const { data, uploadDocument } = props;
   const [isShowSection, setIsShowSection] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [isVisibleDocument, setIsVisibleDocument] = useState(false);
@@ -237,8 +237,21 @@ const ComponentSectionDocument = (props) => {
             const ctx = canvas.getContext("2d");
             ctx.drawImage(event1.target, 0, 0, canvas.width, canvas.height);
             canvas.remove();
-            const result = ctx.canvas.toDataURL("image/jpeg", 0.9);
-            //onClickUploadFile(result, metadata);
+            ctx.canvas.toBlob(
+              (result) => {
+                uploadDocument(result, {
+                  idDocument: null,
+                  name: metadata.name,
+                  extension: metadata.extension,
+                  mimeType: metadata.type,
+                  metadata: JSON.stringify(data.metadata),
+                  isActive: true,
+                  bucketSource: data.metadata.bucketSource,
+                });
+              },
+              "image/jpeg",
+              0.9
+            );
           };
           imgElement.remove();
         } else {

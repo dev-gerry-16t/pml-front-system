@@ -6,7 +6,10 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import ComponentBorderTopSection from "../../components/componentBorderTopSection";
 import ComponentChipInfo from "../../components/componentChipInfo";
-import { callGlobalActionApi } from "../../utils/actions/actions";
+import {
+  callGlobalActionApi,
+  callSetCustomerInDocument,
+} from "../../utils/actions/actions";
 import FrontFunctions from "../../utils/actions/frontFunctions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
@@ -118,7 +121,7 @@ const SectionComment = styled.div`
   margin-top: 1em;
   display: flex;
   width: 500px;
-  
+
   @media screen and (max-width: 740px) {
     row-gap: 0.5em;
     box-sizing: border-box;
@@ -131,7 +134,7 @@ const SectionComment = styled.div`
 `;
 
 const DetailUser = (props) => {
-  const { dataProfile, callGlobalActionApi } = props;
+  const { dataProfile, callGlobalActionApi, callSetCustomerInDocument } = props;
   const { idSystemUser, idLoginHistory } = dataProfile;
   const [dataPawn, setDataPawn] = useState({});
   const [comment, setComment] = useState("");
@@ -184,6 +187,28 @@ const DetailUser = (props) => {
         API_CONSTANTS.ADMIN.SET_PAWN_PROCESS,
         "PUT",
         true
+      );
+    } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
+      throw error;
+    }
+  };
+
+  const handlerSetCustomerInDocument = async (file, data) => {
+    console.log('data',data);
+    try {
+      await callSetCustomerInDocument(
+        file,
+        {
+          idSystemUser,
+          idLoginHistory,
+          ...data,
+        },
+        () => {},
+        "PUT"
       );
     } catch (error) {
       frontFunctions.showMessageStatusApi(
@@ -257,6 +282,12 @@ const DetailUser = (props) => {
                 <ComponentSectionDocument
                   key={`section-container-${ix}`}
                   data={row}
+                  uploadDocument={async (file, data) => {
+                    try {
+                      await handlerSetCustomerInDocument(file, data);
+                      handlerGetPawnById();
+                    } catch (error) {}
+                  }}
                 />
               );
             })}
@@ -362,8 +393,7 @@ const DetailUser = (props) => {
                     )
                   ) {
                     await handlerSetPawnProcess({
-                      isApproved: false,
-                      comment,
+                      isApproved: true,
                     });
                     setComment("");
                     setIsVisibleComment(false);
@@ -391,6 +421,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   callGlobalActionApi: (data, id, constant, method, token) =>
     dispatch(callGlobalActionApi(data, id, constant, method, token)),
+  callSetCustomerInDocument: (file, data, callback, method) =>
+    dispatch(callSetCustomerInDocument(file, data, callback, method)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailUser);
