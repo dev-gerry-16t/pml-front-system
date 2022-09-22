@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import isNil from "lodash/isNil";
@@ -12,6 +12,8 @@ import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 import CustomButton from "../../components/customButton";
 import ComponentPagination from "../../components/componentPagination";
+import CustomInput from "../../components/customInput";
+import useDebounce from "../../hooks/useDebounce";
 
 const Container = styled.div`
   padding: 1em;
@@ -27,16 +29,33 @@ const TableAdminPawn = (props) => {
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [valueSearch, setValueSearch] = useState("");
+  const [jsonConditionsState, setJsonConditionsState] = useState(
+    JSON.stringify([
+      {
+        id: 0,
+        value: valueSearch,
+      },
+    ])
+  );
+  const [paginationState, setPaginationState] = useState(
+    JSON.stringify({
+      currentPage: current,
+      userConfig: pageSize,
+    })
+  );
 
   const navigate = useNavigate();
+  const valueDebounceSearch = useDebounce(valueSearch, 700);
 
   const frontFunctions = new FrontFunctions();
 
   const buttonDetail = (cell, formatterParams, onRendered) => {
     onRendered(() => {
       const data = cell.getData();
+      const root = createRoot(cell.getElement());
       if (isNil(data.path) === false) {
-        ReactDOM.render(
+        root.render(
           <CustomButton
             type="primary"
             onClick={(event) => {
@@ -44,11 +63,10 @@ const TableAdminPawn = (props) => {
             }}
           >
             Ver detalle
-          </CustomButton>,
-          cell.getElement()
+          </CustomButton>
         );
       } else {
-        ReactDOM.render(<div></div>, cell.getElement());
+        root.render(<div></div>);
       }
     });
   };
@@ -89,6 +107,7 @@ const TableAdminPawn = (props) => {
               headerSort: row.headerSort,
               sorter: row.sorter,
               formatter: buttonDetail,
+              width: 100,
             };
           }
           return objectColumns;
@@ -103,12 +122,17 @@ const TableAdminPawn = (props) => {
     }
   };
 
-  const handlerGetPawnCoincidences = async () => {
+  const handlerGetPawnCoincidences = async (
+    jsonConditions = null,
+    pagination = "{}"
+  ) => {
     try {
       const response = await callGlobalActionApi(
         {
           idSystemUser,
           idLoginHistory,
+          pagination,
+          jsonConditions,
         },
         null,
         API_CONSTANTS.ADMIN.GET_PAWN_COINCIDENCES,
@@ -140,8 +164,18 @@ const TableAdminPawn = (props) => {
       data: [],
     });
     handlerSetUserInObject();
-    handlerGetPawnCoincidences();
   }, []);
+
+  useEffect(() => {
+    const objectJsonConditions = JSON.stringify([
+      {
+        id: 0,
+        value: valueDebounceSearch,
+      },
+    ]);
+    handlerGetPawnCoincidences(objectJsonConditions, paginationState);
+    setJsonConditionsState(objectJsonConditions);
+  }, [valueDebounceSearch]);
 
   return (
     <Container>
@@ -152,6 +186,21 @@ const TableAdminPawn = (props) => {
           </div>
           <div></div>
         </div>
+        <div
+          style={{
+            width: "300px",
+            marginBottom: "2em",
+          }}
+        >
+          <CustomInput
+            value={valueSearch}
+            onChange={(e, value) => {
+              setValueSearch(value);
+            }}
+            name="search"
+            placeholder="Busca por nombre o estatus"
+          />
+        </div>
         <div id="tabulator-admin-pawn"></div>
         <ComponentPagination
           current={current}
@@ -161,6 +210,12 @@ const TableAdminPawn = (props) => {
           onChange={(page, sizePage) => {
             setCurrent(page);
             setPageSize(sizePage);
+            const objectConditions = JSON.stringify({
+              currentPage: page,
+              userConfig: sizePage,
+            });
+            setPaginationState(objectConditions);
+            handlerGetPawnCoincidences(jsonConditionsState, objectConditions);
           }}
         />
       </div>

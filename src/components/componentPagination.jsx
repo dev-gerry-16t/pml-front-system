@@ -43,9 +43,10 @@ const ComponentPagination = (props) => {
         >
           &laquo;
         </li>
-        {paginations.map((row) => {
+        {paginations.map((row, ix) => {
           return (
             <li
+              key={`pagination-${ix}`}
               onClick={() => {
                 onChange(row, pageSize);
               }}
@@ -76,11 +77,15 @@ const ComponentPagination = (props) => {
           value={pageSize}
           onChange={(e) => {
             const numberSelect = Number(e.target.value);
-            onChange(current, numberSelect);
+            onChange(1, numberSelect);
           }}
         >
-          {pageSizeOptions.map((row) => {
-            return <option value={row}>{row}</option>;
+          {pageSizeOptions.map((row, ix) => {
+            return (
+              <option key={`option-${ix}`} value={row}>
+                {row}
+              </option>
+            );
           })}
         </SelectOptions>
       </div>

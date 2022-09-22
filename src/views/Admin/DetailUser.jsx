@@ -198,7 +198,6 @@ const DetailUser = (props) => {
   };
 
   const handlerSetCustomerInDocument = async (file, data) => {
-    console.log('data',data);
     try {
       await callSetCustomerInDocument(
         file,
