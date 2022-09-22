@@ -198,7 +198,7 @@ const TableAdminPawn = (props) => {
               setValueSearch(value);
             }}
             name="search"
-            placeholder="Busca por nombre o estatus"
+            placeholder="Busca por nombre o proceso"
           />
         </div>
         <div id="tabulator-admin-pawn"></div>
