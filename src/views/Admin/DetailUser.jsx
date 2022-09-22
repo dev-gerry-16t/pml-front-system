@@ -11,9 +11,34 @@ import FrontFunctions from "../../utils/actions/frontFunctions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 import ComponentSectionDocument from "../../components/componentSectionDocument";
+import CustomButton from "../../components/customButton";
+
+const TextArea = styled.textarea`
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid var(--color-font-primary);
+  padding: 1em;
+`;
+
+const BackActions = styled.div`
+  background: var(--color-brand-primary);
+  color: #fff;
+  padding: 1em;
+  width: fit-content;
+  position: absolute;
+  top: 1.5em;
+  left: 0px;
+  border-radius: 0px 5px 5px 0px;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.5;
+  }
+`;
 
 const Container = styled.div`
   padding: 2em 1em;
+  position: relative;
   .section-container {
     padding: 1em;
   }
@@ -27,6 +52,7 @@ const SectionCollapse = styled.div`
 `;
 
 const Description = styled.div`
+  margin-top: 2em;
   padding: 1em;
   background: #eeeff8;
   border-radius: 1em;
@@ -34,10 +60,15 @@ const Description = styled.div`
 `;
 
 const ContainerChips = styled.div`
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 1em;
+  box-sizing: border-box;
+  @media screen and (max-width: 740px) {
+    flex-direction: column;
+  }
 `;
 
 const CreditAsigned = styled.div`
@@ -75,10 +106,36 @@ const CreditAsigned = styled.div`
   }
 `;
 
+const ButtonActions = styled.div`
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+`;
+
+const SectionComment = styled.div`
+  margin-top: 1em;
+  display: flex;
+  width: 500px;
+  
+  @media screen and (max-width: 740px) {
+    row-gap: 0.5em;
+    box-sizing: border-box;
+    width: 100%;
+    flex-direction: column;
+    textarea {
+      width: 100%;
+    }
+  }
+`;
+
 const DetailUser = (props) => {
   const { dataProfile, callGlobalActionApi } = props;
   const { idSystemUser, idLoginHistory } = dataProfile;
   const [dataPawn, setDataPawn] = useState({});
+  const [comment, setComment] = useState("");
+  const [isVisibleComment, setIsVisibleComment] = useState(false);
 
   const frontFunctions = new FrontFunctions();
 
@@ -115,12 +172,41 @@ const DetailUser = (props) => {
     }
   };
 
+  const handlerSetPawnProcess = async (data) => {
+    try {
+      await callGlobalActionApi(
+        {
+          metadata: JSON.stringify(data),
+          idSystemUser,
+          idLoginHistory,
+        },
+        idPawn,
+        API_CONSTANTS.ADMIN.SET_PAWN_PROCESS,
+        "PUT",
+        true
+      );
+    } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
+      throw error;
+    }
+  };
+
   useEffect(() => {
     handlerGetPawnById();
   }, []);
 
   return (
     <Container>
+      <BackActions
+        onClick={() => {
+          navigate("/websystem/admin");
+        }}
+      >
+        Regresar
+      </BackActions>
       <div className="section-shadow section-container">
         <Description>
           <div>
@@ -131,7 +217,10 @@ const DetailUser = (props) => {
             {dataPawn.processDescription}
           </div>
         </Description>
-        <ComponentBorderTopSection type="secondary" className="grid-column-2">
+        <ComponentBorderTopSection
+          type="secondary"
+          className="grid-column-2-responsive"
+        >
           <CreditAsigned>
             <h2 className="type-credit">Prestamo aprobado</h2>
             <div
@@ -172,6 +261,121 @@ const DetailUser = (props) => {
               );
             })}
         </SectionCollapse>
+        {isVisibleComment === false && dataPawn.canValidateFile === true && (
+          <ButtonActions>
+            <CustomButton
+              style={{
+                padding: "0.5em 2em",
+              }}
+              onClick={async () => {
+                try {
+                  if (
+                    window.confirm(
+                      "Estas por validar el expediente, ¿Deseas continuar?"
+                    )
+                  ) {
+                    await handlerSetPawnProcess({
+                      isApproved: true,
+                      comment: null,
+                    });
+                    handlerGetPawnById();
+                  }
+                } catch (error) {}
+              }}
+            >
+              Validar expediente
+            </CustomButton>
+            <CustomButton
+              style={{
+                padding: "0.5em 2em",
+              }}
+              formatType="tertiary"
+              onClick={() => {
+                setIsVisibleComment(true);
+              }}
+            >
+              Rechazar expediente
+            </CustomButton>
+          </ButtonActions>
+        )}
+        {isVisibleComment === true && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <SectionComment>
+              <TextArea
+                maxLength={256}
+                value={comment}
+                onChange={(e) => {
+                  setComment(e.target.value);
+                }}
+                placeholder="Escribir el motivo por el que estas rechazando el expediente"
+              ></TextArea>
+              <CustomButton
+                onClick={async () => {
+                  try {
+                    if (isEmpty(comment) === false) {
+                      if (
+                        window.confirm(
+                          "Estas por rechazar el expediente, ¿Deseas continuar?"
+                        )
+                      ) {
+                        await handlerSetPawnProcess({
+                          isApproved: false,
+                          comment,
+                        });
+                        setComment("");
+                        setIsVisibleComment(false);
+                        handlerGetPawnById();
+                      }
+                    } else {
+                      frontFunctions.showMessageStatusApi(
+                        "Aún no escribes el motivo del rechazo",
+                        GLOBAL_CONSTANTS.STATUS_API.WARNING
+                      );
+                    }
+                  } catch (error) {}
+                }}
+                style={{
+                  padding: "0.2em 0.5em",
+                }}
+              >
+                Enviar
+              </CustomButton>
+            </SectionComment>
+          </div>
+        )}
+        {dataPawn.canScatter === true && (
+          <ButtonActions>
+            <CustomButton
+              style={{
+                padding: "0.5em 2em",
+              }}
+              onClick={async () => {
+                try {
+                  if (
+                    window.confirm(
+                      "Estas por marcar la dispersión realizada, ¿Deseas continuar?"
+                    )
+                  ) {
+                    await handlerSetPawnProcess({
+                      isApproved: false,
+                      comment,
+                    });
+                    setComment("");
+                    setIsVisibleComment(false);
+                    handlerGetPawnById();
+                  }
+                } catch (error) {}
+              }}
+            >
+              Dispersión realizada
+            </CustomButton>
+          </ButtonActions>
+        )}
       </div>
     </Container>
   );

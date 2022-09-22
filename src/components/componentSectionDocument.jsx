@@ -3,6 +3,76 @@ import isEmpty from "lodash/isEmpty";
 import isNil from "lodash/isNil";
 import styled from "styled-components";
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+import { IconUploadFile } from "../assets/icons";
+import FrontFunctions from "../utils/actions/frontFunctions";
+
+const SectionInputUpload = styled.div`
+  display: flex;
+  column-gap: 0.5em;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  .border-upload {
+    overflow: hidden;
+    position: relative;
+    padding: 2em;
+    border: 3px solid var(--color-brand-primary);
+    border-radius: 1em;
+    width: 12em;
+    height: 8.8em;
+    cursor: pointer;
+    .delete-doc-process {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+    }
+    .contain-image {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .title-file-type {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      span {
+        font-size: 2.5em;
+        color: var(--color-brand-primary);
+        text-align: center;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+    }
+    .upload-file {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
+      padding: 1em 0;
+      cursor: pointer;
+      span {
+        font-size: 1.2em;
+        color: var(--color-brand-primary);
+        text-align: center;
+        font-weight: 700;
+      }
+    }
+  }
+  @media screen and (max-width: 820px) {
+    flex-direction: column;
+    row-gap: 1em;
+  }
+`;
 
 const ModalView = styled.div`
   position: fixed;
@@ -49,6 +119,7 @@ const SectionHeader = styled.div`
   padding: 0px 2em;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
   .cursor-collapse {
     cursor: pointer;
     padding: 3px;
@@ -126,9 +197,58 @@ const ComponentSectionDocument = (props) => {
   const [isVisibleDocument, setIsVisibleDocument] = useState(false);
   const [selectDataFile, setSelectDataFile] = useState({});
 
+  const frontFunctions = new FrontFunctions();
+
   const handlerCloseModalFile = () => {
     setSelectedId(null);
     setIsVisibleDocument(false);
+  };
+
+  const handlerUploadFileV2 = async (e) => {
+    try {
+      const files = e.target.files[0];
+      if (!files) return;
+
+      const extension = frontFunctions.getExtensionFile(files.type);
+      const metadata = {
+        name: files.name,
+        type: files.type,
+        extension: extension,
+        size: files.size,
+      };
+      if (!files) return;
+      const reader = new FileReader();
+      reader.readAsDataURL(files);
+      reader.onload = async (event) => {
+        if (extension == "png" || extension == "jpg" || extension == "jpeg") {
+          const imgElement = document.createElement("img");
+          imgElement.src = event.target.result;
+          imgElement.onload = async (event1) => {
+            const canvas = document.createElement("canvas");
+            const width = event1.target.width;
+            const height = event1.target.height;
+
+            const MAX_WIDTH = 1200;
+            const scaleSize = MAX_WIDTH / width;
+
+            canvas.width = MAX_WIDTH;
+            canvas.height = height * scaleSize;
+
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(event1.target, 0, 0, canvas.width, canvas.height);
+            canvas.remove();
+            const result = ctx.canvas.toDataURL("image/jpeg", 0.9);
+            //onClickUploadFile(result, metadata);
+          };
+          imgElement.remove();
+        } else {
+          window.alert("El archivo a subir debe ser una imagen");
+        }
+      };
+      document.getElementById("id-file-upload-checklist").value = "";
+    } catch (error) {
+      document.getElementById("id-file-upload-checklist").value = "";
+    }
   };
 
   return (
@@ -173,7 +293,11 @@ const ComponentSectionDocument = (props) => {
           </div>
         </ModalView>
       )}
-      <SectionHeader>
+      <SectionHeader
+        onClick={() => {
+          setIsShowSection(!isShowSection);
+        }}
+      >
         <h3>{data.documentGroup}</h3>
         <div
           className="cursor-collapse"
@@ -220,7 +344,7 @@ const ComponentSectionDocument = (props) => {
         <ContainerDocuments>
           {isEmpty(data.document) === false &&
             data.document.map((row, ix) => {
-              return (
+              return isEmpty(row) === false ? (
                 <ContainerDocument
                   key={`document-${ix}`}
                   style={{
@@ -254,6 +378,16 @@ const ComponentSectionDocument = (props) => {
                   <div className="info-text-action">
                     <div className="data-info">
                       <h3>{row.documentType}</h3>
+                      {isNil(row.title) === false && (
+                        <div>
+                          <strong>Titulo:</strong> {row.title}
+                        </div>
+                      )}
+                      {isNil(row.description) === false && (
+                        <div>
+                          <strong>Descripción:</strong> {row.description}
+                        </div>
+                      )}
                       <div>
                         <strong>Nombre del archivo:</strong> {row.name}
                       </div>
@@ -267,9 +401,37 @@ const ComponentSectionDocument = (props) => {
                     </div>
                   </div>
                 </ContainerDocument>
+              ) : (
+                <div
+                  style={{
+                    position: "absolute",
+                    display: "none",
+                  }}
+                  key={`document-${ix}`}
+                ></div>
               );
             })}
         </ContainerDocuments>
+        {data.canAttach === true && (
+          <SectionInputUpload>
+            <div className="border-upload">
+              <label
+                className="upload-file"
+                htmlFor={`id-file-upload-checklist`}
+              >
+                <IconUploadFile size="5em" />
+                <span>Tomar foto</span>
+              </label>
+              <input
+                id={`id-file-upload-checklist`}
+                style={{ display: "none" }}
+                type="file"
+                capture="camera"
+                onChange={handlerUploadFileV2}
+              />
+            </div>
+          </SectionInputUpload>
+        )}
       </SectionMain>
     </div>
   );

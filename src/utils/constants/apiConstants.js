@@ -52,6 +52,7 @@ const API_CONSTANTS = {
     REVIEW_DOCUMENT: `${API.ADMIN}/reviewDocument/`,
     SET_PIPELINE_ADMIN_STEP: `${API.ADMIN}/setPipelineAdminStep/`,
     GET_PAWN_BY_ID: `${API.ADMIN}/getPawnById`,
+    SET_PAWN_PROCESS: `${API.ADMIN}/setPawnProcess/`,
   },
 };
 

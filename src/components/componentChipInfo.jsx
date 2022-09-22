@@ -12,6 +12,7 @@ const Chip = styled.div`
   border-radius: 0.6em;
   row-gap: 0.5em;
   font-size: 0.8em;
+  box-sizing: border-box;
   .format-amount {
     display: flex;
     align-items: baseline;
@@ -22,6 +23,10 @@ const Chip = styled.div`
   }
   &:hover {
     background: rgba(0, 208, 176, 0.5);
+  }
+  @media screen and (max-width: 740px) {
+    width: 100%;
+    padding: 1em 5px;
   }
 `;
 
