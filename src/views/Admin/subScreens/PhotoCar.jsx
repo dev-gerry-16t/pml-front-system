@@ -42,6 +42,7 @@ const ModalView = styled.div`
     .contain-doc-view {
       width: 100%;
       height: 70vh;
+      overflow: scroll;
     }
   }
 `;

@@ -333,6 +333,8 @@ const DetailUser = (props) => {
             style={{
               display: "flex",
               justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
             <SectionComment>
@@ -376,6 +378,20 @@ const DetailUser = (props) => {
                 Enviar
               </CustomButton>
             </SectionComment>
+
+            <CustomButton
+              formatType="tertiary"
+              style={{
+                padding: "0.5em 1em",
+                marginTop: "1em",
+              }}
+              onClick={() => {
+                setComment("");
+                setIsVisibleComment(false);
+              }}
+            >
+              Cancelar
+            </CustomButton>
           </div>
         )}
         {dataPawn.canScatter === true && (
