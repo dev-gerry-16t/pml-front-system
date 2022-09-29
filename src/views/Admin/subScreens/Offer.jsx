@@ -26,6 +26,10 @@ const CreditAsigned = styled.div`
   }
   .button-action {
     margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
   }
   .format-amount {
     display: flex;
@@ -66,12 +70,21 @@ const ViewAmount = styled.div`
   }
 `;
 
+const SectionRequestAmount = styled.div`
+  display: flex;
+  justify-content: center;
+  .container-request {
+  }
+`;
+
 const Offer = () => {
   const dataContent = useContext(ContextStepLine);
   const dataAdmin = useContext(ContextAdmin);
   const [isVisibleAmount, setIsVisibleAmount] = useState(false);
   const [valueAmount, setValueAmount] = useState(0);
   const [valueAmountFormat, setValueAmountFormat] = useState("");
+  const [valueRequestAmount, setValueRequestAmount] = useState(0);
+  const [valueRequestAmountFormat, setValueRequestAmountFormat] = useState("");
 
   let component = <LoaderApp />;
   if (
@@ -101,7 +114,7 @@ const Offer = () => {
                     }}
                     formatType="primary"
                   >
-                    Asignar una {dataContent.content.step}
+                    Asignar un nuevo monto
                   </CustomButton>
                 </div>
               </>
@@ -174,6 +187,24 @@ const Offer = () => {
                 </div>
               </ViewAmount>
             )}
+            <SectionRequestAmount>
+              <div className="container-request">
+                <p>
+                  Solo si el usuario desea un monto diferente ingresalo en el
+                  siguiente campo
+                </p>
+                <CustomInput
+                  type="currency"
+                  value={valueRequestAmountFormat}
+                  placeholder="Ingresa el monto solicitado en MXN"
+                  onChange={(e, format) => {
+                    const value = e.target.value;
+                    setValueRequestAmountFormat(format);
+                    setValueRequestAmount(value);
+                  }}
+                />
+              </div>
+            </SectionRequestAmount>
           </CreditAsigned>
           <ButtonsActions>
             <CustomButton
@@ -202,13 +233,14 @@ const Offer = () => {
                           : JSON.stringify({
                               amount: null,
                               isAccepted: false,
+                              amountRequested: null,
                             }),
                     });
                   }
                 } catch (error) {}
               }}
             >
-              Rechazó la oferta
+              Rechazó
             </CustomButton>
             <CustomButton
               style={{
@@ -235,13 +267,18 @@ const Offer = () => {
                           : JSON.stringify({
                               amount: null,
                               isAccepted: true,
+                              amountRequested:
+                                valueRequestAmount === 0 ||
+                                valueRequestAmount === ""
+                                  ? null
+                                  : valueRequestAmount,
                             }),
                     });
                   }
                 } catch (error) {}
               }}
             >
-              Acepto la oferta
+              Aceptó
             </CustomButton>
           </ButtonsActions>
         </ComponentBorderTopSection>

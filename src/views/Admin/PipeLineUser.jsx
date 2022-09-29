@@ -163,6 +163,18 @@ const PipeLineUser = (props) => {
                 />
               }
             />
+            {isNil(pipeLine.amountRequested) === false && (
+              <ComponentChipInfo
+                title="Monto solicitado:"
+                info={
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: pipeLine.amountRequested,
+                    }}
+                  />
+                }
+              />
+            )}
           </SectionInfo>
         )}
         <div
