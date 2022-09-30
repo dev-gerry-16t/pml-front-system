@@ -187,24 +187,28 @@ const Offer = () => {
                 </div>
               </ViewAmount>
             )}
-            <SectionRequestAmount>
-              <div className="container-request">
-                <p>
-                  Solo si el usuario desea un monto diferente ingresalo en el
-                  siguiente campo
-                </p>
-                <CustomInput
-                  type="currency"
-                  value={valueRequestAmountFormat}
-                  placeholder="Ingresa el monto solicitado en MXN"
-                  onChange={(e, format) => {
-                    const value = e.target.value;
-                    setValueRequestAmountFormat(format);
-                    setValueRequestAmount(value);
-                  }}
-                />
-              </div>
-            </SectionRequestAmount>
+            {isEmpty(dataContent.content.config) === false &&
+              isNil(dataContent.content.config.isFinalOffer) === false &&
+              dataContent.content.config.isFinalOffer === true && (
+                <SectionRequestAmount>
+                  <div className="container-request">
+                    <p>
+                      Solo si el usuario desea un monto diferente ingresalo en
+                      el siguiente campo
+                    </p>
+                    <CustomInput
+                      type="currency"
+                      value={valueRequestAmountFormat}
+                      placeholder="Ingresa el monto solicitado en MXN"
+                      onChange={(e, format) => {
+                        const value = e.target.value;
+                        setValueRequestAmountFormat(format);
+                        setValueRequestAmount(value);
+                      }}
+                    />
+                  </div>
+                </SectionRequestAmount>
+              )}
           </CreditAsigned>
           <ButtonsActions>
             <CustomButton
