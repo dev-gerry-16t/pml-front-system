@@ -18,6 +18,7 @@ import FrontFunctions from "../../utils/actions/frontFunctions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
 import LoaderProcess from "../../components/loaderProcess";
 import CustomSelect from "../../components/customSelect";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 
 const EditButton = styled.div`
   position: absolute;
@@ -34,7 +35,7 @@ const CreditAsigned = styled.div`
   .type-credit {
     color: var(--color-font-dark);
     font-weight: 900;
-    font-family: "Kometa";
+    font-family: "Kometa", "Lato";
     padding-top: 10px;
   }
   .format-amount {
@@ -42,7 +43,7 @@ const CreditAsigned = styled.div`
     align-items: baseline;
     column-gap: 0.5em;
     h1 {
-      font-family: "Kometa";
+      font-family: "Kometa", "Lato";
       font-style: normal;
       font-weight: 900;
       font-size: 2em;
@@ -52,6 +53,31 @@ const CreditAsigned = styled.div`
       margin: 0px;
       font-weight: 900;
     }
+  }
+`;
+
+const ContainerEdit = styled.div`
+  box-sizing: border-box;
+  .form-container-edit {
+    width: 100%;
+    position: relative;
+    .button-close {
+      position: absolute;
+      right: 0;
+      top: -2em;
+    }
+  }
+  @media screen and (max-width: 740px) {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: var(--color-backGround-section);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em 2em;
   }
 `;
 
@@ -81,116 +107,109 @@ const ComponentEditInformation = ({
   }, [data]);
 
   return (
-    <AnimatePresence>
+    <>
       {isVisible && (
-        <motion.div
-          initial={{ x: 300, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -300, opacity: 0 }}
-          style={{
-            width: "80%",
-            position: "relative",
-          }}
-        >
-          <CustomButton
-            style={{
-              position: "absolute",
-              right: "0px",
-              top: "1em",
-            }}
-            formatType="close"
-            onClick={onClick}
-          >
-            X
-          </CustomButton>
-          <CustomForm
-            onSubmit={(e) => {
-              onSaveInformation({
-                ...dataForm,
-                isUniqueOwner: dataForm.isUniqueOwner === "1" ? 1 : 0,
-              });
-            }}
-          >
-            <div className="vertical-form">
-              <CustomInput
-                value={dataForm.brand}
-                onChange={handlerOnChange}
-                name="brand"
-                placeholder="Marca"
-                type="text"
-                isRequired
-              />
-              <CustomInput
-                value={dataForm.model}
-                onChange={handlerOnChange}
-                name="model"
-                placeholder="Modelo"
-                type="text"
-                isRequired
-              />
-              <CustomInput
-                value={dataForm.year}
-                onChange={handlerOnChange}
-                name="year"
-                placeholder="Año"
-                type="number"
-                isRequired
-              />
-              <CustomInput
-                value={dataForm.version}
-                onChange={handlerOnChange}
-                name="version"
-                placeholder="Versión"
-                type="text"
-                isRequired
-              />
-              <CustomInput
-                value={dataForm.color}
-                onChange={(e) => {
-                  handlerOnChange(e);
-                  onChangeColor(e.target.value);
-                }}
-                name="color"
-                placeholder="Color"
-                type="color"
-                isRequired
-              />
-              <CustomInput
-                value={dataForm.km}
-                onChange={handlerOnChange}
-                name="km"
-                placeholder="Kilometraje"
-                type="number"
-                isRequired
-              />
-              <CustomSelect
-                value={dataForm.isUniqueOwner}
-                onChange={(e) => {
-                  handlerOnChange(e);
-                }}
-                name="isUniqueOwner"
-                placeholder="Dueño"
-                isRequired
-                data={[
-                  { id: "1", text: "Único dueño" },
-                  { id: "0", text: "Mas de un dueño" },
-                ]}
-              />
-              <CustomButton
-                type="submit"
-                formatType="secondary"
-                text="Guardar cambios"
-                style={{
-                  padding: "0.2em 0px",
-                  width: "100%",
-                }}
-                isRequired
-              />
-            </div>
-          </CustomForm>
-        </motion.div>
+        <ContainerEdit>
+          <div className="form-container-edit">
+            <CustomButton
+              className="button-close"
+              formatType="close"
+              onClick={onClick}
+            >
+              X
+            </CustomButton>
+            <CustomForm
+              onSubmit={(e) => {
+                onSaveInformation({
+                  ...dataForm,
+                  isUniqueOwner: dataForm.isUniqueOwner === "1" ? 1 : 0,
+                });
+              }}
+            >
+              <div className="vertical-form">
+                <h2 style={{
+                  fontSize:"1.5em"
+                }}>Editar información</h2>
+                <CustomInput
+                  value={dataForm.brand}
+                  onChange={handlerOnChange}
+                  name="brand"
+                  placeholder="Marca"
+                  type="text"
+                  isRequired
+                />
+                <CustomInput
+                  value={dataForm.model}
+                  onChange={handlerOnChange}
+                  name="model"
+                  placeholder="Modelo"
+                  type="text"
+                  isRequired
+                />
+                <CustomInput
+                  value={dataForm.year}
+                  onChange={handlerOnChange}
+                  name="year"
+                  placeholder="Año"
+                  type="number"
+                  isRequired
+                />
+                <CustomInput
+                  value={dataForm.version}
+                  onChange={handlerOnChange}
+                  name="version"
+                  placeholder="Versión"
+                  type="text"
+                  isRequired
+                />
+                <CustomInput
+                  value={dataForm.color}
+                  onChange={(e) => {
+                    handlerOnChange(e);
+                    onChangeColor(e.target.value);
+                  }}
+                  name="color"
+                  placeholder="Color"
+                  type="color"
+                  isRequired
+                />
+                <CustomInput
+                  value={dataForm.km}
+                  onChange={handlerOnChange}
+                  name="km"
+                  placeholder="Kilometraje"
+                  type="number"
+                  isRequired
+                />
+                <CustomSelect
+                  value={dataForm.isUniqueOwner}
+                  onChange={(e) => {
+                    handlerOnChange(e);
+                  }}
+                  name="isUniqueOwner"
+                  placeholder="Dueño"
+                  isRequired
+                  data={[
+                    { id: "1", text: "Único dueño" },
+                    { id: "0", text: "Más de un dueño" },
+                  ]}
+                />
+                <CustomButton
+                  type="submit"
+                  formatType="secondary"
+                  text="Guardar cambios"
+                  style={{
+                    padding: "0.2em 0px",
+                    width: "100%",
+                  }}
+                  isRequired
+                />
+              </div>
+            </CustomForm>
+          </div>
+        </ContainerEdit>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 
@@ -207,12 +226,9 @@ const ComponentCarInformation = ({ data, onClick, isVisible }) => {
   } = data;
 
   return (
-    <AnimatePresence>
+    <>
       {isVisible === false && (
-        <motion.div
-          initial={{ x: 300, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -300, opacity: 0 }}
+        <div
           className="grid-column-2"
           style={{
             columnGap: "1em",
@@ -270,9 +286,9 @@ const ComponentCarInformation = ({ data, onClick, isVisible }) => {
               Editar
             </CustomButton>
           </EditButton>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 
@@ -294,6 +310,7 @@ const CarInformation = (props) => {
     isNil(config) === false ? config.color : "#989FD6"
   );
   const [loadedScreen, setLoadedScreen] = useState(false);
+  const [isVisibleLoad, setIsVisibleLoad] = useState(false);
 
   const frontFunctions = new FrontFunctions();
 
@@ -312,7 +329,27 @@ const CarInformation = (props) => {
         true
       );
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
+    }
+  };
+
+  const handlerContinueProcess = async () => {
+    try {
+      setIsVisibleLoad(true);
+      await setPipeLine(
+        {
+          idStep,
+        },
+        idPawn
+      );
+      await getPipeLine();
+      setIsVisibleLoad(false);
+    } catch (error) {
+      setIsVisibleLoad(false);
     }
   };
 
@@ -324,14 +361,14 @@ const CarInformation = (props) => {
 
   let component = <LoaderApp />;
 
-  if (isNil(config) === false) {
+  if (isNil(config) === false && isVisibleLoad === false) {
     component = (
       <div className="general-container">
         <ComponentGeneralSection title={step}>
           <ComponentBorderTopSection>
             <div className="flex-row">
               <div
-                className="grid-column-2"
+                className="car-info"
                 style={{
                   paddingBottom: "3em",
                   borderBottom: "1px solid var(--color-border-black)",
@@ -399,17 +436,7 @@ const CarInformation = (props) => {
                 padding: "5px 0px",
               }}
               formatType="secondary"
-              onClick={async () => {
-                try {
-                  await setPipeLine(
-                    {
-                      idStep,
-                    },
-                    idPawn
-                  );
-                  await getPipeLine();
-                } catch (error) {}
-              }}
+              onClick={handlerContinueProcess}
             >
               Iniciar Proceso
             </CustomButton>
@@ -417,6 +444,10 @@ const CarInformation = (props) => {
         </ComponentGeneralSection>
       </div>
     );
+  }
+
+  if (isVisibleLoad === true) {
+    component = <LoaderApp />;
   }
 
   return component;

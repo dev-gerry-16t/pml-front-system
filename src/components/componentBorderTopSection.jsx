@@ -13,23 +13,32 @@ const container = {
   },
 };
 
-const GeneralSection = styled(motion.div)`
+const GeneralSection = styled.div`
   width: 100%;
   padding: 2em;
   background: var(--color-backGround-section);
   box-shadow: 0px 5px 15px rgba(35, 50, 153, 0.3);
   border-radius: 0.8em;
   box-sizing: border-box;
-  border-top: 10px solid var(--color-brand-primary);
+  border-top: 10px solid
+    ${(props) =>
+      props.type === "primary"
+        ? "var(--color-brand-primary)"
+        : "var(--color-brand-secondary)"};
 `;
 
-const ComponentBorderTopSection = ({ children, className = "" }) => {
+const ComponentBorderTopSection = ({
+  children,
+  className = "",
+  type = "primary",
+}) => {
   return (
     <GeneralSection
       variants={container}
       initial="hidden"
       animate="show"
       className={className}
+      type={type}
     >
       {children}
     </GeneralSection>

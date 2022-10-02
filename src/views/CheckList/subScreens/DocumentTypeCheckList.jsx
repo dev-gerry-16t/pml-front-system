@@ -16,6 +16,8 @@ import {
   callSetCustomerInDocument,
 } from "../../../utils/actions/actions";
 import { API_CONSTANTS } from "../../../utils/constants/apiConstants";
+import FrontFunctions from "../../../utils/actions/frontFunctions";
+import GLOBAL_CONSTANTS from "../../../utils/constants/globalConstants";
 
 const DocumentTypeCheckList = (props) => {
   const { callGlobalActionApi, callSetCustomerInDocument, dataProfile } = props;
@@ -37,6 +39,8 @@ const DocumentTypeCheckList = (props) => {
   const [loadProcess, setLoadProcess] = useState(false);
   const [metaDataFile, setMetaDataFile] = useState({});
   const [dataPawnDocument, setDataPawnDocument] = useState({});
+
+  const frontFunctions = new FrontFunctions();
 
   const handlerGetPawnDocuments = async () => {
     try {
@@ -67,6 +71,10 @@ const DocumentTypeCheckList = (props) => {
           : {};
       setDataPawnDocument(responseDocuments);
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
     }
   };
@@ -88,7 +96,7 @@ const DocumentTypeCheckList = (props) => {
     }
   };
 
-  const handlerSetCustomerInDocument = async (file) => {
+  const handlerSetCustomerInDocument = async (file, data) => {
     try {
       setLoadProcess(true);
       await callSetCustomerInDocument(
@@ -96,14 +104,7 @@ const DocumentTypeCheckList = (props) => {
         {
           idSystemUser,
           idLoginHistory,
-          idCustomer: null,
-          idDocument: null,
-          name: metaDataFile.name,
-          extension: metaDataFile.extension,
-          metadata: JSON.stringify(dataPawnDocument.metadata),
-          mimeType: metaDataFile.type,
-          isActive: true,
-          bucketSource: dataPawnDocument.bucketSource,
+          ...data,
         },
         () => {},
         "PUT"
@@ -116,6 +117,34 @@ const DocumentTypeCheckList = (props) => {
       }, 1000);
     } catch (error) {
       setLoadProcess(false);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
+    }
+  };
+
+  const handlerDeleteCustomerInDocuments = async (data) => {
+    try {
+      await callGlobalActionApi(
+        {
+          idSystemUser,
+          idLoginHistory,
+          idCustomer: null,
+          ...data,
+        },
+        null,
+        API_CONSTANTS.SYSTEM_USER.SET_CUSTOMER_IN_DELETE_DOCUMENT,
+        "POST",
+        true
+      );
+      handlerGetPawnDocuments();
+    } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
+      throw error;
     }
   };
 
@@ -125,60 +154,81 @@ const DocumentTypeCheckList = (props) => {
     if (isEmpty(content) === false) {
       handlerGetPawnDocuments();
     }
-  }, [content]);
+  }, [content, documentTypeName]);
 
   if (loadProcess === false) {
     component = (
       <>
-        <AnimatePresence>
-          {isVisibleCamera === true && (
-            <ComponentShotCamera
-              labelImage="Los datos deben ser visibles"
-              type="default-rectangle"
-              onClickShot={(src, data) => {
-                setDataSrcShot(src);
-                setIsVisibleImage(true);
-                setIsVisibleCamera(false);
-                setMetaDataFile(data);
-              }}
-            />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {isVisibleImage === true && (
-            <ComponentViewImage
-              src={dataSrcShot}
-              indication="Verifica que tu foto sea visible"
-              onClickContinue={handlerSetCustomerInDocument}
-              onClickOther={() => {
-                setIsVisibleImage(false);
-                if (
-                  isNil(content.canTakePhoto) === true ||
-                  content.canTakePhoto === true
-                ) {
-                  setIsVisibleCamera(true);
-                }
-              }}
-            />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {isVisibleFile === true && (
-            <ComponentViewDocument
-              src={dataSrcShot}
-              indication="Verifica que tu foto sea visible"
-              onClickContinue={handlerSetCustomerInDocument}
-              metaDataFile={metaDataFile}
-              onClickOther={() => {
-                setIsVisibleFile(false);
-                setDataSrcShot(null);
-              }}
-            />
-          )}
-        </AnimatePresence>
+        {isVisibleCamera === true && (
+          <ComponentShotCamera
+            labelImage="Los datos deben ser visibles"
+            type="default-rectangle"
+            onClickShot={(src, data) => {
+              setDataSrcShot(src);
+              setIsVisibleImage(true);
+              setIsVisibleCamera(false);
+              setMetaDataFile(data);
+            }}
+          />
+        )}
+        {isVisibleImage === true && (
+          <ComponentViewImage
+            src={dataSrcShot}
+            indication="Verifica que tu foto sea visible"
+            onClickContinue={(file) => {
+              const data = {
+                idCustomer: null,
+                idDocument: null,
+                name: metaDataFile.name,
+                extension: metaDataFile.extension,
+                metadata: JSON.stringify(dataPawnDocument.metadata),
+                mimeType: metaDataFile.type,
+                isActive: true,
+                bucketSource: dataPawnDocument.bucketSource,
+              };
+              handlerSetCustomerInDocument(file, data);
+            }}
+            onClickOther={() => {
+              setIsVisibleImage(false);
+              if (
+                isNil(content.canTakePhoto) === true ||
+                content.canTakePhoto === true
+              ) {
+                setIsVisibleCamera(true);
+              }
+            }}
+          />
+        )}
+        {isVisibleFile === true && (
+          <ComponentViewDocument
+            src={dataSrcShot}
+            indication="Verifica que tu foto sea visible"
+            onClickContinue={(file) => {
+              const data = {
+                idCustomer: null,
+                idDocument: null,
+                name: metaDataFile.name,
+                extension: metaDataFile.extension,
+                metadata: JSON.stringify(dataPawnDocument.metadata),
+                mimeType: metaDataFile.type,
+                isActive: true,
+                bucketSource: dataPawnDocument.bucketSource,
+              };
+              handlerSetCustomerInDocument(file, data);
+            }}
+            metaDataFile={metaDataFile}
+            onClickOther={() => {
+              setIsVisibleFile(false);
+              setDataSrcShot(null);
+            }}
+          />
+        )}
         <ComponentProcessDocument
           onClickOpenCamera={() => {
             setIsVisibleCamera(true);
+          }}
+          onDeleteFile={(data) => {
+            handlerDeleteCustomerInDocuments(data);
           }}
           onClickNextStep={handlerContinueProcess}
           canGoNextStep={true}
@@ -188,6 +238,7 @@ const DocumentTypeCheckList = (props) => {
           bucketDocument={dataPawnDocument.bucketSource}
           stepNumber="Paso 3 de 4"
           subTitle={content.directions}
+          title={content.documentType}
           accept={content.extensions}
           onClickUploadFile={(src, data) => {
             setDataSrcShot(src);

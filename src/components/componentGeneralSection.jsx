@@ -15,9 +15,12 @@ const container = {
 
 const ContainerInfo = styled.div`
   padding: 1em 3em;
+  @media screen and (max-width: 740px) {
+    padding: 1em 10px;
+  }
 `;
 
-const GeneralSection = styled(motion.div)`
+const GeneralSection = styled.div`
   width: 100%;
   padding: 2em;
   background: var(--color-backGround-section);
@@ -31,11 +34,14 @@ const GeneralSection = styled(motion.div)`
     h2 {
       margin: 0px;
       color: var(--color-border-black);
-      font-family: "Kometa";
+      font-family: "Kometa", "Lato";
       font-style: normal;
       font-weight: 700;
       font-size: 1.4em;
     }
+  }
+  @media screen and (max-width: 460px) {
+    padding: 1em 10px;
   }
 `;
 

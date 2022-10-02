@@ -7,11 +7,22 @@ import { API_CONSTANTS } from "./utils/constants/apiConstants";
 import "./App.css";
 import "./global-styles.scss";
 import LoaderApp from "./components/loaderApp";
+import ComponentToasterMessage from "./components/componentToasterMessage";
 
 const loading = () => <LoaderApp />;
 
 const SignIn = Loadable({
   loader: () => import("./containers/Register/signIn"),
+  loading,
+});
+
+const RecoveryAccount = Loadable({
+  loader: () => import("./containers/Recovery/recoveryAccount"),
+  loading,
+});
+
+const RecoveryPassword = Loadable({
+  loader: () => import("./containers/Recovery/recoveryPassword"),
   loading,
 });
 
@@ -63,15 +74,17 @@ const App = ({ callGlobalActionApi, dataProfile }) => {
 
   return (
     <BrowserRouter>
+      <ComponentToasterMessage />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/recovery-account" element={<RecoveryAccount />} />
+        <Route path="/recovery-password" element={<RecoveryPassword />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/activate-account" element={<ActivateAccount />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/logout" element={<Auth />} />
         <Route path="/testScreen" element={<TestScreen />} />
-        
         <Route path="/websystem/*" element={<DefaultLayout />} />
       </Routes>
     </BrowserRouter>

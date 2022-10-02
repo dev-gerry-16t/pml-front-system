@@ -4,12 +4,22 @@ import IconSelfie from "./IconSelfie";
 import IconInstructions from "./IconInstructions";
 import IconArrowSquareRight from "./IconSquareRight";
 import IconCamera from "./iconCamera";
+import IconBackCamera from "./iconBackCamera";
+import IconFrontCamera from "./iconFrontCamera";
 import IconCar from "./iconCar";
 import IconInvoiceCar from "./iconInvoiceCar";
 import IconCarId from "./iconCarId";
 import IconUploadFile from "./iconUploadFile";
 import IconDocument from "./iconDocument";
 import IconCarTenure from "./iconCarTenure";
+import IconTax from "./iconTax";
+import IconAct from "./iconAct";
+import IconProof from "./iconProof";
+import IconRecomend from "./iconRecomend";
+import IconOffer from "./iconOffer";
+import IconDate from "./iconDate";
+import IconPhoto from "./iconPhoto";
+import IconWaiting from "./iconWaiting";
 
 export {
   IconDocAddress,
@@ -18,10 +28,20 @@ export {
   IconInstructions,
   IconArrowSquareRight,
   IconCamera,
+  IconBackCamera,
+  IconFrontCamera,
   IconCar,
   IconInvoiceCar,
   IconCarId,
   IconUploadFile,
   IconDocument,
   IconCarTenure,
+  IconTax,
+  IconAct,
+  IconProof,
+  IconRecomend,
+  IconOffer,
+  IconDate,
+  IconPhoto,
+  IconWaiting,
 };

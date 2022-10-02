@@ -14,6 +14,7 @@ import LoaderProcess from "../../../components/loaderFullProcess";
 import ComponentShotCamera from "../../../components/componentShotCamera";
 import ComponentViewImage from "../../../components/componentViewImage";
 import ComponentInstruction from "../../../components/componentInstruction";
+import GLOBAL_CONSTANTS from "../../../utils/constants/globalConstants";
 
 const arrayIndication = [
   { name: "Recibo de luz", desciption: "" },
@@ -55,15 +56,15 @@ const DocumentAddress = (props) => {
         group: content.group,
         data: {
           type: dataForm.documentAddress,
-          country: dataProfile.country,
+          country: dataProfile.alpha2,
           page: "front",
-          filename: `${dataForm.documentAddress}-1.jpeg`,
+          filename: `${dataForm.documentAddress}-1.png`,
         },
       };
       dataMetaMap.push(dataToMetaMap);
       dataFileMetaMap.push(file);
       setLoadProcess(true);
-      const response = await frontFunctions.handlerUploadToMetaMap(
+      await frontFunctions.handlerUploadToMetaMap(
         dataFileMetaMap,
         dataMetaMap,
         dataProfile.identity,
@@ -81,7 +82,16 @@ const DocumentAddress = (props) => {
       await getPipeLine();
       setLoadProcess(false);
     } catch (error) {
-      setLoadProcess(false);
+      setTimeout(() => {
+        setIsVisibleImage(false);
+        setIsVisibleCamera(false);
+        setLoadProcess(false);
+        setDataSrcShot("");
+      }, 7000);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
     }
   };
 
@@ -106,32 +116,28 @@ const DocumentAddress = (props) => {
   if (window.mobileCheck() === true && loadProcess === false) {
     component = (
       <>
-        <AnimatePresence>
-          {isVisibleCamera === true && (
-            <ComponentShotCamera
-              labelImage="Los datos deben ser visibles"
-              type={dataForm.documentAddress}
-              onClickShot={(src) => {
-                setDataSrcShot(src);
-                setIsVisibleImage(true);
-                setIsVisibleCamera(false);
-              }}
-            />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {isVisibleImage === true && (
-            <ComponentViewImage
-              src={dataSrcShot}
-              indication="Verifica que tu foto sea visible"
-              onClickContinue={handlerContinueProcess}
-              onClickOther={() => {
-                setIsVisibleImage(false);
-                setIsVisibleCamera(true);
-              }}
-            />
-          )}
-        </AnimatePresence>
+        {isVisibleCamera === true && (
+          <ComponentShotCamera
+            labelImage="Los datos deben ser visibles"
+            type={dataForm.documentAddress}
+            onClickShot={(src) => {
+              setDataSrcShot(src);
+              setIsVisibleImage(true);
+              setIsVisibleCamera(false);
+            }}
+          />
+        )}
+        {isVisibleImage === true && (
+          <ComponentViewImage
+            src={dataSrcShot}
+            indication="Verifica que tu foto sea visible"
+            onClickContinue={handlerContinueProcess}
+            onClickOther={() => {
+              setIsVisibleImage(false);
+              setIsVisibleCamera(true);
+            }}
+          />
+        )}
         <ComponentProcessDocument
           onClickOpenCamera={() => {
             setIsVisibleCamera(true);

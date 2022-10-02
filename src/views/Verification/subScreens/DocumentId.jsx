@@ -18,6 +18,7 @@ import { useOnChangeInput } from "../../../hooks";
 import LoaderProcess from "../../../components/loaderFullProcess";
 import ComponentShotCamera from "../../../components/componentShotCamera";
 import ComponentViewImage from "../../../components/componentViewImage";
+import GLOBAL_CONSTANTS from "../../../utils/constants/globalConstants";
 
 const DocumentId = (props) => {
   const initialState = {
@@ -88,36 +89,6 @@ const DocumentId = (props) => {
     }
   };
 
-  const handlerGetConfigurationMetaMap = async () => {
-    try {
-      const response = await callGlobalActionApi(
-        {
-          idSystemUser,
-          idLoginHistory,
-          idCustomer: null,
-          flowId: config.flowId,
-          metadata: config.metadata,
-        },
-        null,
-        API_CONSTANTS.META_MAP.CREATE_VERIFICATION,
-        "POST",
-        true
-      );
-      const responseResult =
-        isEmpty(response) === false &&
-        isNil(response.response) === false &&
-        isEmpty(response.response) === false
-          ? response.response
-          : {};
-      setDataUserProfile({
-        ...dataProfile,
-        tokenMetaMap: responseResult.token,
-        idVerification: responseResult.verificationId,
-        identity: responseResult.identity,
-      });
-    } catch (error) {}
-  };
-
   const handlerContinueProcess = async (file) => {
     const dataMetaMap = arrayDataFiles;
     const dataFileMetaMap = arrayFiles;
@@ -130,13 +101,13 @@ const DocumentId = (props) => {
             type: dataForm.documentId,
             country: dataOptionCountry["Alpha-2"],
             page: "front",
-            filename: `${dataForm.documentId}-${stepPage}.jpeg`,
+            filename: `${dataForm.documentId}-${stepPage}.png`,
           },
         };
         dataMetaMap.push(dataToMetaMap);
         dataFileMetaMap.push(file);
         setLoadProcess(true);
-        const response = await frontFunctions.handlerUploadToMetaMap(
+        await frontFunctions.handlerUploadToMetaMap(
           dataFileMetaMap,
           dataMetaMap,
           dataProfile.identity,
@@ -146,12 +117,13 @@ const DocumentId = (props) => {
         );
         setDataUserProfile({
           ...dataProfile,
-          country: dataOptionCountry["Alpha-2"],
+          alpha2: dataOptionCountry["Alpha-2"],
         });
         await setPipeLine(
           {
             idStep,
             idStepLine: content.idStepLine,
+            alpha2: dataOptionCountry["Alpha-2"],
           },
           idPawn
         );
@@ -167,7 +139,7 @@ const DocumentId = (props) => {
             type: dataForm.documentId,
             country: dataOptionCountry["Alpha-2"],
             page: "front",
-            filename: `${dataForm.documentId}-${stepPage}.jpeg`,
+            filename: `${dataForm.documentId}-${stepPage}.png`,
           },
         };
         dataMetaMap.push(dataToMetaMap);
@@ -188,13 +160,13 @@ const DocumentId = (props) => {
             type: dataForm.documentId,
             country: dataOptionCountry["Alpha-2"],
             page: "back",
-            filename: `${dataForm.documentId}-${stepPage}.jpeg`,
+            filename: `${dataForm.documentId}-${stepPage}.png`,
           },
         };
         dataMetaMap.push(dataToMetaMap);
         dataFileMetaMap.push(file);
         setLoadProcess(true);
-        const response = await frontFunctions.handlerUploadToMetaMap(
+        await frontFunctions.handlerUploadToMetaMap(
           dataFileMetaMap,
           dataMetaMap,
           dataProfile.identity,
@@ -204,12 +176,13 @@ const DocumentId = (props) => {
         );
         setDataUserProfile({
           ...dataProfile,
-          country: dataOptionCountry["Alpha-2"],
+          alpha2: dataOptionCountry["Alpha-2"],
         });
         await setPipeLine(
           {
             idStep,
             idStepLine: content.idStepLine,
+            alpha2: dataOptionCountry["Alpha-2"],
           },
           idPawn
         );
@@ -217,18 +190,25 @@ const DocumentId = (props) => {
         setLoadProcess(false);
       }
     } catch (error) {
-      setLoadProcess(false);
+      setTimeout(() => {
+        setIsVisibleImage(false);
+        setIsVisibleCamera(false);
+        setLoadProcess(false);
+        setDataSrcShot("");
+        setArrayFiles([]);
+        setArrayDataFiles([]);
+        setStepPage(1);
+        setTextFileType("");
+      }, 7000);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
     }
   };
 
   useEffect(() => {
-    if (
-      window.mobileCheck() === true &&
-      isNil(dataProfile.idVerification) === true
-    ) {
-      handlerGetAllCountries();
-      handlerGetConfigurationMetaMap();
-    }
+    handlerGetAllCountries();
   }, []);
 
   if (window.mobileCheck() === false && loadProcess === false) {
@@ -252,35 +232,41 @@ const DocumentId = (props) => {
   if (window.mobileCheck() === true && loadProcess === false) {
     component = (
       <>
-        <AnimatePresence>
-          {isVisibleCamera === true && (
-            <ComponentShotCamera
-              labelImage={textFieType}
-              type={dataForm.documentId}
-              onClickShot={(src) => {
-                setDataSrcShot(src);
-                setIsVisibleImage(true);
-                setIsVisibleCamera(false);
-              }}
-            />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {isVisibleImage === true && (
-            <ComponentViewImage
-              src={dataSrcShot}
-              indication="Verifica que tu foto sea visible"
-              onClickContinue={handlerContinueProcess}
-              onClickOther={() => {
-                setIsVisibleImage(false);
-                setIsVisibleCamera(true);
-              }}
-            />
-          )}
-        </AnimatePresence>
+        {isVisibleCamera === true && (
+          <ComponentShotCamera
+            labelImage={textFieType}
+            type={dataForm.documentId}
+            onClickShot={(src) => {
+              setDataSrcShot(src);
+              setIsVisibleImage(true);
+              setIsVisibleCamera(false);
+            }}
+          />
+        )}
+        {isVisibleImage === true && (
+          <ComponentViewImage
+            src={dataSrcShot}
+            indication="Verifica que tu foto sea visible"
+            onClickContinue={handlerContinueProcess}
+            onClickOther={() => {
+              setIsVisibleImage(false);
+              setIsVisibleCamera(true);
+            }}
+          />
+        )}
         <ComponentProcessDocument
           onClickOpenCamera={() => {
-            setIsVisibleCamera(true);
+            if (
+              isEmpty(dataForm.nationality) === false &&
+              isEmpty(dataForm.documentId) === false
+            ) {
+              setIsVisibleCamera(true);
+            } else {
+              frontFunctions.showMessageStatusApi(
+                "Asegúrate de seleccionar tu nacionalidad y documento de identidad",
+                GLOBAL_CONSTANTS.STATUS_API.WARNING
+              );
+            }
           }}
           stepNumber="Paso 2 de 4"
           subTitle="Sube un documento de identidad vigente"

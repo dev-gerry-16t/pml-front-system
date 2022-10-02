@@ -14,6 +14,14 @@ import {
   IconCarId,
   IconDocument,
   IconCarTenure,
+  IconTax,
+  IconAct,
+  IconProof,
+  IconRecomend,
+  IconOffer,
+  IconDate,
+  IconPhoto,
+  IconWaiting as IconWait,
 } from "../assets/icons";
 
 const max_width = "820px";
@@ -27,31 +35,49 @@ const IconsStep = {
   IconCarId,
   IconDocument,
   IconCarTenure,
+  IconTax,
+  IconAct,
+  IconProof,
+  IconRecomend,
+  IconOffer,
+  IconDate,
+  IconPhoto,
+  IconWait,
 };
 
 const PrincipalContainer = styled.div`
   display: grid;
   grid-template-columns: 21em 1fr;
+  .time-step-container {
+    max-height: 80vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
   @media screen and (max-width: ${max_width}) {
-    grid-template-columns: 100%;
+    grid-template-columns: 1fr;
     grid-template-rows: 7em auto;
+    .time-step-container {
+      overflow-x: scroll;
+      overflow-y: hidden;
+    }
   }
 `;
 
 const ContainerStep = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
+  left: 0px;
   .line-step:last-child {
     display: none;
   }
   @media screen and (max-width: ${max_width}) {
     flex-direction: row;
-    width: 100%;
-    justify-content: space-around;
+    /* justify-content: space-around; */
   }
 `;
 
-const ComponentStep = styled(motion.div)`
+const ComponentStep = styled.div`
   display: grid;
   grid-template-columns: 12em 6em 2em;
   min-height: 10em;
@@ -137,9 +163,9 @@ const Step = styled.div`
     width: 3.6875em;
     height: 3.6875em;
     background: ${(props) =>
-      props.background === true
-        ? "var(--color-font-primary)"
-        : "var(--color-backGround-light)"};
+    props.background === true
+      ? "var(--color-font-primary)"
+      : "var(--color-backGround-light)"};
   }
 `;
 
@@ -172,16 +198,16 @@ const Line = styled.div`
     width: 18vw;
     border-left: none;
     border-top: ${(props) =>
-      props.isCompleted === true
-        ? "2px solid var(--color-font-primary)"
-        : "2px dashed var(--color-font-primary)"};
+    props.isCompleted === true
+      ? "2px solid var(--color-font-primary)"
+      : "2px dashed var(--color-font-primary)"};
     height: 2px;
     left: 0px;
     top: 0px;
   }
 `;
 
-const CustomStepLine = ({ children, data }) => {
+const CustomStepLine = ({ children, data, goToActive = false }) => {
   const [content, setContent] = useState([]);
   const navigate = useNavigate();
 
@@ -191,7 +217,9 @@ const CustomStepLine = ({ children, data }) => {
         return rowFind.isCompleted === false && rowFind.isCurrent === true;
       });
       if (isNil(findCurrentScreen) === false) {
-        navigate(findCurrentScreen.path);
+        if (isNil(findCurrentScreen.path) === false) {
+          navigate(findCurrentScreen.path);
+        }
         setContent(isNil(findCurrentScreen) === false ? findCurrentScreen : []);
       }
     }
@@ -199,28 +227,20 @@ const CustomStepLine = ({ children, data }) => {
 
   return (
     <PrincipalContainer>
-      <div>
+      <div className="time-step-container">
         <ContainerStep>
           {data.map((row, ix) => {
             return (
               <ComponentStep
                 key={`stepLine-${ix}`}
-                initial={{
-                  scale: 0,
-                }}
-                custom={ix}
-                animate={{
-                  transition: {
-                    delay: ix === 0 ? ix : ix / 2,
-                  },
-                  scale: 1,
-                }}
                 onClick={() => {
-                  //navigate(row.path);
+                  if (goToActive === true) navigate(row.path);
                 }}
               >
                 <div className="title-description">
-                  <span className="title">{row.name || row.documentType}</span>
+                  <span className="title">
+                    {row.name || row.documentType || row.step}
+                  </span>
                   <span className="description">
                     {row.description || row.directions}
                   </span>
@@ -228,7 +248,7 @@ const CustomStepLine = ({ children, data }) => {
                 <div className="icon-step">
                   <Step
                     background={
-                      row.isCompleted === true || row.isCurrent === true
+                      (row.isCompleted === true && row.isCurrent === true) || (row.isCompleted === true && row.isCurrent === false)
                     }
                     border={"3px solid var(--color-font-primary)"}
                   >
@@ -236,11 +256,11 @@ const CustomStepLine = ({ children, data }) => {
                       React.createElement(IconsStep[row.icon], {
                         size: "2.5em",
                         fill:
-                          row.isCompleted === true || row.isCurrent === true
+                          (row.isCompleted === true && row.isCurrent === true) || (row.isCompleted === true && row.isCurrent === false)
                             ? "var(--color-backGround-section)"
                             : "none",
                         color:
-                          row.isCompleted === true || row.isCurrent === true
+                          (row.isCompleted === true && row.isCurrent === true) || (row.isCompleted === true && row.isCurrent === false)
                             ? "var(--color-backGround-section)"
                             : "var(--color-font-primary)",
                       })}
@@ -255,7 +275,7 @@ const CustomStepLine = ({ children, data }) => {
                 <div className="line">
                   <Point
                     background={
-                      row.isCompleted === true || row.isCurrent === true
+                      (row.isCompleted === true && row.isCurrent === true) || (row.isCompleted === true && row.isCurrent === false)
                         ? "var(--color-brand-secondary)"
                         : "var(--color-backGround-section)"
                     }

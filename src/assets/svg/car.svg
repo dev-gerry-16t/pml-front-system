@@ -1,5 +1,5 @@
 <svg width="599" height="269" viewBox="0 0 599 269" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M584.484 244.216H29.0352" stroke="#ADADAD" stroke-width="19.8682" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M584.484 244.216H29.0352" stroke="#ADADAD" strokeWidth="19.8682" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
 <path d="M526.633 109.466H361.656V190.51H526.633V109.466Z" fill="#00D0B0"/>
 <path d="M207.082 109.466H42.1055V190.51H207.082V109.466Z" fill="#00D0B0"/>
 <path d="M35.4895 170.649H13.8522C6.19878 170.649 0 164.451 0 156.797V145.145C0 137.492 6.19878 131.293 13.8522 131.293H35.4968V170.649H35.4895Z" fill="#8EA7B4"/>
@@ -30,9 +30,9 @@
 <path d="M45.1393 109.466H35.4902V99.9485C35.4902 90.1459 43.4361 82.2001 53.2386 82.2001H57.4418L45.1393 109.466Z" fill="#FF7F00"/>
 <path d="M357.226 84.5603H292.855V88.8366H357.226V84.5603Z" fill="#EEEFF8"/>
 <path d="M218.265 84.5603H153.895V88.8366H218.265V84.5603Z" fill="#EEEFF8"/>
-<path d="M397.176 73.4938V152.769" stroke="#00D0B0" stroke-width="6.47" stroke-miterlimit="10"/>
-<path d="M231.402 67.8938V174.991" stroke="#00D0B0" stroke-width="6.47" stroke-miterlimit="10"/>
-<path d="M94.6914 73.4938V131.293" stroke="#00D0B0" stroke-width="6.47" stroke-miterlimit="10"/>
+<path d="M397.176 73.4938V152.769" stroke="#00D0B0" strokeWidth="6.47" stroke-miterlimit="10"/>
+<path d="M231.402 67.8938V174.991" stroke="#00D0B0" strokeWidth="6.47" stroke-miterlimit="10"/>
+<path d="M94.6914 73.4938V131.293" stroke="#00D0B0" strokeWidth="6.47" stroke-miterlimit="10"/>
 <path d="M555.002 113.136C545.989 105.146 520.821 82.7922 473.994 79.3639C473.994 79.3639 508.256 92.4924 526.121 113.136H555.002Z" fill="#EEEFF8"/>
 <defs>
 <radialGradient id="paint0_radial_576_1131" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(447.903 -81.3936) scale(250.181 250.181)">

@@ -13,6 +13,8 @@ import CustomInput from "../../components/customInput";
 import CustomButton from "../../components/customButton";
 import { useOnChangeInput } from "../../hooks";
 import ComponentSendEmail from "../../components/componentSendEmail";
+import FrontFunctions from "../../utils/actions/frontFunctions";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
 
 const SignIn = (props) => {
   const { callGlobalActionApi } = props;
@@ -33,6 +35,7 @@ const SignIn = (props) => {
   const [validateLink, setValidateLink] = useState(false);
   const [loadedScreen, setLoadedScreen] = useState(true);
   const [sendActivateAccount, setSendActivateAccount] = useState(false);
+  const frontFunctions = new FrontFunctions();
 
   const handlerValidateKeyNumber = (data) => {
     let numberToCompare = "";
@@ -95,6 +98,10 @@ const SignIn = (props) => {
     } catch (error) {
       setLoadedScreen(false);
       setValidateLink(false);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
     }
   };
 
@@ -120,12 +127,21 @@ const SignIn = (props) => {
 
   const handlerOnSubmit = async () => {
     try {
-      setLoadedScreen(true);
-      await handlerSignInUser(dataForm.password);
-      setLoadedScreen(false);
-      setSendActivateAccount(true);
+      if (dataForm.password === dataForm.confirmPassword) {
+        setLoadedScreen(true);
+        await handlerSignInUser(dataForm.password);
+        setLoadedScreen(false);
+        setSendActivateAccount(true);
+      } else {
+        const err = "Las contraseñas no coinciden";
+        throw err;
+      }
     } catch (error) {
       setLoadedScreen(false);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
     }
   };
 
@@ -148,7 +164,7 @@ const SignIn = (props) => {
         <CustomForm onSubmit={handlerOnSubmit}>
           <div className="vertical-form">
             <span className="indication">
-              Ingresa tus datos para dar de alta tu perfil
+              Para iniciar confirma tu número móvil y crea una contraseña
             </span>
             <CustomInput
               value={dataForm.mobilephone}
@@ -166,6 +182,7 @@ const SignIn = (props) => {
               placeholder="Contraseña"
               type="password"
               isRequired
+              pattern="^[A-Za-z0-9\d@$!%*#?&]{8,}$"
             />
             <CustomInput
               value={dataForm.confirmPassword}
@@ -175,6 +192,14 @@ const SignIn = (props) => {
               type="password"
               isRequired
             />
+            <div className="format-required-pass">
+              La contraseña debe contener:
+              <p>
+                <ul>
+                  <li>Mínimo 8 caracteres</li>
+                </ul>
+              </p>
+            </div>
             <CustomButton
               type="submit"
               formatType="secondary"

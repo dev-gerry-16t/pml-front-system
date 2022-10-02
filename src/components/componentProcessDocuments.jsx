@@ -10,7 +10,7 @@ import CustomIndicationList from "./customIndicationList";
 import FrontFunctions from "../utils/actions/frontFunctions";
 import ENVIROMENT from "../utils/constants/enviroments";
 
-const ModalView = styled(motion.div)`
+const ModalView = styled.div`
   position: fixed;
   top: 0px;
   left: 0px;
@@ -32,8 +32,21 @@ const ModalView = styled(motion.div)`
     .contain-doc-view {
       width: 100%;
       height: 70vh;
+      overflow: scroll;
     }
   }
+`;
+const ButtonCapture = styled.label`
+  background: var(--color-brand-secondary);
+  border-radius: 0.6em;
+  font-family: "Lato";
+  font-size: 1.2em;
+  font-weight: 500;
+  padding: 0.5em 2em;
+  color: var(--color-font-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ButtonHeader = styled.div`
@@ -58,6 +71,7 @@ const SectionInputUpload = styled.div`
   column-gap: 0.5em;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   .border-upload {
     overflow: hidden;
     position: relative;
@@ -67,6 +81,11 @@ const SectionInputUpload = styled.div`
     width: 12em;
     height: 8.8em;
     cursor: pointer;
+    .delete-doc-process {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+    }
     .contain-image {
       position: absolute;
       left: 0px;
@@ -109,6 +128,10 @@ const SectionInputUpload = styled.div`
       }
     }
   }
+  @media screen and (max-width: 820px) {
+    flex-direction: column;
+    row-gap: 1em;
+  }
 `;
 
 const ComponentProcessDocument = (props) => {
@@ -125,6 +148,8 @@ const ComponentProcessDocument = (props) => {
     documents = [],
     bucketDocument = "",
     accept = "*",
+    title = "",
+    onDeleteFile = () => {},
   } = props;
 
   const [selectedId, setSelectedId] = useState(null);
@@ -133,9 +158,41 @@ const ComponentProcessDocument = (props) => {
 
   const frontFunctions = new FrontFunctions();
 
-  const handlerUploadFile = (e) => {
-    const files = e.target.files[0];
-    if (files.size <= 10000000) {
+  const handlerUploadFile = async (e) => {
+    try {
+      const files = e.target.files[0];
+      if (!files) return;
+
+      if (files.size <= 10000000) {
+        const extension = frontFunctions.getExtensionFile(files.type);
+        const metadata = {
+          name: files.name,
+          type: files.type,
+          extension: extension,
+          size: files.size,
+        };
+        if (!files) return;
+        const reader = new FileReader();
+        reader.readAsDataURL(files);
+        reader.onload = async (event) => {
+          const result = event.target.result;
+          onClickUploadFile(result, metadata);
+        };
+        document.getElementById("id-file-upload-checklist").value = "";
+      } else {
+        alert("El tamaño del archivo supera el máximo permitido");
+        document.getElementById("id-file-upload-checklist").value = "";
+      }
+    } catch (error) {
+      document.getElementById("id-file-upload-checklist").value = "";
+    }
+  };
+
+  const handlerUploadFileV2 = async (e) => {
+    try {
+      const files = e.target.files[0];
+      if (!files) return;
+
       const extension = frontFunctions.getExtensionFile(files.type);
       const metadata = {
         name: files.name,
@@ -147,11 +204,34 @@ const ComponentProcessDocument = (props) => {
       const reader = new FileReader();
       reader.readAsDataURL(files);
       reader.onload = async (event) => {
-        const result = event.target.result;
-        onClickUploadFile(result, metadata);
+        if (extension == "png" || extension == "jpg" || extension == "jpeg") {
+          const imgElement = document.createElement("img");
+          imgElement.src = event.target.result;
+          imgElement.onload = async (event1) => {
+            const canvas = document.createElement("canvas");
+            const width = event1.target.width;
+            const height = event1.target.height;
+
+            const MAX_WIDTH = 1200;
+            const scaleSize = MAX_WIDTH / width;
+
+            canvas.width = MAX_WIDTH;
+            canvas.height = height * scaleSize;
+
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(event1.target, 0, 0, canvas.width, canvas.height);
+            canvas.remove();
+            const result = ctx.canvas.toDataURL("image/jpeg", 0.9);
+            onClickUploadFile(result, metadata);
+          };
+          imgElement.remove();
+        } else {
+          onClickUploadFile(event.target.result, metadata);
+        }
       };
-    } else {
-      alert("El tamaño del archivo supera el máximo permitido");
+      document.getElementById("id-file-camera-checklist").value = "";
+    } catch (error) {
+      document.getElementById("id-file-camera-checklist").value = "";
     }
   };
 
@@ -161,46 +241,41 @@ const ComponentProcessDocument = (props) => {
       setIsVisibleDocument(false);
     }, 1000);
   };
+
   return (
     <div className="section-shadow padding-2-1">
-      <AnimatePresence>
-        {selectedId && (
-          <ModalView layoutId={selectedId} onClick={handlerCloseModalFile}>
-            <div className="mask-section" onClick={(e) => e.stopPropagation()}>
-              <ButtonHeader>
-                <motion.button
-                  whileHover={{ scale: 1.07 }}
-                  whileTap={{ scale: 0.8 }}
-                  className="button-modal"
-                  onClick={handlerCloseModalFile}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path
-                      d="M15 5L5 15M5 5l5.03 5.03L15 15"
-                      fill="black"
-                      stroke-width="2"
-                      stroke=" var(--color-brand-primary)"
-                      stroke-linecap="round"
-                    ></path>
-                  </svg>
-                </motion.button>
-              </ButtonHeader>
-              {isVisibleDocument === true && (
-                <div className="contain-doc-view">
-                  <FileViewer
-                    fileType={selectDataFile.extension}
-                    filePath={`${ENVIROMENT}/api/v1/file/getFile/${bucketDocument}/${selectDataFile.idDocument}?type=${selectDataFile.mimeType}`}
-                    onError={() => {}}
-                  />
-                </div>
-              )}
-            </div>
-          </ModalView>
-        )}
-      </AnimatePresence>
+      {selectedId && (
+        <ModalView layoutId={selectedId} onClick={handlerCloseModalFile}>
+          <div className="mask-section" onClick={(e) => e.stopPropagation()}>
+            <ButtonHeader>
+              <button className="button-modal" onClick={handlerCloseModalFile}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path
+                    d="M15 5L5 15M5 5l5.03 5.03L15 15"
+                    fill="black"
+                    strokeWidth="2"
+                    stroke=" var(--color-brand-primary)"
+                    strokeLinecap="round"
+                  ></path>
+                </svg>
+              </button>
+            </ButtonHeader>
+            {isVisibleDocument === true && (
+              <div className="contain-doc-view">
+                <FileViewer
+                  fileType={selectDataFile.extension}
+                  filePath={`${ENVIROMENT}/api/v1/file/getFile/${bucketDocument}/${selectDataFile.idDocument}?type=${selectDataFile.mimeType}`}
+                  onError={() => {}}
+                />
+              </div>
+            )}
+          </div>
+        </ModalView>
+      )}
       <CustomIndicationList
         stepNumber={stepNumber}
         subTitle={subTitle}
+        title={title}
         isVisibleButton={false}
         onClick={async () => {}}
       >
@@ -211,8 +286,8 @@ const ComponentProcessDocument = (props) => {
               documents.map((row, ix) => {
                 if (isEmpty(row) === false) {
                   return (
-                    <motion.div
-                      layoutId={row.idDocument}
+                    <div
+                      // layoutId={row.idDocument}
                       key={`image-upload-${ix}`}
                       className="border-upload"
                       onClick={() => {
@@ -235,7 +310,32 @@ const ComponentProcessDocument = (props) => {
                           <span>{row.extension}</span>
                         </div>
                       )}
-                    </motion.div>
+                      <div className="delete-doc-process">
+                        <CustomButton
+                          style={{
+                            padding: "1em",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (
+                              window.confirm(
+                                "¿Seguro que deseas eliminar tu documento?"
+                              ) === true
+                            ) {
+                              onDeleteFile({
+                                idDocument: row.idDocument,
+                                isActive: false,
+                                bucketSource: bucketDocument,
+                              });
+                            } else {
+                            }
+                          }}
+                          formatType="underline-secondary"
+                        >
+                          Eliminar
+                        </CustomButton>
+                      </div>
+                    </div>
                   );
                 } else {
                   return <></>;
@@ -243,12 +343,15 @@ const ComponentProcessDocument = (props) => {
               })}
 
             <div className="border-upload">
-              <label className="upload-file" for={`id-file`}>
+              <label
+                className="upload-file"
+                htmlFor={`id-file-upload-checklist`}
+              >
                 <IconUploadFile size="5em" />
                 <span>Subir documento</span>
               </label>
               <input
-                id={`id-file`}
+                id={`id-file-upload-checklist`}
                 accept={accept}
                 style={{ display: "none" }}
                 type="file"
@@ -265,14 +368,24 @@ const ComponentProcessDocument = (props) => {
               padding: "3em 0px",
             }}
           >
-            <CustomButton
+            <ButtonCapture htmlFor={`id-file-camera-checklist`}>
+              <span>Tomar foto</span>
+            </ButtonCapture>
+            <input
+              id={`id-file-camera-checklist`}
+              type="file"
+              capture="camera"
+              style={{ display: "none" }}
+              onChange={handlerUploadFileV2}
+            />
+            {/* <CustomButton
               style={{
                 padding: "0.5em 2em",
               }}
               onClick={onClickOpenCamera}
             >
               Tomar foto
-            </CustomButton>
+            </CustomButton> */}
           </div>
         )}
       </CustomIndicationList>

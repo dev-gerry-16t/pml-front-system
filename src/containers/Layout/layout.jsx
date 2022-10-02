@@ -14,18 +14,30 @@ import ContextLayout from "../../context/contextLayout";
 import Verification from "../../views/Verification/Verification";
 import FinishVerification from "../../views/FinishVerification/FinishVerification";
 import CheckList from "../../views/CheckList/CheckList";
+import CompletedSuccess from "../../views/Completed/CompletedSuccess";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
+import IconLogout from "../../assets/icons/iconLogout";
+import CustomButton from "../../components/customButton";
+import TableAdminPawn from "../../views/Admin/TableAdmin";
+import "../../assets/css/styles-tabulator.css";
+import ImageLogoCar from "../../assets/img/pml-logo-car.png";
+import PipeLineUser from "../../views/Admin/PipeLineUser";
+import DetailUser from "../../views/Admin/DetailUser";
 
 const max_width = "820px";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   font-size: 16px;
   font-family: "Lato";
   background: var(--color-backGround-light);
   box-sizing: border-box;
   @media screen and (max-width: ${max_width}) {
     font-size: 14px;
+  }
+  @media screen and (max-width: 420px) {
+    font-size: 12px;
   }
 `;
 
@@ -37,32 +49,40 @@ const Header = styled.header`
   background: var(--color-backGround-section);
   box-shadow: 0px 6px 15px rgba(192, 192, 192, 0.69);
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  .logo-pml {
-    width: 11em;
-    height: 2.5em;
+  .header-welcome {
+    display: flex;
+    column-gap: 1em;
+    align-items: center;
+    h1 {
+      font-family: "Lato";
+      font-size: 1.5em;
+      color: var(--color-brand-primary);
+      span {
+        color: var(--color-brand-secondary);
+      }
+    }
+  }
+  @media screen and (max-width: 500px) {
   }
 `;
 
 const DefaultLayout = (props) => {
-  const {
-    dataProfile: { idSystemUser, idLoginHistory },
-    callGlobalActionApi,
-  } = props;
+  const { dataProfile, callGlobalActionApi } = props;
+  const navigate = useNavigate();
   const [idItem, setIdItem] = useState(null);
   const [idPawn, setIdPawn] = useState(null);
   const [dataConfigStep, setDataConfigStep] = useState([]);
 
-  const navigate = useNavigate();
   const frontFunctions = new FrontFunctions();
 
   const handlerGetPipeLine = async () => {
     try {
       const response = await callGlobalActionApi(
         {
-          idSystemUser,
-          idLoginHistory,
+          idSystemUser: dataProfile.idSystemUser,
+          idLoginHistory: dataProfile.idLoginHistory,
           idCustomer: null,
         },
         null,
@@ -97,13 +117,17 @@ const DefaultLayout = (props) => {
       setIdItem(responseIdItem);
       setIdPawn(responseIdPawn);
       const findCurrentScreen = responsePipeLine.find((rowFind) => {
-        return rowFind.isCompleted === false && rowFind.isCurrent === true;
+        return rowFind.isCurrent === true;
       });
       if (isNil(findCurrentScreen) === false) {
         setDataConfigStep(findCurrentScreen);
         navigate(findCurrentScreen.path);
       }
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
     }
   };
@@ -113,8 +137,8 @@ const DefaultLayout = (props) => {
       await callGlobalActionApi(
         {
           ...data,
-          idSystemUser,
-          idLoginHistory,
+          idSystemUser: dataProfile.idSystemUser,
+          idLoginHistory: dataProfile.idLoginHistory,
           idCustomer: null,
         },
         id,
@@ -123,6 +147,10 @@ const DefaultLayout = (props) => {
         true
       );
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
     }
   };
@@ -144,7 +172,11 @@ const DefaultLayout = (props) => {
   };
 
   useEffect(() => {
-    handlerGetPipeLine();
+    if (isNil(dataProfile)) {
+      navigate("/logout");
+    } else {
+      handlerGetPipeLine();
+    }
   }, []);
 
   return (
@@ -172,19 +204,48 @@ const DefaultLayout = (props) => {
         }}
       >
         <Header>
-          <img
-            className="logo-pml"
-            src="https://prendamovil-assets.s3.us-east-2.amazonaws.com/logo-prenda-light.png"
-            alt="Imagen-ciudad"
-          />
+          <div className="header-welcome">
+            <img
+              src={ImageLogoCar} //"https://prendamovil-assets.s3.us-east-2.amazonaws.com/logo-prenda-light.png"
+              alt="Imagen-ciudad"
+            />
+            <h1>
+              <span>¡Hola!</span> {dataProfile.givenName}
+            </h1>
+          </div>
+          <div>
+            <CustomButton
+              formatType="close"
+              onClick={() => {
+                navigate("/logout");
+              }}
+            >
+              <IconLogout size="2em" />
+            </CustomButton>
+          </div>
         </Header>
-        <Routes>
-          <Route path="accept-notify" element={<AcceptNotify />} />
-          <Route path="car-information" element={<CarInformation />} />
-          <Route path="user-verification/*" element={<Verification />} />
-          <Route path="finish-verification" element={<FinishVerification />} />
-          <Route path="check-list/*" element={<CheckList />} />
-        </Routes>
+        {isNil(dataProfile) === false && (
+          <Routes>
+            <Route path="accept-notify" element={<AcceptNotify />} />
+            <Route path="car-information" element={<CarInformation />} />
+            <Route path="user-verification/*" element={<Verification />} />
+            <Route
+              path="finish-verification"
+              element={<FinishVerification />}
+            />
+            <Route path="check-list/*" element={<CheckList />} />
+            <Route path="completed-success" element={<CompletedSuccess />} />
+            <Route path="admin" element={<TableAdminPawn />} />
+            <Route
+              path="admin/pipeline-user/:idPawn/*"
+              element={<PipeLineUser />}
+            />
+            <Route
+              path="admin/detail-user/:idPawn"
+              element={<DetailUser />}
+            />
+          </Routes>
+        )}
       </ContextLayout.Provider>
     </Container>
   );

@@ -14,7 +14,7 @@ const container = {
   },
 };
 
-const ModalImage = styled(motion.div)`
+const ModalImage = styled.div`
   background: transparent;
   position: fixed;
   top: 0px;
@@ -22,7 +22,7 @@ const ModalImage = styled(motion.div)`
   height: 100vh;
   width: 100%;
   z-index: 100;
-  padding: 1em;
+  /* padding: 1em; */
   box-sizing: border-box;
 `;
 
@@ -34,10 +34,11 @@ const ResultImage = styled.div`
   display: flex;
   flex-direction: column;
   //align-content: space-between;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   .title-result {
     text-align: center;
     font-weight: 900;
+    margin-bottom: 2em;
     span {
       font-size: 1.2em;
     }
@@ -48,10 +49,11 @@ const ResultImage = styled.div`
     padding: 1em;
     min-height: 300px;
     box-sizing: border-box;
+    margin-bottom: 2em;
     img {
       width: 100%;
       height: 50vh;
-      object-fit: cover;
+      object-fit: contain;
       border-radius: 1em;
     }
   }
@@ -59,26 +61,23 @@ const ResultImage = styled.div`
 
 const ComponentViewImage = (props) => {
   const { src, indication, onClickOther, onClickContinue } = props;
+
+  const handlerUrlImage = (blob) => {
+    return URL.createObjectURL(blob);
+  };
   return (
-    <ModalImage
-      variants={container}
-      initial={{
-        scale: 0,
-      }}
-      animate={{
-        scale: 1,
-      }}
-      exit={{
-        scale: 0,
-      }}
-    >
+    <ModalImage>
       <div className="section-modal">
         <ResultImage>
           <div className="title-result">
             <span>{indication}</span>
           </div>
           <div className="image-outline">
-            <img id="image-container-process" src={src} alt="screenImage" />
+            <img
+              id="image-container-process"
+              src={handlerUrlImage(src)}
+              alt="screenImage"
+            />
           </div>
           <div className="align-button-row">
             <CustomButton
@@ -86,9 +85,7 @@ const ComponentViewImage = (props) => {
                 padding: "0.5em 0px",
               }}
               onClick={async () => {
-                const urlObject = await fetch(src);
-                const blobFile = await urlObject.blob();
-                onClickContinue(blobFile);
+                onClickContinue(src);
               }}
             >
               Continuar

@@ -31,6 +31,9 @@
   --color-font-dark: #000;
   --color-border-black: #090c41;
   --color-backGround-section: #f9f9f9;
+  --color-error-message: #d02b3d;
+  --color-success-message: #0cc1a5;
+  --color-warning-message: #f9b449;
 }
 
 @keyframes App-logo-spin {
@@ -44,4 +47,5 @@
 
 body {
   box-sizing: border-box;
+  font-family: "Lato", "Kometa", "Manrope";
 }

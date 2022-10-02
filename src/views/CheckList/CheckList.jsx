@@ -19,7 +19,6 @@ const CheckList = (props) => {
   } = dataContextLayout;
 
   let component = <LoaderApp />;
-
   if (isNil(config) === false && window.mobileCheck() === false) {
     component = (
       <div className="general-container">
@@ -31,7 +30,7 @@ const CheckList = (props) => {
               color: "var(--color-font-black)",
             }}
           ></div>
-          <CustomStepLine data={config.stepLine}>
+          <CustomStepLine data={config.stepLine} goToActive={false}>
             <Routes>
               <Route path="instructions" element={<InstructionsCheckList />} />
               <Route
@@ -47,7 +46,7 @@ const CheckList = (props) => {
   if (isNil(config) === false && window.mobileCheck() === true) {
     component = (
       <div className="general-container">
-        <CustomStepLine data={config.stepLine}>
+        <CustomStepLine data={config.stepLine} goToActive={false}>
           <Routes>
             <Route path="instructions" element={<InstructionsCheckList />} />
             <Route

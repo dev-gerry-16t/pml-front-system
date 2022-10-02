@@ -1,5 +1,5 @@
-const DOMAIN_WEB = "app.homify.ai";
-const DOMAIN_WEB_TEST = "apptest.homify.ai";
+const DOMAIN_WEB = "app.prendamovil.com";
+const DOMAIN_WEB_TEST = "apptest.prendamovil.com";
 const DOMAIN_WEB_LOCAL = "localhost";
 
 const INSTANCE_LOCAL = {

@@ -6,11 +6,12 @@ import ContextStepLine from "../../../context/contextStepLine";
 import ComponentInstruction from "../../../components/componentInstruction";
 import LoaderApp from "../../../components/loaderApp";
 import ComponentQrScan from "../../../components/componentQrScan";
+import CustomReactMati from "../../../components/componentReactMati";
 
 const InstructionsVerification = () => {
   const dataContextLayout = useContext(ContextLayout);
   const {
-    dataConfigStep: { idStep },
+    dataConfigStep: { idStep, config },
     idPawn,
     setPipeLine,
     getPipeLine,
@@ -21,7 +22,6 @@ const InstructionsVerification = () => {
     content: { content, idStepLine },
   } = dataContent;
   const [nextStep, setNextStep] = useState(false);
-
   let component = <LoaderApp />;
 
   if (nextStep === false) {
@@ -31,22 +31,54 @@ const InstructionsVerification = () => {
           stepNumber="Paso 1 de 4"
           subTitle="Para la verificación de identidad necesitamos lo siguiente"
           labelReady="Tengo listo todos los documentos"
-          isVisibleButton
+          isVisibleButton={false}
+          buttonComponent={
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <CustomReactMati
+                clientId={config.clientId}
+                country={config.alpha2}
+                loaded={() => {}}
+                metadata={config.metadata}
+                exited={async () => {
+                  await getPipeLine();
+                }}
+                finished={async () => {
+                  try {
+                    await setPipeLine(
+                      {
+                        idStep,
+                      },
+                      idPawn
+                    );
+                    await getPipeLine();
+                  } catch (error) {}
+                }}
+                flowId={config.flowId}
+                color={config.color}
+                textColor={config.textcolor}
+              />
+            </div>
+          }
           onClick={async () => {
-            try {
-              await setPipeLine(
-                {
-                  idStep,
-                  idStepLine,
-                },
-                idPawn
-              );
-              if (window.mobileCheck()) {
-                await getPipeLine();
-              } else {
-                setNextStep(true);
-              }
-            } catch (error) {}
+            // try {
+            //   await setPipeLine(
+            //     {
+            //       idStep,
+            //       idStepLine,
+            //     },
+            //     idPawn
+            //   );
+            //   if (window.mobileCheck()) {
+            //     await getPipeLine();
+            //   } else {
+            //     setNextStep(true);
+            //   }
+            // } catch (error) {}
           }}
         >
           {isEmpty(content) === false &&

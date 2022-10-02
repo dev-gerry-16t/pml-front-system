@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import Lottie from "react-lottie";
 import { connect } from "react-redux";
 import isNil from "lodash/isNil";
 import isEmpty from "lodash/isEmpty";
@@ -11,6 +12,17 @@ import CustomButton from "../../components/customButton";
 import { callGlobalActionApi } from "../../utils/actions/actions";
 import FrontFunctions from "../../utils/actions/frontFunctions";
 import { API_CONSTANTS } from "../../utils/constants/apiConstants";
+import GLOBAL_CONSTANTS from "../../utils/constants/globalConstants";
+import animationData from "../../assets/lottie/kiss-of-the-heart.json";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: animationData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 const container = {
   hidden: { opacity: 0 },
@@ -23,22 +35,30 @@ const container = {
   },
 };
 
-const FullScreen = styled(motion.div)`
+const FullScreen = styled.div`
   background: var(--color-backGround-section);
   position: fixed;
   top: 0px;
   height: 100vh;
   width: 100%;
   padding: 1em;
+  box-sizing: border-box;
   .notify-whats {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
+    box-sizing: border-box;
     img {
       width: 367px;
       height: 370px;
+    }
+  }
+  @media screen and (max-width: 420px) {
+    .notify-whats {
+      padding: 0px 1em;
+      width: 100%;
     }
   }
 `;
@@ -48,6 +68,9 @@ const TextOne = styled.div`
   width: 430px;
   font-size: 1.1em;
   color: var(--color-font-dark);
+  @media screen and (max-width: 420px) {
+    width: 100%;
+  }
 `;
 
 let timeInterval = null;
@@ -57,7 +80,7 @@ const AcceptNotify = (props) => {
     dataProfile: { idSystemUser, idLoginHistory },
     callGlobalActionApi,
   } = props;
-
+  const [viewQrScan, setViewQrScan] = useState(false);
   const dataContextLayout = useContext(ContextLayout);
   const frontFunctions = new FrontFunctions();
   const {
@@ -93,6 +116,10 @@ const AcceptNotify = (props) => {
         getPipeLine();
       }
     } catch (error) {
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.ERROR
+      );
       throw error;
     }
   };
@@ -103,7 +130,9 @@ const AcceptNotify = (props) => {
         handlerIsServiceReady();
       }, 10000);
     }, 15000);
-
+    setTimeout(() => {
+      setViewQrScan(!viewQrScan);
+    }, 5000);
     return () => {
       clearInterval(timeInterval);
       clearTimeout(timeInitTest);
@@ -123,23 +152,62 @@ const AcceptNotify = (props) => {
       >
         <div className="notify-whats">
           <CustomPrincipalTitle greet={step} subGreet="" />
-          <img
-            src={config.qr_image_url}
-            alt="QR WhatsApp"
-            style={{
-              marginTop: "5px",
-            }}
-          />
-          <TextOne>
-            <span>
-              Escanea el QR y permite que{" "}
-              <strong>
-                Prendamovil te envíe mensajes a través de WhatsApp
-              </strong>{" "}
-              y así notificarte sobre cambios y promociones importantes en tu
-              cuenta.
-            </span>
-          </TextOne>
+          {window.mobileCheck() === true ? (
+            <>
+              <div
+                style={{
+                  margin: "3em",
+                }}
+              >
+                <CustomButton
+                  formatType="primary"
+                  text="Acepto"
+                  onClick={async () => {
+                    window.open(config.deep_link_url, "_blank");
+                  }}
+                  style={{
+                    padding: "1em",
+                  }}
+                />
+              </div>
+              <TextOne>
+                <span>
+                  Da clic en el botón <strong>Aceptar</strong> para que{" "}
+                  <strong>
+                    Prendamovil te envíe mensajes a través de WhatsApp
+                  </strong>{" "}
+                  y así notificarte sobre cambios y promociones importantes en
+                  tu cuenta.
+                </span>
+              </TextOne>
+            </>
+          ) : (
+            <>
+              {viewQrScan === false ? (
+                <Lottie options={defaultOptions} height={300} width={300} />
+              ) : (
+                <img
+                  src={config.qr_image_url}
+                  alt="QR WhatsApp"
+                  style={{
+                    marginTop: "5px",
+                  }}
+                />
+              )}
+
+              <TextOne>
+                <span>
+                  Escanea el QR y permite que{" "}
+                  <strong>
+                    Prendamovil te envíe mensajes a través de WhatsApp
+                  </strong>{" "}
+                  y así notificarte sobre cambios y promociones importantes en
+                  tu cuenta.
+                </span>
+              </TextOne>
+            </>
+          )}
+
           <div
             style={{
               marginTop: "3.125em",

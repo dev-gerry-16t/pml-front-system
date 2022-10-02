@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import CustomPrincipalTitle from "./customTitleLogin";
 
 const container = {
@@ -20,23 +19,29 @@ const ComponentPresentation = ({ children, greet, subGreet }) => {
           className="logo-pml"
           src="https://prendamovil-assets.s3.us-east-2.amazonaws.com/logo-prenda-dark.png"
           alt="Imagen-ciudad"
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            window.location.href = "/login";
+          }}
         />
         <img
           className="background-img"
           src="https://prendamovil-assets.s3.us-east-2.amazonaws.com/pml-city.png"
           alt="Imagen-ciudad"
         />
+        <img
+          className="background-img-1"
+          srcSet="https://prendamovil-assets.s3.us-east-2.amazonaws.com/pml-city-mobile.png"
+          alt="Imagen-ciudad"
+        />
       </div>
       <div className="info-form">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="container-form"
-        >
+        <div className="container-form">
           <CustomPrincipalTitle greet={greet} subGreet={subGreet} />
           {children}
-        </motion.div>
+        </div>
       </div>
     </div>
   );

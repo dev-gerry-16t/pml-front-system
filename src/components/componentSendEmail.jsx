@@ -54,7 +54,11 @@ const LinkCircle = styled.div`
   }
 `;
 
-const ComponentSendEmail = ({ email = "", onClick = () => {} }) => {
+const ComponentSendEmail = ({
+  email = "",
+  onClick = () => {},
+  text = "para activar tu cuenta",
+}) => {
   return (
     <div className="container-send-email">
       <div className="section-info-email">
@@ -73,8 +77,8 @@ const ComponentSendEmail = ({ email = "", onClick = () => {} }) => {
         </div>
         <TitleOne>
           <span>
-            Te hemos enviado un mensaje a <strong>{email}</strong> con un enlace
-            para activar tu cuenta
+            Te hemos enviado un mensaje a <strong>{email}</strong> con un enlace{" "}
+            {text}
           </span>
         </TitleOne>
         <LinkCircle>

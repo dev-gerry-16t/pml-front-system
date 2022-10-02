@@ -12,6 +12,7 @@ import FrontFunctions from "../../../utils/actions/frontFunctions";
 import LoaderProcess from "../../../components/loaderFullProcess";
 import ComponentShotCamera from "../../../components/componentShotCamera";
 import ComponentViewImage from "../../../components/componentViewImage";
+import GLOBAL_CONSTANTS from "../../../utils/constants/globalConstants";
 
 const DocumentSelfie = (props) => {
   const { dataProfile } = props;
@@ -41,13 +42,13 @@ const DocumentSelfie = (props) => {
         group: content.group,
         data: {
           type: content.inputType,
-          filename: `${content.inputType}-1.jpeg`,
+          filename: `${content.inputType}-1.png`,
         },
       };
       dataMetaMap.push(dataToMetaMap);
       dataFileMetaMap.push(file);
       setLoadProcess(true);
-      const response = await frontFunctions.handlerUploadToMetaMap(
+      await frontFunctions.handlerUploadToMetaMap(
         dataFileMetaMap,
         dataMetaMap,
         dataProfile.identity,
@@ -65,7 +66,16 @@ const DocumentSelfie = (props) => {
       await getPipeLine();
       setLoadProcess(false);
     } catch (error) {
-      setLoadProcess(false);
+      setTimeout(() => {
+        setIsVisibleImage(false);
+        setIsVisibleCamera(false);
+        setLoadProcess(false);
+        setDataSrcShot("");
+      }, 7000);
+      frontFunctions.showMessageStatusApi(
+        error,
+        GLOBAL_CONSTANTS.STATUS_API.WARNING
+      );
     }
   };
 
@@ -90,32 +100,28 @@ const DocumentSelfie = (props) => {
   if (window.mobileCheck() === true && loadProcess === false) {
     component = (
       <>
-        <AnimatePresence>
-          {isVisibleCamera === true && (
-            <ComponentShotCamera
-              labelImage="Mira a la cámara"
-              type={content.matiDocumentType}
-              onClickShot={(src) => {
-                setDataSrcShot(src);
-                setIsVisibleImage(true);
-                setIsVisibleCamera(false);
-              }}
-            />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {isVisibleImage === true && (
-            <ComponentViewImage
-              src={dataSrcShot}
-              indication="Verifica que se vea bien tu rostro y si no te convence puedes tomarte otra"
-              onClickContinue={handlerContinueProcess}
-              onClickOther={() => {
-                setIsVisibleImage(false);
-                setIsVisibleCamera(true);
-              }}
-            />
-          )}
-        </AnimatePresence>
+        {isVisibleCamera === true && (
+          <ComponentShotCamera
+            labelImage="Mira a la cámara"
+            type={content.matiDocumentType}
+            onClickShot={(src) => {
+              setDataSrcShot(src);
+              setIsVisibleImage(true);
+              setIsVisibleCamera(false);
+            }}
+          />
+        )}
+        {isVisibleImage === true && (
+          <ComponentViewImage
+            src={dataSrcShot}
+            indication="Verifica que se vea bien tu rostro y si no te convence puedes tomarte otra"
+            onClickContinue={handlerContinueProcess}
+            onClickOther={() => {
+              setIsVisibleImage(false);
+              setIsVisibleCamera(true);
+            }}
+          />
+        )}
         <ComponentProcessDocument
           onClickOpenCamera={() => {
             setIsVisibleCamera(true);

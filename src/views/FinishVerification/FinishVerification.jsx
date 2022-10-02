@@ -26,7 +26,7 @@ const StaticCar = styled.div`
 `;
 
 const TextDescription = styled.div`
-  font-family: "Kometa";
+  font-family: "Kometa", "Lato";
   display: flex;
   justify-content: center;
   align-items: center;
@@ -55,8 +55,8 @@ const FinishVerification = () => {
         <ComponentBorderTopSection className="grid-column-2-3-1 over-flow-hidden-x">
           <TextDescription>
             <div className="info">
-              <h1>Haz concluido la primera fase</h1>
-              <p>Ya estamos mas cerca, continua a la siguiente fase:</p>
+              <h1>Has concluido la primera fase</h1>
+              <p>Ya estamos más cerca, continua a la siguiente fase:</p>
               <strong>Documentos de información vehicular</strong>
             </div>
           </TextDescription>

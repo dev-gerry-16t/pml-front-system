@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Icons from "../assets/icons/icons";
+import FrontFunctions from "../utils/actions/frontFunctions";
 
 const Border = styled.div`
+  position: relative;
   border: 2px solid var(--color-brand-primary);
   border-radius: 10px;
   padding: 0.4em;
@@ -20,7 +22,18 @@ const Icon = styled.div`
   }
 `;
 
+const IconRight = styled.div`
+  position: absolute;
+  right: 0px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0px 1em;
+  cursor: pointer;
+`;
+
 const Input = styled.div`
+  box-sizing: border-box;
   input {
     border: none;
     font-family: "Lato";
@@ -28,6 +41,7 @@ const Input = styled.div`
     font-size: 1.2em;
     width: 100%;
     height: 100%;
+    background: ${(props) => props.background};
   }
   ::placeholder {
     color: var(--color-font-light);
@@ -47,20 +61,57 @@ const CustomInput = ({
   type = "text",
   subType = null,
   isRequired = false,
+  pattern = null,
+  background = "transparent",
 }) => {
+  const [isVisibleDefault, setIsVisibleDefault] = useState(true);
+
+  const frontFunctions = new FrontFunctions();
+
   return (
     <Border>
       <Icon>{Icons[subType || type]}</Icon>
-      <Input>
+      <Input background={background}>
         <input
           value={value}
-          onChange={onChange}
+          onChange={(e) => {
+            const value = e.target.value;
+            onChange(e, value);
+          }}
           name={name}
           placeholder={placeholder}
-          type={type}
+          type={isVisibleDefault === true ? type : "text"}
           required={isRequired}
+          pattern={pattern}
+          onFocus={(e) => {
+            if (type === "currency") {
+              const value = e.target.value;
+              const notFormat = frontFunctions.localStringToNumber(value);
+              onChange(e, notFormat);
+            }
+          }}
+          onBlur={(e) => {
+            if (type === "currency") {
+              const value = e.target.value;
+              const valueOnchange = frontFunctions.parseFormatCurrency(
+                value,
+                2,
+                2
+              );
+              onChange(e, valueOnchange);
+            }
+          }}
         />
       </Input>
+      {type === "password" && name !== "confirmPassword" && (
+        <IconRight
+          onClick={() => {
+            setIsVisibleDefault(!isVisibleDefault);
+          }}
+        >
+          {isVisibleDefault === true ? Icons["show"] : Icons["hide"]}
+        </IconRight>
+      )}
     </Border>
   );
 };
@@ -73,6 +124,7 @@ CustomInput.propTypes = {
   type: PropTypes.string,
   subType: PropTypes.string,
   isRequired: PropTypes.bool,
+  pattern: PropTypes.string,
 };
 
 export default CustomInput;
