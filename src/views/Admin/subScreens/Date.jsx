@@ -149,10 +149,12 @@ const ScheduleDate = () => {
     if (isEmpty(dataContent.content) === false) {
       setPositionCoordenates({
         lat:
+          isNil(dataContent.content.config.location) === false &&
           isNil(dataContent.content.config.location.latitude) === false
             ? dataContent.content.config.location.latitude
             : "19.3805745",
         lng:
+          isNil(dataContent.content.config.location) === false &&
           isNil(dataContent.content.config.location.longitude) === false
             ? dataContent.content.config.location.longitude
             : "-99.1756967",
