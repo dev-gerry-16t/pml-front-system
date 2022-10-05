@@ -272,6 +272,18 @@ const DetailUser = (props) => {
               info={dataPawn.pawnType}
             />
             <ComponentChipInfo title="Vehículo:" info={dataPawn.vehicle} />
+            {isNil(dataPawn.amountRequested) === false && (
+              <ComponentChipInfo
+                title="Monto solicitado:"
+                info={
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: dataPawn.amountRequested,
+                    }}
+                  />
+                }
+              />
+            )}
           </ContainerChips>
         </ComponentBorderTopSection>
         <SectionCollapse>
