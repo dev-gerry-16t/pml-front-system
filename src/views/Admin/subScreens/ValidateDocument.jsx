@@ -12,6 +12,7 @@ import GLOBAL_CONSTANTS from "../../../utils/constants/globalConstants";
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 import LoaderApp from "../../../components/loaderApp";
 import CustomButton from "../../../components/customButton";
+import ENVIROMENT from "../../../utils/constants/enviroments";
 
 const TextArea = styled.textarea`
   width: 100%;
@@ -121,6 +122,7 @@ const ValidateDocument = (props) => {
   const [isVisibleDocument, setIsVisibleDocument] = useState(false);
   const [comment, setComment] = useState("");
   const [isVisibleComment, setIsVisibleComment] = useState(false);
+  const [bucketSource, setBucketSource] = useState(null);
 
   const frontFunctions = new FrontFunctions();
 
@@ -171,6 +173,11 @@ const ValidateDocument = (props) => {
               return row.canBeEvaluated === true;
             })
           : {};
+      setBucketSource(
+        isEmpty(documents) === false && isNil(documents.bucketSource) === false
+          ? documents.bucketSource
+          : null
+      );
       setDataDocuments(
         isEmpty(documents) === false && isNil(documents.document) === false
           ? documents.document
@@ -225,7 +232,7 @@ const ValidateDocument = (props) => {
   };
 
   let component = <LoaderApp />;
-
+  
   if (isEmpty(dataDocuments) === false) {
     component = (
       <div className="section-shadow padding-2-1">
@@ -248,6 +255,13 @@ const ValidateDocument = (props) => {
                   </svg>
                 </button>
               </ButtonHeader>
+              <a
+                href={`${ENVIROMENT}${API_CONSTANTS.FILE.DOWNLOAD_FILE}/${bucketSource}/${selectDataFile.idDocument}?type=${selectDataFile.mimeType}&name=${selectDataFile.name}`}
+                download
+                target="_blank"
+              >
+                Descargar
+              </a>
               {isVisibleDocument === true && (
                 <div className="contain-doc-view">
                   <DocViewer
