@@ -10,6 +10,7 @@ const API = {
   CATALOGS: "/api/v1/catalogs",
   META_MAP: "/api/v1/verification",
   ADMIN: "/api/v1/admin",
+  FILE: "/api/v1/file",
 };
 
 const API_CONSTANTS = {
@@ -54,6 +55,9 @@ const API_CONSTANTS = {
     GET_PAWN_BY_ID: `${API.ADMIN}/getPawnById`,
     SET_PAWN_PROCESS: `${API.ADMIN}/setPawnProcess/`,
   },
+  FILE: {
+    DOWNLOAD_FILE: `${API.FILE}/downloadFile`,
+  }
 };
 
 export { API_CONSTANTS, HEADER };
