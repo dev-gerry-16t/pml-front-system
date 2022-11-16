@@ -232,7 +232,7 @@ const ValidateDocument = (props) => {
   };
 
   let component = <LoaderApp />;
-  console.log("selectDataFile", selectDataFile);
+  
   if (isEmpty(dataDocuments) === false) {
     component = (
       <div className="section-shadow padding-2-1">
